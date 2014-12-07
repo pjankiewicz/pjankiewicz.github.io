@@ -57,7 +57,7 @@ to handle longer tasks. When there is 1 million element collection there
 is too much overhead when creating the threads.
 
 The solution is to use ```partition-all``` function which splits the sequence into 
-smaller chunks and then user ```pma``` on the chunks. Here is how ```partition-all```
+smaller chunks and then use ```pmap``` on the chunks. Here is how ```partition-all```
 works:
 
 {% highlight clojure %}
