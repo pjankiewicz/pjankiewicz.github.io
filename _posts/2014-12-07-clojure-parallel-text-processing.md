@@ -18,7 +18,7 @@ One of the most frequent things that I do with text is clean it and normalize it
 
 Here is a Clojure code to load some big text file (1 sentence per line) and perform these operations:
 
-<pre>
+{% highlight clojure %}
 (require '[clojure.string :as str])
 
 (defn clean-text
@@ -31,23 +31,26 @@ Here is a Clojure code to load some big text file (1 sentence per line) and perf
       str/trim))
 
 (def texts (str/split (slurp "somebigfile") #"\n"))
-</pre>
+{% endhighlight %}
 
 One of the things that Clojure is so proud is parallelism support. 
 First let's use a simple map function to conver all sentences
 
-<pre>> (time (doall (map clean-text texts)) (println "finished!"))
+{% highlight clojure %}
+> (time (doall (map clean-text texts)) (println "finished!"))
 finished!
 "Elapsed time: 9917.938119 msecs"
-</pre>
+{% endhighlight %}
 
 10 seconds to process 1 million sentences. This is not bad. We should 
 be able to use parallel implementation of ```map``` function ```pmap```.
 
-<pre>> (time (doall (pmap clean-text texts)) (println "finished!"))
+{% highlight clojure %}
+> (time (doall (pmap clean-text texts)) (println "finished!"))
 finished!
 "Elapsed time: 8944.514524 msecs"
 </pre>
+{% endhighlight %}
 
 What?!?! Only 10% faster. I have 4 cores so I should expect ~4x improvement.
 After researching this I have found out that the ```pmap``` function is supposed
@@ -58,16 +61,18 @@ The solution is to use ```partition-all``` function which splits the sequence in
 smaller chunks and then user ```pma``` on the chunks. Here is how ```partition-all```
 works:
 
-<pre> > (partition-all 3 (range 10))
+{% highlight clojure %}
+> (partition-all 3 (range 10))
 ((0 1 2) (3 4 5) (6 7 8) (9))
-</pre>
+{% endhighlight %}
 
 Please be careful not to use the ```partition``` function because it does not include
 chunks smaller than n. For example
 
-<pre> > (partition 3 (range 10))
+{% highlight clojure %}
+> (partition 3 (range 10))
 ((0 1 2) (3 4 5) (6 7 8))
-</pre>
+{% endhighlight %}
 
 We are now ready to split our job 50000 elements chunks (~20 chunks total).
 Another important thing is to call ```doall``` on ```map``` and ```pmap``` result
