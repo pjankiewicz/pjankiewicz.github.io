@@ -80,8 +80,8 @@ they are realized inside the call.
 
 {% highlight clojure %}
 > (time (doall (pmap #(doall (map clean-text %)) 
-                          (partition-all 50000 texts))) 
-             (println "finished!"))
+                     (partition-all 50000 texts))) 
+			   (println "finished!"))
 finished!
 "Elapsed time: 3022.481366 msecs"
 {% endhighlight %}
