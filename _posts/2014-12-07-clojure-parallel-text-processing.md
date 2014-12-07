@@ -83,7 +83,7 @@ they are realized inside the call.
                           (partition-all 50000 texts))) 
              (println "finished!"))
 finished!
-"Elapsed time: 3022.481366 msecs
+"Elapsed time: 3022.481366 msecs"
 {% endhighlight %}
 
 That's more like it 3.4x speed-up.
