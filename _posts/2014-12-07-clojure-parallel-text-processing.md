@@ -14,6 +14,7 @@ One of the most frequent things that I do with text is clean it and normalize it
 2. replace all non alphanumerics with " "
 3. repace all multiple spaces with single space
 4. join words with hanging hyphens "a - b" -> "a-b"
+5. trim spaces
 
 Here is a Clojure code to load some big text file (1 sentence per line) and perform these operations:
 
@@ -32,7 +33,7 @@ Here is a Clojure code to load some big text file (1 sentence per line) and perf
 (def titles (str/split (slurp "somebigfile") #"\n"))
 </pre>
 
-One of the things that Clojure is so proud is support parallelism. 
+One of the things that Clojure is so proud is parallelism support. 
 First let's use a simple map function to conver all sentences
 
 <pre>> (time (doall (map clean-title titles)) (println "finished!"))
@@ -50,11 +51,12 @@ finished!
 
 What?!?! Only 10% faster. I have 4 cores so I should expect ~4x improvement.
 After researching this I have found out that the ```pmap``` function is supposed
-to handle longer tasks. When there is 1 million elements collection there
+to handle longer tasks. When there is 1 million element collection there
 is too much overhead when creating the threads.
 
 The solution is to use ```partition-all``` function which splits the sequence into 
-smaller chunks:
+smaller chunks and then user ```pma``` on the chunks. Here is how ```partition-all```
+works:
 
 <pre> > (partition-all 3 (range 10))
 ((0 1 2) (3 4 5) (6 7 8) (9))
@@ -80,5 +82,3 @@ finished!
 </pre>
 
 That's more like it 3.4x speed-up.
-
-To conclude - I'm fairly satisfied with how Clojure handles parallelism.
