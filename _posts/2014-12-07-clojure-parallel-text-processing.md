@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "Clojure parallel text processing"
+text: "Clojure parallel text processing"
 description: ""
 category: 
-tags: []
+tags: [clojure text-processing parallel]
 ---
 {% include JB/setup %}
 
@@ -21,22 +21,22 @@ Here is a Clojure code to load some big text file (1 sentence per line) and perf
 <pre>
 (require '[clojure.string :as str])
 
-(defn clean-title
-  [title]
-  (-> title
+(defn clean-text
+  [text]
+  (-> text
       str/upper-case
       (str/replace #"[^A-Z0-9 -]" " ")
       (str/replace #"\s+" " ")
       (str/replace #"\s?\-\s?" "-")
       str/trim))
 
-(def titles (str/split (slurp "somebigfile") #"\n"))
+(def texts (str/split (slurp "somebigfile") #"\n"))
 </pre>
 
 One of the things that Clojure is so proud is parallelism support. 
 First let's use a simple map function to conver all sentences
 
-<pre>> (time (doall (map clean-title titles)) (println "finished!"))
+<pre>> (time (doall (map clean-text texts)) (println "finished!"))
 finished!
 "Elapsed time: 9917.938119 msecs"
 </pre>
@@ -44,7 +44,7 @@ finished!
 10 seconds to process 1 million sentences. This is not bad. We should 
 be able to use parallel implementation of ```map``` function ```pmap```.
 
-<pre>> (time (doall (pmap clean-title titles)) (println "finished!"))
+<pre>> (time (doall (pmap clean-text texts)) (println "finished!"))
 finished!
 "Elapsed time: 8944.514524 msecs"
 </pre>
@@ -74,8 +74,8 @@ Another important thing is to call ```doall``` on ```map``` and ```pmap``` resul
 because both these functions are lazy and you need to make sure that 
 they are realized inside the call.
 
-<pre>> (time (doall (pmap #(doall (map clean-title %)) 
-                          (partition-all 50000 titles))) 
+<pre>> (time (doall (pmap #(doall (map clean-text %)) 
+                          (partition-all 50000 texts))) 
              (println "finished!"))
 finished!
 "Elapsed time: 3022.481366 msecs
