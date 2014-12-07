@@ -49,7 +49,6 @@ be able to use parallel implementation of ```map``` function ```pmap```.
 > (time (doall (pmap clean-text texts)) (println "finished!"))
 finished!
 "Elapsed time: 8944.514524 msecs"
-</pre>
 {% endhighlight %}
 
 What?!?! Only 10% faster. I have 4 cores so I should expect ~4x improvement.
@@ -79,11 +78,12 @@ Another important thing is to call ```doall``` on ```map``` and ```pmap``` resul
 because both these functions are lazy and you need to make sure that 
 they are realized inside the call.
 
-<pre>> (time (doall (pmap #(doall (map clean-text %)) 
+{% highlight clojure %}
+> (time (doall (pmap #(doall (map clean-text %)) 
                           (partition-all 50000 texts))) 
              (println "finished!"))
 finished!
 "Elapsed time: 3022.481366 msecs
-</pre>
+{% endhighlight %}
 
 That's more like it 3.4x speed-up.
