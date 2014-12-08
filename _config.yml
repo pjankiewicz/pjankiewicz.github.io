@@ -80,7 +80,7 @@ JB :
   comments :
     provider : disqus
     disqus :
-      short_name : pjankiewicz_github_io
+      short_name : outoffold
     livefyre :
       site_id : 123
     intensedebate :
