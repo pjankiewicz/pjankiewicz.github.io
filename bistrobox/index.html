@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Nutritional Calculator</title>
+    <style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+    }
+
+    textarea {
+        width: 80%;
+        margin-bottom: 20px;
+    }
+    </style>
+</head>
+<body>
+    <h1>Obliczanie wartości odżywczych</h1>
+    <textarea id="inputText" rows="10" cols="50"></textarea><br>
+    <button onclick="calculateNutrition()">Oblicz</button>
+    <div id="results"></div>
+
+    <script>
+    function calculateNutrition() {
+    const text = document.getElementById('inputText').value;
+    let totalProtein = 0, totalCarbs = 0, totalFat = 0;
+
+    const lines = text.split('\n');
+    for (let line of lines) {
+        if (line.startsWith('B:')) {
+            totalProtein += parseFloat(line.split('B: ')[1].replace('g', ''));
+        } else if (line.startsWith('W:')) {
+            totalCarbs += parseFloat(line.split('W: ')[1].replace('g', ''));
+        } else if (line.startsWith('T:')) {
+            totalFat += parseFloat(line.split('T: ')[1].replace('g', ''));
+        }
+    }
+
+    const calories = totalProtein * 4 + totalCarbs * 4 + totalFat * 9;
+    const results = `
+        <h2>Podsumowanie</h2>
+        <p>Białko: ${totalProtein.toFixed(2)}g</p>
+        <p>Węglowodany: ${totalCarbs.toFixed(2)}g</p>
+        <p>Tłuszcz: ${totalFat.toFixed(2)}g</p>
+        <p>Kalorie: ${calories.toFixed(2)}</p>
+
+        <p>Do wklejenia: ${totalProtein.toFixed(2)}\t${totalCarbs.toFixed(2)}\t${totalFat.toFixed(2)}\t${calories.toFixed(2)}</p>
+    `;
+
+    document.getElementById('results').innerHTML = results;
+    }
+    </script>
+</body>
+</html>
