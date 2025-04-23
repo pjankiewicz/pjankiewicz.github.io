@@ -1,11 +1,12 @@
-\
 {% extends "base.html" %}
 {% block content %}
 <section class="tags-list">
   <h1>All Tags</h1>
   <ul>
-    {% for tag, count in tags|dictsort %}
-    <li><a href="{{ config.site_url }}/tags/{{ tag | slugify }}.html">{{ tag }}</a> ({{ count }})</li>
+    {# Iterate over the list of tag dictionaries provided by build.py #}
+    {% for tag_info in tags %}
+    {# Use the pre-calculated absolute URL from tag_info #}
+    <li><a href="{{ tag_info.url }}">{{ tag_info.name }}</a> ({{ tag_info.count }})</li>
     {% endfor %}
   </ul>
 </section>

@@ -3,7 +3,8 @@
 <section class="post-list">
   {% for post in posts %}
   <article>
-    <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
+    {# Use relative_url for internal site links #}
+    <h2><a href="{{ post.relative_url }}">{{ post.title }}</a></h2>
     <p class="post-meta">{{ post.date }}</p>
     <p>{{ post.description }}</p>
   </article>

@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
   <title>{{ config.site_name }}</title>
-  <link>{{ config.site_url }}</link>
+  <link>{{ site_url }}/</link> {# Use site_url directly from context #}
   <description>{{ config.description }}</description>
+  <atom:link href="{{ site_url }}/feed.xml" rel="self" type="application/rss+xml" /> {# Use site_url directly #}
   {% for post in posts %}
   <item>
     <title>{{ post.title }}</title>
-    <link>{{ config.site_url }}{{ post.url }}</link>
-    <guid>{{ config.site_url }}{{ post.url }}</guid>
+    {# Construct link using site_url and relative_url #}
+    <link>{{ site_url }}{{ post.relative_url }}</link>
+    {# Use absolute url for guid #}
+    <guid isPermaLink="true">{{ post.url }}</guid>
     <pubDate>{{ post.date_rfc }}</pubDate>
     <description>{{ post.description | e }}</description>
   </item>

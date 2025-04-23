@@ -1,4 +1,3 @@
-\
 #!/usr/bin/env python3
 import os
 import sys
@@ -9,6 +8,7 @@ import datetime
 import re
 import collections
 import shutil
+from urllib.parse import urlparse, urljoin
 
 def slugify(text):
     """Generate URL-friendly slug from text."""
@@ -38,8 +38,9 @@ def format_date(date_str):
         try:
             dt = datetime.datetime.strptime(date_str, '%Y-%m-%d')
         except Exception:
-            dt = datetime.datetime.now()
+            dt = datetime.datetime.now() # Consider timezone awareness if needed
     nice = dt.strftime('%B %d, %Y')
+    # Ensure timezone offset for RFC 2822 compliance (assuming UTC for simplicity here)
     rfc = dt.strftime('%a, %d %b %Y %H:%M:%S +0000')
     return dt, nice, rfc
 
@@ -58,7 +59,7 @@ def build():
     tags_out = config.get('tags_output_dir', 'tags') # New config option for tags output
     templates_dir = config.get('templates_dir', 'templates')
     output_dir = config.get('output_dir', '.')
-    site_url = config.get('site_url', '').rstrip('/')
+    site_url = config.get('site_url', '').rstrip('/') # Ensure no trailing slash for urljoin base
 
     # Prepare output posts directory
     out_posts_dir = os.path.join(output_dir, posts_out)
@@ -94,7 +95,12 @@ def build():
         title = meta.get('title') or os.path.splitext(fname)[0]
         dt, nice_date, rfc_date = format_date(meta.get('date', ''))
         post_slug = slugify(meta.get('slug') or os.path.splitext(fname)[0])
-        url = f"/{posts_out}/{post_slug}/index.html"
+
+        # Generate relative path (leading slash important for urljoin)
+        # Ensure it points to the directory for clean URLs
+        relative_url_path = f"/{posts_out}/{post_slug}/"
+        # Generate absolute URL using urljoin
+        absolute_url = urljoin(site_url + '/', relative_url_path.lstrip('/')) # Add trailing slash to base
 
         # Meta description
         desc = meta.get('description')
@@ -108,29 +114,30 @@ def build():
         post_data = {
             'title': title,
             'date': nice_date,
-            'date_rfc': rfc_date,
+            'date_dt': dt, # Store datetime object for sorting
+            'date_rfc': rfc_date, # Store RFC date for feeds/sitemaps
             'slug': post_slug,
-            'url': url,
+            'url': absolute_url, # Store the absolute URL (for canonical etc.)
+            'relative_url': relative_url_path, # Store the relative URL (for site-internal links)
             'content': html_content,
             'description': desc,
             'tags': meta.get('tags', []),
             'meta': meta,
         }
-        posts.append((dt, post_data))
+        posts.append(post_data) # Append data directly
 
         # Collect tags
         for tag in post_data['tags']:
             tags_collection[tag].append(post_data)
 
-    # Sort posts by date descending
-    posts.sort(key=lambda x: x[0], reverse=True)
-    posts = [p[1] for p in posts]
+    # Sort posts by date descending using datetime object
+    posts.sort(key=lambda x: x['date_dt'], reverse=True)
 
     # Common template context
     ctx = {
         'config': config,
         'current_year': datetime.datetime.now().year,
-        'site_url': site_url,
+        'site_url': site_url, # Pass site_url (without trailing slash) to context
     }
 
     # Render individual post pages
@@ -143,9 +150,10 @@ def build():
             title=post['title'],
             content=post['content'],
             meta_description=post['description'],
-            canonical_url=site_url + post['url'],
+            canonical_url=post['url'], # Use the absolute URL
             date=post['date'],
             tags=post['tags'],
+            relative_url=post['relative_url'], # Pass relative url too if needed by template
             meta_image=post['meta'].get('image'),
         )
         with open(os.path.join(dest_dir, 'index.html'), 'w', encoding='utf-8') as f:
@@ -158,27 +166,31 @@ def build():
         dest_dir = os.path.join(output_dir, tags_out, tag_slug)
         os.makedirs(dest_dir, exist_ok=True)
         # Sort posts for this tag by date
-        tag_posts.sort(key=lambda p: datetime.datetime.strptime(p['date'], '%B %d, %Y'), reverse=True)
-        tag_url = f"{site_url}/{tags_out}/{tag_slug}/"
+        tag_posts.sort(key=lambda p: p['date_dt'], reverse=True)
+        # Generate absolute URL for the tag page directory
+        tag_page_relative_url = f"/{tags_out}/{tag_slug}/"
+        tag_page_url = urljoin(site_url + '/', tag_page_relative_url.lstrip('/'))
         output_html = tag_tpl.render(
             **ctx,
             title=f"Posts tagged '{tag}'",
             meta_description=f"Blog posts tagged with {tag}",
-            canonical_url=tag_url,
+            canonical_url=tag_page_url, # Use absolute tag page URL
             tag_name=tag,
-            posts=tag_posts
+            posts=tag_posts # Contains posts with absolute and relative URLs
         )
         with open(os.path.join(dest_dir, 'index.html'), 'w', encoding='utf-8') as f:
             f.write(output_html)
 
     # Render index page
     index_tpl = env.get_template('index.html')
+    index_page_relative_url = "/"
+    index_page_url = urljoin(site_url + '/', index_page_relative_url.lstrip('/'))
     index_html = index_tpl.render(
         **ctx,
         title='Home',
         meta_description=config.get('description', ''),
-        canonical_url=site_url + '/',
-        posts=posts,
+        canonical_url=index_page_url, # Use absolute index URL
+        posts=posts, # Contains posts with absolute and relative URLs
     )
     with open(os.path.join(output_dir, 'index.html'), 'w', encoding='utf-8') as f:
         f.write(index_html)
@@ -186,13 +198,28 @@ def build():
     # Render main tags list page
     if 'tags.html' in env.list_templates():
         tags_list_tpl = env.get_template('tags.html')
-        tags_data = {tag: len(posts) for tag, posts in tags_collection.items()}
+        # Create structured data for the template
+        tags_list_data = []
+        for tag, posts_in_tag in sorted(tags_collection.items()): # Sort tags alphabetically
+             tag_slug = slugify(tag)
+             tag_page_relative_url = f"/{tags_out}/{tag_slug}/"
+             tag_page_url = urljoin(site_url + '/', tag_page_relative_url.lstrip('/'))
+             tags_list_data.append({
+                 'name': tag,
+                 'slug': tag_slug,
+                 'url': tag_page_url, # Pass the correct absolute URL
+                 'relative_url': tag_page_relative_url, # Pass relative URL too
+                 'count': len(posts_in_tag)
+             })
+
+        main_tags_relative_url = f"/{tags_out}/"
+        main_tags_page_url = urljoin(site_url + '/', main_tags_relative_url.lstrip('/'))
         tags_list_html = tags_list_tpl.render(
             **ctx,
             title='All Tags',
             meta_description='List of all tags used in the blog.',
-            canonical_url=f"{site_url}/{tags_out}/",
-            tags=tags_data
+            canonical_url=main_tags_page_url, # Use absolute main tags URL
+            tags=tags_list_data # Pass the list of dicts
         )
         tags_list_page_path = os.path.join(output_dir, tags_out, 'index.html')
         with open(tags_list_page_path, 'w', encoding='utf-8') as f:
@@ -200,19 +227,27 @@ def build():
 
     # Render RSS feed
     feed_tpl = env.get_template('feed.xml')
-    feed_xml = feed_tpl.render(**ctx, posts=posts)
+    # Ensure posts passed have absolute URLs and RFC date
+    feed_xml = feed_tpl.render(**ctx, posts=posts) # Pass full post data
     with open(os.path.join(output_dir, 'feed.xml'), 'w', encoding='utf-8') as f:
         f.write(feed_xml)
 
     # Render sitemap
     sitemap_tpl = env.get_template('sitemap.xml')
-    # Add tag pages to sitemap context if needed
-    all_pages_for_sitemap = posts + [{'url': f"/{tags_out}/{slugify(tag)}.html", 'date_rfc': datetime.datetime.now().strftime('%Y-%m-%d')} for tag in tags_collection.keys()]
-    # Add main tags page if it exists
-    if 'tags.html' in env.list_templates():
-         all_pages_for_sitemap.append({'url': f"/{tags_out}/index.html", 'date_rfc': datetime.datetime.now().strftime('%Y-%m-%d')})
+    # Prepare data with absolute URLs and lastmod dates
+    all_pages_for_sitemap = [{'url': p['url'], 'lastmod': p['date_dt'].strftime('%Y-%m-%d')} for p in posts] # Use YYYY-MM-DD
+    now_rfc = datetime.datetime.now().strftime('%Y-%m-%d') # Use YYYY-MM-DD format for sitemap lastmod
 
-    sitemap_xml = sitemap_tpl.render(**ctx, posts=all_pages_for_sitemap) # Pass combined list or adjust template
+    # Add tag pages using the structured data already created
+    if 'tags.html' in env.list_templates(): # Check if main tags page exists
+        for tag_info in tags_list_data:
+             all_pages_for_sitemap.append({'url': tag_info['url'], 'lastmod': now_rfc}) # Use pre-calculated absolute URL
+        all_pages_for_sitemap.append({'url': main_tags_page_url, 'lastmod': now_rfc}) # Add main tags page URL
+
+    # Add index page URL to sitemap data
+    all_pages_for_sitemap.append({'url': index_page_url, 'lastmod': now_rfc})
+
+    sitemap_xml = sitemap_tpl.render(**ctx, pages=all_pages_for_sitemap) # Pass processed list as 'pages'
     with open(os.path.join(output_dir, 'sitemap.xml'), 'w', encoding='utf-8') as f:
         f.write(sitemap_xml)
 
@@ -220,4 +255,3 @@ def build():
 
 if __name__ == "__main__":
     build()
-

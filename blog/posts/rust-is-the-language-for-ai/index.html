@@ -10,11 +10,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/blog/style.css">
 
-  <link rel="alternate" type="application/rss+xml" title="Paweł Jankiewicz" href="https://pjankiewicz.github.io/blog/feed.xml">
+  <link rel="alternate" type="application/rss+xml" title="Paweł Jankiewicz" href="https://pjankiewicz.github.io/blog//feed.xml">
   <meta property="og:site_name" content="Paweł Jankiewicz">
   <meta property="og:title" content="Rust is the most important language at the moment">
   <meta property="og:description" content="Why I think Rust is and will become the most important language for AI-assisted software development">
-  <meta property="og:url" content="https://pjankiewicz.github.io/blog/posts/rust-is-the-language-for-ai/index.html">
+  <meta property="og:url" content="https://pjankiewicz.github.io/blog/posts/rust-is-the-language-for-ai/">
   
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Rust is the most important language at the moment">
@@ -24,7 +24,7 @@
 <body>  <div class="site-wrapper">
 
   <header class="site-header">
-    <h1><a href="https://pjankiewicz.github.io/blog">Paweł Jankiewicz</a></h1>
+    <h1><a href="https://pjankiewicz.github.io/blog/">Paweł Jankiewicz</a></h1>
     <p>Blog about programming, AI, Machine Learning</p>
   </header>
   <main class="site-main">
@@ -32,136 +32,127 @@
 <article class="post-content">
   <h1>Rust is the most important language at the moment</h1>
   <p class="post-meta">April 23, 2025</p>
-  <h3 id="key-points">Key Points</h3>
+  <h3 id="so-whats-the-gist">So, What's the Gist?</h3>
 <ul>
-<li>Research suggests Rust is increasingly important due to its safety, performance, and adoption by major companies.</li>
-<li>It seems likely that Rust's features benefit AI coding assistants, enhancing automation in software development.</li>
-<li>The evidence leans toward Rust being versatile for web, mobile, and backend, supported by frameworks like Dioxus and SpacetimeDB.</li>
-<li>It appears Rust is widely used by companies like AWS, Microsoft, and Google for critical systems, boosting its relevance.</li>
+<li>Honestly, it feels like Rust is popping up everywhere. Research points to it being a big deal because it's safe, fast, and big companies are actually using it.</li>
+<li>My gut feeling? Rust's features just <em>work</em> well with AI coding assistants. It seems like it makes automating software development easier.</li>
+<li>It's not just for one thing, either. You see it in web stuff, mobile, backend... frameworks like Dioxus and SpacetimeDB show it's got range.</li>
+<li>Plus, when giants like AWS, Microsoft, and Google use it for important systems, you know it's got staying power.</li>
 </ul>
-<h3 id="introduction">Introduction</h3>
-<p>Rust has emerged as a pivotal programming language in 2025, known for its blend of speed, safety, and versatility. This response explores why Rust is considered crucial, its appeal to both human developers and AI, its broad applicability, and its adoption by major tech firms, providing a clear overview for those new to the topic.</p>
-<h3 id="why-rust-matters">Why Rust Matters</h3>
-<p>Rust stands out for its ability to deliver high performance akin to C and C++ while ensuring memory safety without a garbage collector. This makes it ideal for systems programming where reliability is key. Its growing adoption, as seen in surveys like Stack Overflow's 2025 developer survey, underscores its importance, with over 80% of developers expressing a desire to use it again <a href="https://stackoverflow.blog/2020/01/20/what-is-rust-and-why-is-it-so-popular/">Stack Overflow - What is Rust and why is it so popular?</a>. Companies like AWS and Google integrating Rust into critical systems further highlight its significance <a href="https://www.technologyreview.com/2023/02/14/1067869/rust-worlds-fastest-growing-programming-language/">MIT Technology Review - How Rust went from a side project to the world's most-loved programming language</a>.</p>
-<h3 id="rusts-appeal-to-developers-and-ai">Rust's Appeal to Developers and AI</h3>
-<p>Rust's compiler provides detailed error messages, which are ideal for AI coding assistants, simplifying debugging and code generation. Its strong type system and ownership model help AI tools generate accurate code, a trend seen in Microsoft's use of Rust with AI for development tasks <a href="https://medium.com/@Aaron0928/30-year-old-code-killed-microsoft-rewrites-windows-kernel-with-180-000-lines-of-rust-f891c95959f2">Medium - Rust at Microsoft</a>.</p>
-<h3 id="rusts-versatility">Rust's Versatility</h3>
-<p>Rust's versatility is evident in its ability to handle web, frontend, mobile, backend, and machine learning, supported by frameworks like Dioxus for cross-platform apps <a href="https://dioxuslabs.com/">Dioxus Official Website</a>, SpacetimeDB for real-time databases <a href="https://spacetimedb.com/docs">SpacetimeDB Official Website</a>, and Zino for composable applications <a href="https://github.com/zino-rs/zino">Zino Official Website</a>.</p>
-<h3 id="corporate-adoption">Corporate Adoption</h3>
-<p>Major companies like AWS (using Rust in Firecracker), Microsoft (for Azure IoT and Windows), and Google (in Android and Chromium) have adopted Rust, showcasing its broad applicability and growing influence <a href="https://aws.amazon.com/blogs/aws/firecracker-lightweight-virtualization-for-serverless-computing/">AWS Blog - Firecracker</a>, <a href="https://msrc.microsoft.com/blog/2019/09/building-the-azure-iot-edge-security-daemon-in-rust/">Microsoft Blog - Using Rust</a>, <a href="https://security.googleblog.com/2023/01/supporting-use-of-rust-in-chromium.html">Google Blog - Rust in Android</a>.</p>
+<h3 id="quick-intro">Quick Intro</h3>
+<p>Rust. You've probably heard of it. In 2025, it feels like it's really hit its stride – fast, safe, and surprisingly versatile. I wanted to jot down why I think it's so crucial right now, why it clicks for both people and AI, where you can use it, and who's betting on it. Just a quick rundown if you're curious.</p>
+<h3 id="why-does-rust-even-matter">Why Does Rust Even Matter?</h3>
+<p>Here's the thing: Rust manages to be super performant, like C or C++, but without constantly worrying about memory safety issues. No garbage collector needed, which is great for systems programming where things <em>have</em> to be reliable. You see it in developer surveys, like Stack Overflow's from this year – everyone wants to use it or keep using it <a href="https://stackoverflow.blog/2020/01/20/what-is-rust-and-why-is-it-so-popular/">Stack Overflow - What is Rust and why is it so popular?</a>. And it's not just talk; places like AWS and Google are building critical stuff with it. That tells you something <a href="https://www.technologyreview.com/2023/02/14/1067869/rust-worlds-fastest-growing-programming-language/">MIT Technology Review - How Rust went from a side project to the world's most-loved programming language</a>.</p>
+<h3 id="why-devs-and-ai-seem-to-love-rust">Why Devs and AI Seem to Love Rust</h3>
+<p>It's interesting – Rust's compiler can be strict, yeah, but its error messages? Super helpful. This turns out to be gold for AI coding assistants. It gives them clear feedback, making debugging and even generating code less of a shot in the dark. The strong type system and ownership model mean the AI is more likely to spit out code that actually works and is safe. Microsoft seems to be experimenting with this combo quite a bit <a href="https://medium.com/@Aaron0928/30-year-old-code-killed-microsoft-rewrites-windows-kernel-with-180-000-lines-of-rust-f891c95959f2">Medium - Rust at Microsoft</a>.</p>
+<h3 id="rust-isnt-a-one-trick-pony">Rust Isn't a One-Trick Pony</h3>
+<p>You can really use Rust for a lot. Web development, frontend, mobile apps, backend services, even dipping into machine learning. There are some cool frameworks making this happen:
+- <strong>Dioxus</strong>: Build UIs for web, desktop, mobile – all from one Rust codebase. Pretty neat <a href="https://dioxuslabs.com/">Dioxus Official Website</a>.
+- <strong>SpacetimeDB</strong>: This feels different – like a database and server smashed together, great for real-time stuff like games <a href="https://spacetimedb.com/docs">SpacetimeDB Official Website</a>.
+- <strong>Zino</strong>: A newer framework focused on putting things together easily, seems good for building backend apps <a href="https://github.com/zino-rs/zino">Zino Official Website</a>.</p>
+<h3 id="whos-actually-using-it-the-big-players">Who's Actually Using It? The Big Players</h3>
+<p>It's not just hobby projects. Big tech is seriously invested:
+- <strong>AWS</strong>: Uses it in Firecracker, the tech behind Lambda and Fargate.
+- <strong>Microsoft</strong>: Building parts of Azure IoT and even rewriting bits of Windows in Rust for better security.
+- <strong>Google</strong>: Using it in Android and Chromium to cut down on bugs.
+- <strong>Meta</strong>: Using it for backend services where performance counts.
+- <strong>Dropbox</strong>: Rewrote their core sync engine in Rust.
+- <strong>Cloudflare</strong>: Built their powerful Pingora proxy in Rust.
+- <strong>And others</strong>: npm, Discord, Huawei, Atlassian... the list keeps growing.</p>
+<p>Seeing this kind of adoption makes me think Rust isn't just a fad.</p>
 <hr />
-<h3 id="comprehensive-analysis-rusts-rising-prominence-in-2025">Comprehensive Analysis: Rust's Rising Prominence in 2025</h3>
-<p>This section provides a detailed examination of Rust's importance, its appeal to developers and AI, its versatility across domains, and its adoption by major tech companies, drawing from extensive research conducted on April 23, 2025. The analysis aims to offer a thorough understanding for those seeking in-depth insights into Rust's role in modern software development.</p>
-<h4 id="rusts-significance-and-growing-adoption">Rust's Significance and Growing Adoption</h4>
-<p>Rust, a general-purpose programming language, has solidified its position as a critical tool in 2025, driven by its performance, safety, and concurrency features. Unlike C and C++, Rust ensures memory safety without a garbage collector, making it ideal for systems programming where reliability and efficiency are paramount. This is particularly relevant in an era where software underpins critical infrastructure, from cloud services to embedded devices.</p>
-<p>Research from GeeksforGeeks highlights Rust's future in 2025, noting its performance, memory safety, and concurrent features as key drivers of its adoption <a href="https://www.geeksforgeeks.org/future-of-rust/">GeeksforGeeks - The Future of Rust in 2025</a>. Stack Overflow's 2025 developer survey, published in April, reinforces this, with Rust topping the charts as the most desired language, with over 80% of developers expressing a desire to use it again <a href="https://stackoverflow.blog/2020/01/20/what-is-rust-and-why-is-it-so-popular/">Stack Overflow - What is Rust and why is it so popular?</a>. This popularity is fueled by its ability to address memory management challenges, a common pain point in languages like C and C++, as noted in MIT Technology Review's analysis of Rust's rapid adoption <a href="https://www.technologyreview.com/2023/02/14/1067869/rust-worlds-fastest-growing-programming-language/">MIT Technology Review - How Rust went from a side project to the world's most-loved programming language</a>.</p>
-<p>Rust's community and ecosystem further enhance its importance. The language's tooling, including Cargo for package management and Rustfmt for code formatting, provides a seamless development experience. Its inclusive community, as mentioned in Wikipedia, has contributed to its rapid growth, with academic research exploring its safety and performance benefits in fields like astrophysics and bioinformatics <a href="https://en.wikipedia.org/wiki/Rust_%28programming_language%29">Rust (programming language) - Wikipedia</a>.</p>
-<h4 id="rusts-appeal-to-developers-and-ai-coding-assistants">Rust's Appeal to Developers and AI Coding Assistants</h4>
-<p>Rust's appeal extends beyond human developers to AI coding assistants, thanks to its robust ecosystem and compiler feedback. Developers appreciate Rust for its combination of functional and procedural programming, offering features like pattern matching and enums that enhance code expressiveness. The compiler's detailed error messages are particularly valuable for AI tools, as they provide clear inputs for automated debugging and code generation.</p>
-<p>For instance, Rust's strong type system and ownership model, which enforce memory safety at compile time, allow AI coding assistants to generate code with fewer errors. This is evident in Microsoft's exploration of Rust with AI, where tools like RustCoder, built on models like Qwen-2.5 Coder, assist in learning and coding Rust, as discussed in a CNCF blog post from January 2025 <a href="https://www.cncf.io/blog/2025/01/10/rustcoder-ai-assisted-rust-learning/">RustCoder: AI-assisted Rust learning | CNCF</a>. Reddit discussions also highlight the use of AI tools like Ollama and Continue for Rust coding, indicating a growing trend of AI integration <a href="https://www.reddit.com/r/rust/comments/1dl4pkk/ai_for_rust/">r/rust on Reddit: AI for Rust?</a>.</p>
-<p>This synergy is further supported by articles like the one from Medium, which notes Microsoft's use of Rust in AI-driven development, leveraging its safety features for code generation and debugging <a href="https://medium.com/@Aaron0928/30-year-old-code-killed-microsoft-rewrites-windows-kernel-with-180-000-lines-of-rust-f891c95959f2">Medium - Rust at Microsoft</a>. The evidence suggests that Rust's design aligns well with the needs of AI-assisted development, enhancing productivity and reducing human error.</p>
-<h4 id="rusts-versatility-across-development-domains">Rust's Versatility Across Development Domains</h4>
-<p>Rust's versatility is one of its strongest selling points, allowing developers to use a single language for a wide range of applications, from web and mobile to backend and machine learning. This is facilitated by a rich ecosystem of frameworks and libraries, as evidenced by projects like Dioxus, SpacetimeDB, and Zino.</p>
-<ul>
-<li>
-<p><strong>Dioxus</strong>: A fullstack, cross-platform app framework for Rust, Dioxus enables developers to build web, desktop, and mobile applications from a single codebase. Its features, such as live hot-reloading and type-safe routing, make it ideal for rapid development, as detailed on its official website <a href="https://dioxuslabs.com/">Dioxus Official Website</a>. A Medium article from February 2025 praises Dioxus for its performance and efficiency, noting its React-like experience with Rust's safety <a href="https://medium.com/@sreevedvp/mastering-dioxus-a-powerful-rust-framework-for-cross-platform-development-b1d5a45d1a01">Mastering Dioxus: A Powerful Rust Framework for Cross-Platform Development | Medium</a>.</p>
-</li>
-<li>
-<p><strong>SpacetimeDB</strong>: This novel database system, written in Rust, combines relational database and server capabilities, allowing clients to execute logic directly within the database. Designed for real-time applications like multiplayer games, SpacetimeDB offers high performance and simplifies network management, as described in its documentation <a href="https://spacetimedb.com/docs">SpacetimeDB Official Website</a>. Reddit discussions from 2023 highlight its use in game development, underscoring its real-world applicability <a href="https://www.reddit.com/r/rust/comments/15mgscr/spacetimedb_a_new_database_written_in_rust_that/?rdt=49409">Reddit - The heart of the internet</a>.</p>
-</li>
-<li>
-<p><strong>Zino</strong>: A next-generation framework for composable applications, Zino emphasizes simplicity, extensibility, and productivity. It provides out-of-the-box features like a minimal design, composable architecture, and an expressive ORM for databases like MySQL and PostgreSQL, as noted in its GitHub repository <a href="https://github.com/zino-rs/zino">Zino GitHub Repository</a>. A LinuxLinks article from November 2024 details its innovations, including a lightweight scheduler and built-in support for tracing and metrics <a href="https://www.linuxlinks.com/zino-next-generation-framework-for-composable-applications/">Zino - next-generation framework for composable applications - LinuxLinks</a>.</p>
-</li>
-</ul>
-<p>These frameworks demonstrate Rust's ability to handle diverse workloads, supported by its performance and safety features, making it a versatile choice for modern software development [6][7][8].</p>
-<h4 id="the-future-of-coding-humans-and-ai-with-rust">The Future of Coding: Humans and AI with Rust</h4>
-<p>The future of coding is increasingly automated, with AI playing a significant role in assisting developers. Rust is well-positioned to lead this transformation, given its performance, safety, and concurrency features. Its functional programming roots, including enums, pattern matching, and collection operations, align with the needs of AI coding assistants, enabling more expressive and safe code generation.</p>
-<p>Articles like one from Data Science Talent discuss Rust's potential as the future of AI, citing Elon Musk's claim that Rust will be the language of artificial general intelligence <a href="https://datasciencetalent.co.uk/could-rust-be-the-future-of-ai-by-francesco-gadaleta/">Could Rust Be the Future of AI? By Francesco Gadaleta - Data Science Talent</a>. Another from Medium in February 2025 explores Rust for high-performance machine learning, noting its speed and safety benefits <a href="https://aarambhdevhub.medium.com/rust-for-ai-the-future-of-high-performance-machine-learning-56bc93dd1e74">Rust for AI: The Future of High-Performance Machine Learning | Medium</a>. These insights suggest that Rust's design will allow AI tools to generate and debug code more effectively, reducing the burden on human developers.</p>
-<p>Red Badger's blog post from September 2023 also discusses how AI, Rust, and WebAssembly are shaping the future of coding, emphasizing Rust's role in building robust, efficient systems <a href="https://content.red-badger.com/resources/how-ai-rust-and-webassembly-are-shaping-the-future-of-coding">How AI, Rust, and WebAssembly Are Shaping the Future of Coding - Red Badger</a>. This aligns with the trend of Rust being used in AI-driven development workflows, as seen in Microsoft's initiatives, enhancing productivity and innovation [9][10].</p>
-<h4 id="functional-programming-in-rust-benefits-for-ai-assisted-development">Functional Programming in Rust: Benefits for AI-Assisted Development</h4>
-<p>Rust's strong functional programming roots make it particularly suitable for AI coding assistants. Its first compiler was built in OCaml, and it includes robust support for functional concepts like enums, pattern matching, and collection operations, comparable to Scala. These features enable AI tools to generate code that is both efficient and safe, aligning with the needs of automated development.</p>
-<p>The Rust Programming Language book details functional features like iterators and closures, which are key for writing idiomatic, fast Rust code, beneficial for AI tools <a href="https://doc.rust-lang.org/book/ch13-00-functional-features.html">Functional Language Features: Iterators and Closures - The Rust Programming Language</a>. An article from Pragmatic Coders in May 2025 highlights how Rust's functional programming aspects, such as immutability and higher-order functions, enhance AI-driven code completion and optimization <a href="https://www.pragmaticcoders.com/resources/ai-developer-tools">Best AI for coding in 2025: software development, tool for programming | Pragmatic Coders</a>. This balance between pragmatism and functional programming makes Rust accessible yet powerful for AI-assisted development [11][12].</p>
-<h4 id="notable-rust-projects-and-their-impact">Notable Rust Projects and Their Impact</h4>
-<p>Rust's ecosystem is rich with innovative projects that showcase its versatility and power. Three notable projects include:</p>
-<ul>
-<li>
-<p><strong>Dioxus</strong>: A fullstack, cross-platform app framework, Dioxus enables developers to build web, desktop, and mobile applications from a single codebase. Its features, such as live hot-reloading and type-safe routing, are detailed in its GitHub repository, with a Medium article from February 2025 praising its performance <a href="https://github.com/DioxusLabs/dioxus">Dioxus GitHub Repository</a>, <a href="https://medium.com/@sreevedvp/mastering-dioxus-a-powerful-rust-framework-for-cross-platform-development-b1d5a45d1a01">Mastering Dioxus: A Powerful Rust Framework for Cross-Platform Development | Medium</a>.</p>
-</li>
-<li>
-<p><strong>SpacetimeDB</strong>: A novel database system, SpacetimeDB combines relational database and server capabilities, ideal for real-time applications. Its documentation highlights its use in multiplayer games, with Reddit discussions from 2023 noting its real-world applicability <a href="https://github.com/clockworklabs/SpacetimeDB">SpacetimeDB GitHub Repository</a>, <a href="https://www.reddit.com/r/rust/comments/15mgscr/spacetimedb_a_new_database_written_in_rust_that/?rdt=49409">Reddit - The heart of the internet</a>.</p>
-</li>
-<li>
-<p><strong>Zino</strong>: A next-generation framework for composable applications, Zino emphasizes simplicity and productivity, with features like an expressive ORM and built-in tracing, as detailed in its GitHub repository and a LinuxLinks article from November 2024 <a href="https://github.com/zino-rs/zino">Zino GitHub Repository</a>, <a href="https://www.linuxlinks.com/zino-next-generation-framework-for-composable-applications/">Zino - next-generation framework for composable applications - LinuxLinks</a>.</p>
-</li>
-</ul>
-<p>These projects illustrate Rust's potential to simplify complex development tasks while maintaining high performance and safety [13][14][15].</p>
-<h4 id="adoption-by-major-tech-companies-a-detailed-overview">Adoption by Major Tech Companies: A Detailed Overview</h4>
-<p>Rust's adoption by major tech companies underscores its growing influence. Below is a table summarizing key companies and their use of Rust, based on research conducted in April 2025:</p>
+<h3 id="digging-a-bit-deeper-rusts-rise-in-2025">Digging a Bit Deeper: Rust's Rise in 2025</h3>
+<p>Alright, let's unpack this Rust thing a bit more. I've been looking into it (as of April 23, 2025), and here's a more detailed take on why it feels so important right now.</p>
+<h4 id="why-rust-feels-significant">Why Rust Feels Significant</h4>
+<p>Rust has carved out a niche by being fast <em>and</em> safe. You get performance close to C/C++, but the compiler helps prevent those nasty memory bugs (like dangling pointers or data races) <em>before</em> you even run the code. No garbage collector means predictable performance, which is crucial for systems-level stuff, cloud infrastructure, embedded devices – basically, anywhere reliability matters.</p>
+<p>The buzz isn't just hype. GeeksforGeeks talks about its bright future <a href="https://www.geeksforgeeks.org/future-of-rust/">GeeksforGeeks - The Future of Rust in 2025</a>, and Stack Overflow surveys consistently show developers love it or really want to learn it <a href="https://stackoverflow.blog/2020/01/20/what-is-rust-and-why-is-it-so-popular/">Stack Overflow - What is Rust and why is it so popular?</a>. Why? It solves real problems, especially the memory management headaches common in older systems languages <a href="https://www.technologyreview.com/2023/02/14/1067869/rust-worlds-fastest-growing-programming-language/">MIT Technology Review - How Rust went from a side project to the world's most-loved programming language</a>.</p>
+<p>Plus, the tooling (like Cargo for managing packages) and the community are pretty great. It feels like a language with momentum <a href="https://en.wikipedia.org/wiki/Rust_%28programming_language%29">Rust (programming language) - Wikipedia</a>.</p>
+<h4 id="the-connection-between-rust-developers-and-ai">The Connection Between Rust, Developers, and AI</h4>
+<p>So, why does Rust seem to click with both human coders and AI assistants? For humans, it blends different programming styles nicely and has features like pattern matching that make code clean. But the real magic for AI might be the compiler.</p>
+<p>Think about it: the compiler gives <em>specific</em>, detailed error messages. For an AI trying to write or fix code, that's invaluable input. It's much better than a vague crash. The strong type system and ownership rules also guide the AI toward generating safer, more correct code from the start. We're seeing this play out with tools like Microsoft's RustCoder <a href="https://www.cncf.io/blog/2025/01/10/rustcoder-ai-assisted-rust-learning/">RustCoder: AI-assisted Rust learning | CNCF</a> and discussions online about using AI for Rust development <a href="https://www.reddit.com/r/rust/comments/1dl4pkk/ai_for_rust/">r/rust on Reddit: AI for Rust?</a>. It feels like Rust's design inherently makes it easier for AI to "understand" and work with <a href="https://medium.com/@Aaron0928/30-year-old-code-killed-microsoft-rewrites-windows-kernel-with-180-000-lines-of-rust-f891c95959f2">Medium - Rust at Microsoft</a>.</p>
+<h4 id="rusts-flexibility-not-just-for-one-job">Rust's Flexibility: Not Just for One Job</h4>
+<p>One of the coolest things about Rust is that you're not locked into one type of development. It's proving itself useful across the board:
+- <strong>Web &amp; Cross-Platform Apps (Dioxus):</strong> Seriously, building UIs for web, desktop, <em>and</em> mobile with one Rust codebase? Dioxus is making that happen, and people seem impressed with its performance <a href="https://dioxuslabs.com/">Dioxus Official Website</a>, <a href="https://medium.com/@sreevedvp/mastering-dioxus-a-powerful-rust-framework-for-cross-platform-development-b1d5a45d1a01">Mastering Dioxus: A Powerful Rust Framework for Cross-Platform Development | Medium</a>.
+- <strong>Real-time Systems (SpacetimeDB):</strong> This database is wild. It basically combines the database and server logic, letting clients run code <em>in</em> the database. Sounds perfect for multiplayer games or other real-time apps <a href="https://spacetimedb.com/docs">SpacetimeDB Official Website</a>, <a href="https://www.reddit.com/r/rust/comments/15mgscr/spacetimedb_a_new_database_written_in_rust_that/?rdt=49409">Reddit - The heart of the internet</a>.
+- <strong>Composable Backends (Zino):</strong> Zino aims to make building backend applications simpler and more flexible, with built-in tools for databases, tracing, etc. <a href="https://github.com/zino-rs/zino">Zino GitHub Repository</a>, <a href="https://www.linuxlinks.com/zino-next-generation-framework-for-composable-applications/">Zino - next-generation framework for composable applications - LinuxLinks</a>.</p>
+<p>This flexibility means you can potentially stick with Rust for more parts of your stack, which is pretty appealing.</p>
+<h4 id="codings-future-humans-ai-rust">Coding's Future: Humans + AI + Rust?</h4>
+<p>Coding is changing fast. AI assistants are becoming standard tools, automating more and more. Rust seems uniquely positioned for this future. Its performance, safety, and concurrency are exactly what you need for reliable systems.</p>
+<p>And its functional programming roots (enums, pattern matching, iterators – think Scala, but maybe more pragmatic) seem to mesh well with how AI might generate code. Some people are even speculating Rust could be central to future AI development itself <a href="https://datasciencetalent.co.uk/could-rust-be-the-future-of-ai-by-francesco-gadaleta/">Could Rust Be the Future of AI? By Francesco Gadaleta - Data Science Talent</a>, <a href="https://aarambhdevhub.medium.com/rust-for-ai-the-future-of-high-performance-machine-learning-56bc93dd1e74">Rust for AI: The Future of High-Performance Machine Learning | Medium</a>. It feels like Rust, AI, and maybe WebAssembly are converging to change how we build software <a href="https://content.red-badger.com/resources/how-ai-rust-and-webassembly-are-shaping-the-future-of-coding">How AI, Rust, and WebAssembly Are Shaping the Future of Coding - Red Badger</a>.</p>
+<h4 id="functional-programmings-role">Functional Programming's Role</h4>
+<p>It's worth noting Rust borrows heavily from functional programming (it was first written in OCaml!). Features like immutable data by default, powerful enums and pattern matching, and expressive iterators/closures make the code cleaner and often safer. This structure seems beneficial for AI tools trying to reason about and generate code <a href="https://doc.rust-lang.org/book/ch13-00-functional-features.html">Functional Language Features: Iterators and Closures - The Rust Programming Language</a>, <a href="https://www.pragmaticcoders.com/resources/ai-developer-tools">Best AI for coding in 2025: software development, tool for programming | Pragmatic Coders</a>. It strikes a good balance – practical but with strong functional underpinnings.</p>
+<h4 id="cool-rust-projects-worth-noting">Cool Rust Projects Worth Noting</h4>
+<p>Just highlighting these again because they show what's possible:
+- <strong>Dioxus:</strong> Write UIs once, run them anywhere (web, desktop, mobile) <a href="https://github.com/DioxusLabs/dioxus">Dioxus GitHub Repository</a>, <a href="https://medium.com/@sreevedvp/mastering-dioxus-a-powerful-rust-framework-for-cross-platform-development-b1d5a45d1a01">Mastering Dioxus | Medium</a>.
+- <strong>SpacetimeDB:</strong> Database meets application server for real-time magic <a href="https://github.com/clockworklabs/SpacetimeDB">SpacetimeDB GitHub Repository</a>, <a href="https://www.reddit.com/r/rust/comments/15mgscr/spacetimedb_a_new_database_written_in_rust_that/?rdt=49409">Reddit discussion</a>.
+- <strong>Zino:</strong> A modern take on building backend applications with composability in mind <a href="https://github.com/zino-rs/zino">Zino GitHub Repository</a>, <a href="https://www.linuxlinks.com/zino-next-generation-framework-for-composable-applications/">LinuxLinks review</a>.</p>
+<h4 id="whos-using-rust-a-quick-recap">Who's Using Rust? A Quick Recap</h4>
+<p>The corporate adoption is pretty telling. Here's a rundown based on what I could find around April 2025:</p>
 <table>
 <thead>
 <tr>
 <th><strong>Company</strong></th>
-<th><strong>Use Case</strong></th>
-<th><strong>Details</strong></th>
+<th><strong>What they're doing with Rust</strong></th>
+<th><strong>Source/Link</strong></th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>Amazon Web Services (AWS)</td>
-<td>Performance-sensitive components, Firecracker virtualization</td>
-<td>Uses Rust in Firecracker for AWS Lambda and Fargate, open-sourced in 2018 <a href="https://aws.amazon.com/blogs/aws/firecracker-lightweight-virtualization-for-serverless-computing/">AWS Blog - Firecracker</a></td>
+<td>Core tech for Lambda/Fargate (Firecracker), other performance bits</td>
+<td><a href="https://aws.amazon.com/blogs/aws/firecracker-lightweight-virtualization-for-serverless-computing/">AWS Blog - Firecracker</a></td>
 </tr>
 <tr>
 <td>Microsoft</td>
-<td>Azure IoT Edge, Windows kernel rewriting</td>
-<td>Employs Rust for Azure IoT Edge security daemon and parts of Windows for enhanced security <a href="https://msrc.microsoft.com/blog/2019/09/building-the-azure-iot-edge-security-daemon-in-rust/">Microsoft Blog - Using Rust</a></td>
+<td>Azure IoT security, rewriting parts of Windows kernel</td>
+<td><a href="https://msrc.microsoft.com/blog/2019/09/building-the-azure-iot-edge-security-daemon-in-rust/">Microsoft Blog - Using Rust</a></td>
 </tr>
 <tr>
 <td>Google</td>
-<td>Android low-level components, Chromium support</td>
-<td>Integrates Rust into Android (e.g., Bluetooth stack) and supports Rust in Chromium, reducing vulnerabilities <a href="https://security.googleblog.com/2023/01/supporting-use-of-rust-in-chromium.html">Google Blog - Rust in Android</a></td>
+<td>Android system components (like Bluetooth), securing Chromium</td>
+<td><a href="https://security.googleblog.com/2023/01/supporting-use-of-rust-in-chromium.html">Google Blog - Rust in Android</a></td>
 </tr>
 <tr>
 <td>Meta (Facebook)</td>
-<td>Server-side programming, internal tools</td>
-<td>Uses Rust for performance-sensitive back-end services and CLI tools, endorsed since 2022 <a href="https://engineering.fb.com/2022/07/27/developer-tools/programming-languages-endorsed-for-server-side-use-at-meta/">Meta Blog - Switching to Rust</a></td>
+<td>Backend services, command-line tools</td>
+<td><a href="https://engineering.fb.com/2022/07/27/developer-tools/programming-languages-endorsed-for-server-side-use-at-meta/">Meta Blog - Switching to Rust</a></td>
 </tr>
 <tr>
 <td>Dropbox</td>
-<td>File synchronization engine rewrite</td>
-<td>Rewrote sync engine in Rust for improved performance and reliability, announced in 2020 <a href="https://dropbox.tech/infrastructure/rewriting-the-heart-of-our-sync-engine">Dropbox Blog - Rewriting sync engine in Rust</a></td>
+<td>Rewrote their entire file sync engine</td>
+<td><a href="https://dropbox.tech/infrastructure/rewriting-the-heart-of-our-sync-engine">Dropbox Blog - Rewriting sync engine in Rust</a></td>
 </tr>
 <tr>
 <td>Cloudflare</td>
-<td>Pingora web proxy</td>
-<td>Developed Pingora in Rust to replace Nginx, handling trillions of requests daily, open-sourced in 2024 <a href="https://blog.cloudflare.com/pingora-open-source/">Cloudflare Blog - Pingora</a></td>
+<td>Built Pingora, their super-fast web proxy</td>
+<td><a href="https://blog.cloudflare.com/pingora-open-source/">Cloudflare Blog - Pingora</a></td>
 </tr>
 <tr>
 <td>npm (Node Package Manager)</td>
-<td>Authentication service</td>
-<td>Adopted Rust for authentication to enhance performance, reported in 2019 <a href="https://www.infoq.com/news/2019/03/rust-npm-performance/">InfoQ - npm adopting Rust</a></td>
+<td>Sped up their authentication service</td>
+<td><a href="https://www.infoq.com/news/2019/03/rust-npm-performance/">InfoQ - npm adopting Rust</a></td>
 </tr>
 <tr>
 <td>Discord</td>
-<td>System parts for performance</td>
-<td>Rewrote parts in Rust for better performance, switching from Go, detailed in a 2025 blog post <a href="https://discord.com/blog/why-discord-is-switching-from-go-to-rust">Discord Blog - Switching to Rust</a></td>
+<td>Replaced Go code with Rust for better performance</td>
+<td><a href="https://discord.com/blog/why-discord-is-switching-from-go-to-rust">Discord Blog - Switching to Rust</a></td>
 </tr>
 <tr>
 <td>Huawei</td>
-<td>Codebase integration for safety and performance</td>
-<td>Integrated Rust via Trusted Programming initiative, focusing on secure software, noted in 2021 <a href="https://trusted-programming.github.io/2021/02/07/our-rust-mission-at-huawei.html">Huawei Trusted Programming Blog</a></td>
+<td>Using it for safer, more secure software development</td>
+<td><a href="https://trusted-programming.github.io/2021/02/07/our-rust-mission-at-huawei.html">Huawei Trusted Programming Blog</a></td>
 </tr>
 <tr>
 <td>Atlassian</td>
-<td>Service for analyzing petabytes of source code</td>
-<td>Uses Rust for a specific service, as listed on Rust's Friends page, indicating infrastructure use <a href="https://prev.rust-lang.org/en-US/friends.html">Rust Website - Friends of Rust</a></td>
+<td>Built a service to analyze massive amounts of code</td>
+<td><a href="https://prev.rust-lang.org/en-US/friends.html">Rust Website - Friends of Rust</a></td>
 </tr>
 </tbody>
 </table>
-<p>This table illustrates Rust's broad adoption, with each company leveraging its safety and performance for critical applications. The evidence leans toward Rust being a preferred choice for modern software development, with its influence continuing to grow [16][17][18][19][20][21][22][23][24][25].</p>
-<h4 id="conclusion">Conclusion</h4>
-<p>Rust's importance in 2025 is undeniable, driven by its safety, performance, and versatility. Its appeal to both human developers and AI coding assistants, supported by a robust ecosystem and corporate adoption, positions it as a leader in the future of software development. This comprehensive analysis, based on research conducted on April 23, 2025, underscores Rust's role in shaping the technological landscape.</p>
-<h3 id="key-citations">Key Citations</h3>
+<p>Seeing this list makes it clear Rust is being trusted for some heavy lifting. It's not just experimental anymore.</p>
+<h4 id="wrapping-up">Wrapping Up</h4>
+<p>So yeah, Rust feels like a big deal in 2025. It's fast, it's safe, it's flexible, and it seems to work really well with the way coding is heading (hello, AI assistants!). Both developers and major companies are embracing it. Based on everything I've seen, it looks set to be a key language for the foreseeable future.</p>
+<h3 id="some-links-i-found-useful">Some Links I Found Useful</h3>
 <ul>
 <li><a href="https://www.geeksforgeeks.org/future-of-rust/">GeeksforGeeks The Future of Rust in 2025</a></li>
 <li><a href="https://stackoverflow.blog/2020/01/20/what-is-rust-and-why-is-it-so-popular/">Stack Overflow What is Rust and why is it so popular?</a></li>
