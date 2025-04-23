@@ -22,12 +22,15 @@ It's interesting – Rust's compiler can be strict, yeah, but its error messages
 
 ### Rust Isn't a One-Trick Pony
 You can really use Rust for a lot. Web development, frontend, mobile apps, backend services, even dipping into machine learning. There are some cool frameworks making this happen:
+
 - **Dioxus**: Build UIs for web, desktop, mobile – all from one Rust codebase. Pretty neat [Dioxus Official Website](https://dioxuslabs.com/).
 - **SpacetimeDB**: This feels different – like a database and server smashed together, great for real-time stuff like games [SpacetimeDB Official Website](https://spacetimedb.com/docs).
 - **Zino**: A newer framework focused on putting things together easily, seems good for building backend apps [Zino Official Website](https://github.com/zino-rs/zino).
 
 ### Who's Actually Using It? The Big Players
+
 It's not just hobby projects. Big tech is seriously invested:
+
 - **AWS**: Uses it in Firecracker, the tech behind Lambda and Fargate.
 - **Microsoft**: Building parts of Azure IoT and even rewriting bits of Windows in Rust for better security.
 - **Google**: Using it in Android and Chromium to cut down on bugs.
@@ -58,6 +61,7 @@ Think about it: the compiler gives *specific*, detailed error messages. For an A
 
 #### Rust's Flexibility: Not Just for One Job
 One of the coolest things about Rust is that you're not locked into one type of development. It's proving itself useful across the board:
+
 - **Web & Cross-Platform Apps (Dioxus):** Seriously, building UIs for web, desktop, *and* mobile with one Rust codebase? Dioxus is making that happen, and people seem impressed with its performance [Dioxus Official Website](https://dioxuslabs.com/), [Mastering Dioxus: A Powerful Rust Framework for Cross-Platform Development | Medium](https://medium.com/@sreevedvp/mastering-dioxus-a-powerful-rust-framework-for-cross-platform-development-b1d5a45d1a01).
 - **Real-time Systems (SpacetimeDB):** This database is wild. It basically combines the database and server logic, letting clients run code *in* the database. Sounds perfect for multiplayer games or other real-time apps [SpacetimeDB Official Website](https://spacetimedb.com/docs), [Reddit - The heart of the internet](https://www.reddit.com/r/rust/comments/15mgscr/spacetimedb_a_new_database_written_in_rust_that/?rdt=49409).
 - **Composable Backends (Zino):** Zino aims to make building backend applications simpler and more flexible, with built-in tools for databases, tracing, etc. [Zino GitHub Repository](https://github.com/zino-rs/zino), [Zino - next-generation framework for composable applications - LinuxLinks](https://www.linuxlinks.com/zino-next-generation-framework-for-composable-applications/).
@@ -74,6 +78,7 @@ It's worth noting Rust borrows heavily from functional programming (it was first
 
 #### Cool Rust Projects Worth Noting
 Just highlighting these again because they show what's possible:
+
 - **Dioxus:** Write UIs once, run them anywhere (web, desktop, mobile) [Dioxus GitHub Repository](https://github.com/DioxusLabs/dioxus), [Mastering Dioxus | Medium](https://medium.com/@sreevedvp/mastering-dioxus-a-powerful-rust-framework-for-cross-platform-development-b1d5a45d1a01).
 - **SpacetimeDB:** Database meets application server for real-time magic [SpacetimeDB GitHub Repository](https://github.com/clockworklabs/SpacetimeDB), [Reddit discussion](https://www.reddit.com/r/rust/comments/15mgscr/spacetimedb_a_new_database_written_in_rust_that/?rdt=49409).
 - **Zino:** A modern take on building backend applications with composability in mind [Zino GitHub Repository](https://github.com/zino-rs/zino), [LinuxLinks review](https://www.linuxlinks.com/zino-next-generation-framework-for-composable-applications/).

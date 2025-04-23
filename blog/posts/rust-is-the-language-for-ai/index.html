@@ -49,19 +49,23 @@
 <h3 id="why-devs-and-ai-seem-to-love-rust">Why Devs and AI Seem to Love Rust</h3>
 <p>It's interesting – Rust's compiler can be strict, yeah, but its error messages? Super helpful. This turns out to be gold for AI coding assistants. It gives them clear feedback, making debugging and even generating code less of a shot in the dark. The strong type system and ownership model mean the AI is more likely to spit out code that actually works and is safe. Microsoft seems to be experimenting with this combo quite a bit <a href="https://medium.com/@Aaron0928/30-year-old-code-killed-microsoft-rewrites-windows-kernel-with-180-000-lines-of-rust-f891c95959f2">Medium - Rust at Microsoft</a>.</p>
 <h3 id="rust-isnt-a-one-trick-pony">Rust Isn't a One-Trick Pony</h3>
-<p>You can really use Rust for a lot. Web development, frontend, mobile apps, backend services, even dipping into machine learning. There are some cool frameworks making this happen:
-- <strong>Dioxus</strong>: Build UIs for web, desktop, mobile – all from one Rust codebase. Pretty neat <a href="https://dioxuslabs.com/">Dioxus Official Website</a>.
-- <strong>SpacetimeDB</strong>: This feels different – like a database and server smashed together, great for real-time stuff like games <a href="https://spacetimedb.com/docs">SpacetimeDB Official Website</a>.
-- <strong>Zino</strong>: A newer framework focused on putting things together easily, seems good for building backend apps <a href="https://github.com/zino-rs/zino">Zino Official Website</a>.</p>
+<p>You can really use Rust for a lot. Web development, frontend, mobile apps, backend services, even dipping into machine learning. There are some cool frameworks making this happen:</p>
+<ul>
+<li><strong>Dioxus</strong>: Build UIs for web, desktop, mobile – all from one Rust codebase. Pretty neat <a href="https://dioxuslabs.com/">Dioxus Official Website</a>.</li>
+<li><strong>SpacetimeDB</strong>: This feels different – like a database and server smashed together, great for real-time stuff like games <a href="https://spacetimedb.com/docs">SpacetimeDB Official Website</a>.</li>
+<li><strong>Zino</strong>: A newer framework focused on putting things together easily, seems good for building backend apps <a href="https://github.com/zino-rs/zino">Zino Official Website</a>.</li>
+</ul>
 <h3 id="whos-actually-using-it-the-big-players">Who's Actually Using It? The Big Players</h3>
-<p>It's not just hobby projects. Big tech is seriously invested:
-- <strong>AWS</strong>: Uses it in Firecracker, the tech behind Lambda and Fargate.
-- <strong>Microsoft</strong>: Building parts of Azure IoT and even rewriting bits of Windows in Rust for better security.
-- <strong>Google</strong>: Using it in Android and Chromium to cut down on bugs.
-- <strong>Meta</strong>: Using it for backend services where performance counts.
-- <strong>Dropbox</strong>: Rewrote their core sync engine in Rust.
-- <strong>Cloudflare</strong>: Built their powerful Pingora proxy in Rust.
-- <strong>And others</strong>: npm, Discord, Huawei, Atlassian... the list keeps growing.</p>
+<p>It's not just hobby projects. Big tech is seriously invested:</p>
+<ul>
+<li><strong>AWS</strong>: Uses it in Firecracker, the tech behind Lambda and Fargate.</li>
+<li><strong>Microsoft</strong>: Building parts of Azure IoT and even rewriting bits of Windows in Rust for better security.</li>
+<li><strong>Google</strong>: Using it in Android and Chromium to cut down on bugs.</li>
+<li><strong>Meta</strong>: Using it for backend services where performance counts.</li>
+<li><strong>Dropbox</strong>: Rewrote their core sync engine in Rust.</li>
+<li><strong>Cloudflare</strong>: Built their powerful Pingora proxy in Rust.</li>
+<li><strong>And others</strong>: npm, Discord, Huawei, Atlassian... the list keeps growing.</li>
+</ul>
 <p>Seeing this kind of adoption makes me think Rust isn't just a fad.</p>
 <hr />
 <h3 id="digging-a-bit-deeper-rusts-rise-in-2025">Digging a Bit Deeper: Rust's Rise in 2025</h3>
@@ -74,10 +78,12 @@
 <p>So, why does Rust seem to click with both human coders and AI assistants? For humans, it blends different programming styles nicely and has features like pattern matching that make code clean. But the real magic for AI might be the compiler.</p>
 <p>Think about it: the compiler gives <em>specific</em>, detailed error messages. For an AI trying to write or fix code, that's invaluable input. It's much better than a vague crash. The strong type system and ownership rules also guide the AI toward generating safer, more correct code from the start. We're seeing this play out with tools like Microsoft's RustCoder <a href="https://www.cncf.io/blog/2025/01/10/rustcoder-ai-assisted-rust-learning/">RustCoder: AI-assisted Rust learning | CNCF</a> and discussions online about using AI for Rust development <a href="https://www.reddit.com/r/rust/comments/1dl4pkk/ai_for_rust/">r/rust on Reddit: AI for Rust?</a>. It feels like Rust's design inherently makes it easier for AI to "understand" and work with <a href="https://medium.com/@Aaron0928/30-year-old-code-killed-microsoft-rewrites-windows-kernel-with-180-000-lines-of-rust-f891c95959f2">Medium - Rust at Microsoft</a>.</p>
 <h4 id="rusts-flexibility-not-just-for-one-job">Rust's Flexibility: Not Just for One Job</h4>
-<p>One of the coolest things about Rust is that you're not locked into one type of development. It's proving itself useful across the board:
-- <strong>Web &amp; Cross-Platform Apps (Dioxus):</strong> Seriously, building UIs for web, desktop, <em>and</em> mobile with one Rust codebase? Dioxus is making that happen, and people seem impressed with its performance <a href="https://dioxuslabs.com/">Dioxus Official Website</a>, <a href="https://medium.com/@sreevedvp/mastering-dioxus-a-powerful-rust-framework-for-cross-platform-development-b1d5a45d1a01">Mastering Dioxus: A Powerful Rust Framework for Cross-Platform Development | Medium</a>.
-- <strong>Real-time Systems (SpacetimeDB):</strong> This database is wild. It basically combines the database and server logic, letting clients run code <em>in</em> the database. Sounds perfect for multiplayer games or other real-time apps <a href="https://spacetimedb.com/docs">SpacetimeDB Official Website</a>, <a href="https://www.reddit.com/r/rust/comments/15mgscr/spacetimedb_a_new_database_written_in_rust_that/?rdt=49409">Reddit - The heart of the internet</a>.
-- <strong>Composable Backends (Zino):</strong> Zino aims to make building backend applications simpler and more flexible, with built-in tools for databases, tracing, etc. <a href="https://github.com/zino-rs/zino">Zino GitHub Repository</a>, <a href="https://www.linuxlinks.com/zino-next-generation-framework-for-composable-applications/">Zino - next-generation framework for composable applications - LinuxLinks</a>.</p>
+<p>One of the coolest things about Rust is that you're not locked into one type of development. It's proving itself useful across the board:</p>
+<ul>
+<li><strong>Web &amp; Cross-Platform Apps (Dioxus):</strong> Seriously, building UIs for web, desktop, <em>and</em> mobile with one Rust codebase? Dioxus is making that happen, and people seem impressed with its performance <a href="https://dioxuslabs.com/">Dioxus Official Website</a>, <a href="https://medium.com/@sreevedvp/mastering-dioxus-a-powerful-rust-framework-for-cross-platform-development-b1d5a45d1a01">Mastering Dioxus: A Powerful Rust Framework for Cross-Platform Development | Medium</a>.</li>
+<li><strong>Real-time Systems (SpacetimeDB):</strong> This database is wild. It basically combines the database and server logic, letting clients run code <em>in</em> the database. Sounds perfect for multiplayer games or other real-time apps <a href="https://spacetimedb.com/docs">SpacetimeDB Official Website</a>, <a href="https://www.reddit.com/r/rust/comments/15mgscr/spacetimedb_a_new_database_written_in_rust_that/?rdt=49409">Reddit - The heart of the internet</a>.</li>
+<li><strong>Composable Backends (Zino):</strong> Zino aims to make building backend applications simpler and more flexible, with built-in tools for databases, tracing, etc. <a href="https://github.com/zino-rs/zino">Zino GitHub Repository</a>, <a href="https://www.linuxlinks.com/zino-next-generation-framework-for-composable-applications/">Zino - next-generation framework for composable applications - LinuxLinks</a>.</li>
+</ul>
 <p>This flexibility means you can potentially stick with Rust for more parts of your stack, which is pretty appealing.</p>
 <h4 id="codings-future-humans-ai-rust">Coding's Future: Humans + AI + Rust?</h4>
 <p>Coding is changing fast. AI assistants are becoming standard tools, automating more and more. Rust seems uniquely positioned for this future. Its performance, safety, and concurrency are exactly what you need for reliable systems.</p>
@@ -85,10 +91,12 @@
 <h4 id="functional-programmings-role">Functional Programming's Role</h4>
 <p>It's worth noting Rust borrows heavily from functional programming (it was first written in OCaml!). Features like immutable data by default, powerful enums and pattern matching, and expressive iterators/closures make the code cleaner and often safer. This structure seems beneficial for AI tools trying to reason about and generate code <a href="https://doc.rust-lang.org/book/ch13-00-functional-features.html">Functional Language Features: Iterators and Closures - The Rust Programming Language</a>, <a href="https://www.pragmaticcoders.com/resources/ai-developer-tools">Best AI for coding in 2025: software development, tool for programming | Pragmatic Coders</a>. It strikes a good balance – practical but with strong functional underpinnings.</p>
 <h4 id="cool-rust-projects-worth-noting">Cool Rust Projects Worth Noting</h4>
-<p>Just highlighting these again because they show what's possible:
-- <strong>Dioxus:</strong> Write UIs once, run them anywhere (web, desktop, mobile) <a href="https://github.com/DioxusLabs/dioxus">Dioxus GitHub Repository</a>, <a href="https://medium.com/@sreevedvp/mastering-dioxus-a-powerful-rust-framework-for-cross-platform-development-b1d5a45d1a01">Mastering Dioxus | Medium</a>.
-- <strong>SpacetimeDB:</strong> Database meets application server for real-time magic <a href="https://github.com/clockworklabs/SpacetimeDB">SpacetimeDB GitHub Repository</a>, <a href="https://www.reddit.com/r/rust/comments/15mgscr/spacetimedb_a_new_database_written_in_rust_that/?rdt=49409">Reddit discussion</a>.
-- <strong>Zino:</strong> A modern take on building backend applications with composability in mind <a href="https://github.com/zino-rs/zino">Zino GitHub Repository</a>, <a href="https://www.linuxlinks.com/zino-next-generation-framework-for-composable-applications/">LinuxLinks review</a>.</p>
+<p>Just highlighting these again because they show what's possible:</p>
+<ul>
+<li><strong>Dioxus:</strong> Write UIs once, run them anywhere (web, desktop, mobile) <a href="https://github.com/DioxusLabs/dioxus">Dioxus GitHub Repository</a>, <a href="https://medium.com/@sreevedvp/mastering-dioxus-a-powerful-rust-framework-for-cross-platform-development-b1d5a45d1a01">Mastering Dioxus | Medium</a>.</li>
+<li><strong>SpacetimeDB:</strong> Database meets application server for real-time magic <a href="https://github.com/clockworklabs/SpacetimeDB">SpacetimeDB GitHub Repository</a>, <a href="https://www.reddit.com/r/rust/comments/15mgscr/spacetimedb_a_new_database_written_in_rust_that/?rdt=49409">Reddit discussion</a>.</li>
+<li><strong>Zino:</strong> A modern take on building backend applications with composability in mind <a href="https://github.com/zino-rs/zino">Zino GitHub Repository</a>, <a href="https://www.linuxlinks.com/zino-next-generation-framework-for-composable-applications/">LinuxLinks review</a>.</li>
+</ul>
 <h4 id="whos-using-rust-a-quick-recap">Who's Using Rust? A Quick Recap</h4>
 <p>The corporate adoption is pretty telling. Here's a rundown based on what I could find around April 2025:</p>
 <table>
