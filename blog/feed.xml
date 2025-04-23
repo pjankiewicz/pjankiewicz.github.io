@@ -2,15 +2,14 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
   <title>Paweł Jankiewicz</title>
-  <link>https://pjankiewicz.github.io/blog/</link> 
+  <link>/blog/</link> 
   <description>Blog about programming, AI, Machine Learning</description>
-  <atom:link href="https://pjankiewicz.github.io/blog/feed.xml" rel="self" type="application/rss+xml" /> 
+  <atom:link href="/blog/feed.xml" rel="self" type="application/rss+xml" /> 
   
   <item>
     <title>Rust is the most important language at the moment</title>
     
     <link>https://pjankiewicz.github.io/blog/posts/rust-is-the-language-for-ai/</link>
-    
     <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/rust-is-the-language-for-ai/</guid>
     <pubDate>Wed, 23 Apr 2025 00:00:00 +0000</pubDate>
     <description>Why I think Rust is and will become the most important language for AI-assisted software development</description>
@@ -20,7 +19,6 @@
     <title>My Take: The Frameworkless Future with AI</title>
     
     <link>https://pjankiewicz.github.io/blog/posts/ai-frameworkless-future/</link>
-    
     <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/ai-frameworkless-future/</guid>
     <pubDate>Tue, 22 Apr 2025 00:00:00 +0000</pubDate>
     <description>Why I think AI might just kill our reliance on dodgy open-source libraries by cooking up code on the fly.</description>

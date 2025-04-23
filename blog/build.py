@@ -59,7 +59,11 @@ def build():
     tags_out = config.get('tags_output_dir', 'tags') # New config option for tags output
     templates_dir = config.get('templates_dir', 'templates')
     output_dir = config.get('output_dir', '.')
-    site_url = config.get('site_url', '').rstrip('/') # Ensure no trailing slash for urljoin base
+    # Base URL for absolute links (without trailing slash)
+    site_url = config.get('site_url', '').rstrip('/')
+    # Derive base path for root-relative links (path component of site_url)
+    parsed = urlparse(site_url)
+    base_path = parsed.path.rstrip('/')  # e.g. '/blog' or ''
 
     # Prepare output posts directory
     out_posts_dir = os.path.join(output_dir, posts_out)
@@ -96,11 +100,11 @@ def build():
         dt, nice_date, rfc_date = format_date(meta.get('date', ''))
         post_slug = slugify(meta.get('slug') or os.path.splitext(fname)[0])
 
-        # Generate relative path (leading slash important for urljoin)
-        # Ensure it points to the directory for clean URLs
-        relative_url_path = f"/{posts_out}/{post_slug}/"
-        # Generate absolute URL using urljoin
-        absolute_url = urljoin(site_url + '/', relative_url_path.lstrip('/')) # Add trailing slash to base
+        # Generate URLs for this post
+        # Root-relative URL for internal site links: include base_path if any
+        relative_url = f"{base_path}/{posts_out}/{post_slug}/"
+        # Absolute URL for canonical links
+        absolute_url = urljoin(site_url + '/', f"{posts_out}/{post_slug}/")
 
         # Meta description
         desc = meta.get('description')
@@ -117,8 +121,8 @@ def build():
             'date_dt': dt, # Store datetime object for sorting
             'date_rfc': rfc_date, # Store RFC date for feeds/sitemaps
             'slug': post_slug,
-            'url': absolute_url, # Store the absolute URL (for canonical etc.)
-            'relative_url': relative_url_path, # Store the relative URL (for site-internal links)
+            'url': absolute_url,       # Absolute URL (for canonical, feed, sitemap)
+            'relative_url': relative_url, # Root-relative URL (for internal links)
             'content': html_content,
             'description': desc,
             'tags': meta.get('tags', []),
@@ -137,7 +141,8 @@ def build():
     ctx = {
         'config': config,
         'current_year': datetime.datetime.now().year,
-        'site_url': site_url, # Pass site_url (without trailing slash) to context
+        'site_url': site_url,   # Absolute base URL (without trailing slash)
+        'base_path': base_path, # Root-relative base path for internal links
     }
 
     # Render individual post pages
@@ -163,28 +168,30 @@ def build():
     tag_tpl = env.get_template('tag_index.html')
     for tag, tag_posts in tags_collection.items():
         tag_slug = slugify(tag)
+        # Prepare output directory for this tag
         dest_dir = os.path.join(output_dir, tags_out, tag_slug)
         os.makedirs(dest_dir, exist_ok=True)
         # Sort posts for this tag by date
         tag_posts.sort(key=lambda p: p['date_dt'], reverse=True)
-        # Generate absolute URL for the tag page directory
-        tag_page_relative_url = f"/{tags_out}/{tag_slug}/"
-        tag_page_url = urljoin(site_url + '/', tag_page_relative_url.lstrip('/'))
+        # Root-relative URL for tag page
+        tag_relative_url = f"{base_path}/{tags_out}/{tag_slug}/"
+        # Absolute URL for canonical links
+        tag_page_url = urljoin(site_url + '/', f"{tags_out}/{tag_slug}/")
         output_html = tag_tpl.render(
             **ctx,
             title=f"Posts tagged '{tag}'",
             meta_description=f"Blog posts tagged with {tag}",
-            canonical_url=tag_page_url, # Use absolute tag page URL
+            canonical_url=tag_page_url,
             tag_name=tag,
-            posts=tag_posts # Contains posts with absolute and relative URLs
+            posts=tag_posts
         )
         with open(os.path.join(dest_dir, 'index.html'), 'w', encoding='utf-8') as f:
             f.write(output_html)
 
     # Render index page
     index_tpl = env.get_template('index.html')
-    index_page_relative_url = "/"
-    index_page_url = urljoin(site_url + '/', index_page_relative_url.lstrip('/'))
+    # Absolute URL for the home page
+    index_page_url = site_url + '/'
     index_html = index_tpl.render(
         **ctx,
         title='Home',
@@ -200,20 +207,24 @@ def build():
         tags_list_tpl = env.get_template('tags.html')
         # Create structured data for the template
         tags_list_data = []
-        for tag, posts_in_tag in sorted(tags_collection.items()): # Sort tags alphabetically
-             tag_slug = slugify(tag)
-             tag_page_relative_url = f"/{tags_out}/{tag_slug}/"
-             tag_page_url = urljoin(site_url + '/', tag_page_relative_url.lstrip('/'))
-             tags_list_data.append({
-                 'name': tag,
-                 'slug': tag_slug,
-                 'url': tag_page_url, # Pass the correct absolute URL
-                 'relative_url': tag_page_relative_url, # Pass relative URL too
-                 'count': len(posts_in_tag)
-             })
+        for tag, posts_in_tag in sorted(tags_collection.items()):  # Sort tags alphabetically
+            tag_slug = slugify(tag)
+            # Root-relative URL for tag page
+            tag_page_relative_url = f"{base_path}/{tags_out}/{tag_slug}/"
+            # Absolute URL for canonical links
+            tag_page_url = urljoin(site_url + '/', f"{tags_out}/{tag_slug}/")
+            tags_list_data.append({
+                'name': tag,
+                'slug': tag_slug,
+                'url': tag_page_url,           # Absolute URL for feed/sitemap
+                'relative_url': tag_page_relative_url,  # Root-relative for internal links
+                'count': len(posts_in_tag)
+            })
 
-        main_tags_relative_url = f"/{tags_out}/"
-        main_tags_page_url = urljoin(site_url + '/', main_tags_relative_url.lstrip('/'))
+        # Root-relative URL for main tags index
+        main_tags_relative_url = f"{base_path}/{tags_out}/"
+        # Absolute URL for canonical links
+        main_tags_page_url = urljoin(site_url + '/', f"{tags_out}/")
         tags_list_html = tags_list_tpl.render(
             **ctx,
             title='All Tags',

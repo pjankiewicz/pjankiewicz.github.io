@@ -8,9 +8,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/blog/style.css">
+  <link rel="stylesheet" href="{{ base_path }}/style.css">
 
-  <link rel="alternate" type="application/rss+xml" title="{{ config.site_name }}" href="{{ config.site_url }}/feed.xml">
+  <link rel="alternate" type="application/rss+xml" title="{{ config.site_name }}" href="{{ base_path }}/feed.xml">
   <meta property="og:site_name" content="{{ config.site_name }}">
   <meta property="og:title" content="{{ title }}">
   <meta property="og:description" content="{{ meta_description }}">
@@ -28,7 +28,7 @@
 <body>  <div class="site-wrapper">
 
   <header class="site-header">
-    <h1><a href="{{ config.site_url }}">{{ config.site_name }}</a></h1>
+    <h1><a href="{{ base_path }}/">{{ config.site_name }}</a></h1>
     <p>{{ config.description }}</p>
   </header>
   <main class="site-main">

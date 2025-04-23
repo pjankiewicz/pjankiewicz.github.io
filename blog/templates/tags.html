@@ -5,8 +5,8 @@
   <ul>
     {# Iterate over the list of tag dictionaries provided by build.py #}
     {% for tag_info in tags %}
-    {# Use the pre-calculated absolute URL from tag_info #}
-    <li><a href="{{ tag_info.url }}">{{ tag_info.name }}</a> ({{ tag_info.count }})</li>
+    {# Use the pre-calculated root-relative URL from tag_info #}
+    <li><a href="{{ tag_info.relative_url }}">{{ tag_info.name }}</a> ({{ tag_info.count }})</li>
     {% endfor %}
   </ul>
 </section>
