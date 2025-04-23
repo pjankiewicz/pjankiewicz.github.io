@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+<article class="post-content">
+  <h1>{{ title }}</h1>
+  <p class="post-meta">{{ date }}{% if tags %} | Tags: {% for tag in tags %}<a href="{{ config.site_url }}/tags/{{ tag | lower }}/">{{ tag }}</a>{% if not loop.last %}, {% endif %}{% endfor %}{% endif %}</p>
+  {{ content }}
+</article>
+{% endblock %}

@@ -1,0 +1,12 @@
+\
+{% extends "base.html" %}
+{% block content %}
+<section class="tags-list">
+  <h1>All Tags</h1>
+  <ul>
+    {% for tag, count in tags|dictsort %}
+    <li><a href="{{ config.site_url }}/tags/{{ tag | slugify }}.html">{{ tag }}</a> ({{ count }})</li>
+    {% endfor %}
+  </ul>
+</section>
+{% endblock %}

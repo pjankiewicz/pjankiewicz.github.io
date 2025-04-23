@@ -1,0 +1,18 @@
+\
+{% extends "base.html" %}
+{% block content %}
+<section class="tag-index">
+  <h1>Posts tagged with "{{ tag_name }}"</h1>
+  <ul class="post-list">
+    {% for post in posts %}
+    <li>
+      <article>
+        <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
+        <p class="post-meta">{{ post.date }}</p>
+        <p>{{ post.description }}</p>
+      </article>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endblock %}

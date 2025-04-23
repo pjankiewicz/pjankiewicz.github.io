@@ -1,0 +1,20 @@
+Here is a sample of my writing
+
+I don't think the future is in agents communicating with each other to solve the problems - at least in the coding space. At this rate coding agents will implement their own data structures and functions much better than using a not maintained open source library with 200 open issues.
+In my experience most of the problems is linked to managing external dependencies and an inability in the short term to manipulate them.
+Company repositories will look more like monorepos assimilating new features as they are needed and not using frameworks. Just think about it why would you need to use a framework if you need a fraction of its capabilities and it will be much easier for the agent to just write a couple of functions as they are needed.
+I'm already observing this in my code - instead of relying on some external libraries AI is assimilating (scary word) the interface and
+
+What happened in the last week for me was quite ridiculous. When Gemini 2.5 came out, I spent countless hours daily testing it for different tasks. It feels different in a way — it can weave out of problems on its own. Code doesn't compile? Pass the errors to the assistant and try again. In 90% of the cases, it ends up fixing the error.
+
+In my typical fashion, I ended up writing my own coding assistant that can plan and execute changes in a recursive fashion. And during that time, I probably wrote less than 5% of the code. It wasn’t about prompting — I wasn’t guiding it step by step. I was orchestrating, yes, but more like managing a to-do list and letting the assistant execute. That’s a key difference.
+
+It is probably much worse than existing assistants like Cursor or aider.chat, but it’s mine, and I know exactly how to improve it and in the long run it is better as a tool for me. I encourage anyone interested in this to try writing one — it’s a rewarding experience.
+
+It’s not my first attempt at something like this. I created a basic refactoring tool two years ago — https://lnkd.in/d2st4rh4 — and I’ve built a bunch of small, specific tools over time: mass repo changes, contextual search and replace, automatic bug fixing of compilation errors. But those tools were narrow, tightly scoped. The new LLMs are something else. There’s no need for specialized tooling anymore.
+
+The new assistant can understand meta-instructions such as:
+
+“Using the possible actions as the context, please come up with a task utilizing those actions, create a folder and implement the solution, then test it and create a file ok.txt with an explanation of why it works, or bad.txt if it doesn’t.”
+
+This is basically a way to self-improve — creating training data or few shots for itself by using itself. It reminded me of SICP lectures from Gerald Sussman and metacircular evaluator.

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://pjankiewicz.github.io/blog/</loc>
+  </url>
+  
+  <url>
+    <loc>https://pjankiewicz.github.io/blog/posts/rust-is-the-language-for-ai/index.html</loc>
+  </url>
+  
+  <url>
+    <loc>https://pjankiewicz.github.io/blog/posts/ai-frameworkless-future/index.html</loc>
+  </url>
+  
+  <url>
+    <loc>https://pjankiewicz.github.io/blog/tags/ai.html</loc>
+  </url>
+  
+  <url>
+    <loc>https://pjankiewicz.github.io/blog/tags/programming.html</loc>
+  </url>
+  
+  <url>
+    <loc>https://pjankiewicz.github.io/blog/tags/future.html</loc>
+  </url>
+  
+  <url>
+    <loc>https://pjankiewicz.github.io/blog/tags/open-source.html</loc>
+  </url>
+  
+  <url>
+    <loc>https://pjankiewicz.github.io/blog/tags/my-thoughts.html</loc>
+  </url>
+  
+  <url>
+    <loc>https://pjankiewicz.github.io/blog/tags/index.html</loc>
+  </url>
+  
+</urlset>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ title }} - {{ config.site_name }}</title>
+  <meta name="description" content="{{ meta_description }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/blog/style.css">
+
+  <link rel="alternate" type="application/rss+xml" title="{{ config.site_name }}" href="{{ config.site_url }}/feed.xml">
+  <meta property="og:site_name" content="{{ config.site_name }}">
+  <meta property="og:title" content="{{ title }}">
+  <meta property="og:description" content="{{ meta_description }}">
+  <meta property="og:url" content="{{ canonical_url }}">
+  {% if meta_image %}
+  <meta property="og:image" content="{{ meta_image }}">
+  {% endif %}
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ title }}">
+  <meta name="twitter:description" content="{{ meta_description }}">
+  {% if meta_image %}
+  <meta name="twitter:image" content="{{ meta_image }}">
+  {% endif %}
+</head>
+<body>  <div class="site-wrapper">
+
+  <header class="site-header">
+    <h1><a href="{{ config.site_url }}">{{ config.site_name }}</a></h1>
+    <p>{{ config.description }}</p>
+  </header>
+  <main class="site-main">
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="site-footer">
+    <p>&copy; {{ current_year }} {{ config.author }}</p>
+  </footer>
+  </div>
+</body>
+</html>

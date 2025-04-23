@@ -1,0 +1,261 @@
+:root {
+  /* Fonts */
+  --font-heading: 'Merriweather', serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'Fira Code', monospace;
+
+  /* Base Sizes */
+  --base-font-size: 16px; /* Adjust as needed */
+  --base-line-height: 1.7;
+  --base-spacing-unit: calc(var(--base-line-height) * 1rem); /* ~27.2px for 16px base */
+
+  /* Colors */
+  --color-bg: #ffffff;
+  --color-text: #212529;
+  --color-muted: #6c757d;
+  --color-border: #dee2e6;
+  --color-link: #0d6efd;
+  --color-link-hover: #0a58ca;
+  --color-code-bg: #f8f9fa;
+  --color-code-text: #212529;
+  --color-blockquote-bg: #f8f9fa;
+  --color-blockquote-border: #ced4da;
+
+  /* Layout */
+  --content-max-width: 800px;
+}
+
+/* Reset and box-sizing */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Base styles & Vertical Rhythm */
+html {
+  font-size: var(--base-font-size);
+}
+
+body {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    "header"
+    "main"
+    "footer";
+  min-height: 100vh;
+  font-family: var(--font-body);
+  line-height: var(--base-line-height);
+  color: var(--color-text);
+  background-color: #f9f9f9; /* Slightly off-white background */
+}
+
+/* Layout Areas */
+.site-header {
+  grid-area: header;
+  background-color: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--base-spacing-unit) calc(var(--base-spacing-unit) / 2);
+  text-align: center;
+}
+.site-header h1 {
+  margin-top: 0;
+  margin-bottom: calc(var(--base-spacing-unit) / 4);
+  font-size: 1.8rem; /* Adjust */
+}
+.site-header p {
+  margin-bottom: 0;
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+
+.site-main {
+  grid-area: main;
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: var(--base-spacing-unit) calc(var(--base-spacing-unit) / 2);
+  width: 100%;
+}
+
+.site-footer {
+  grid-area: footer;
+  background-color: var(--color-bg);
+  border-top: 1px solid var(--color-border);
+  padding: calc(var(--base-spacing-unit) / 2);
+  text-align: center;
+  color: var(--color-muted);
+  font-size: 0.85rem;
+}
+
+/* Typography Scale & Rhythm */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  margin-top: calc(var(--base-spacing-unit) * 1.5);
+  margin-bottom: var(--base-spacing-unit);
+  line-height: 1.3;
+  font-weight: 700;
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.75rem; }
+h4 { font-size: 1.5rem; }
+h5 { font-size: 1.25rem; }
+h6 { font-size: 1rem; font-weight: 600; }
+
+p,
+ul,
+ol,
+blockquote,
+pre,
+table,
+.codehilite {
+  margin-bottom: var(--base-spacing-unit);
+}
+
+/* Ensure first element doesn't have top margin */
+.site-main > :first-child,
+article.post-content > :first-child {
+  margin-top: 0;
+}
+
+/* Links */
+a {
+  color: var(--color-link);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--color-link-hover);
+  text-decoration: underline;
+}
+
+/* Lists */
+ul,
+ol {
+  padding-left: calc(var(--base-spacing-unit) * 1); /* Indentation based on rhythm */
+}
+li {
+  margin-bottom: calc(var(--base-spacing-unit) / 4);
+}
+
+/* Code Styling */
+/* Inline code */
+code {
+  font-family: var(--font-mono);
+  background-color: var(--color-code-bg);
+  color: var(--color-code-text);
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-size: 0.9em;
+  word-wrap: break-word;
+}
+
+/* Code blocks (pre & codehilite) */
+pre,
+.codehilite {
+  font-family: var(--font-mono);
+  background-color: var(--color-code-bg);
+  padding: var(--base-spacing-unit);
+  overflow-x: auto;
+  border-radius: 5px;
+  font-size: 0.9em;
+  line-height: var(--base-line-height); /* Maintain rhythm inside code */
+  border: 1px solid var(--color-border);
+}
+
+/* Reset styles for code inside pre/codehilite */
+pre code,
+.codehilite pre code {
+  background: none;
+  padding: 0;
+  font-size: inherit; /* Inherit from parent pre */
+  line-height: inherit;
+  color: inherit;
+  border-radius: 0;
+}
+.codehilite pre {
+  margin: 0; /* Remove default margin */
+  padding: 0; /* Remove default padding */
+  background: none;
+  border: none;
+  overflow: visible; /* Let outer container handle scroll */
+}
+
+/* Images */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin-bottom: var(--base-spacing-unit);
+  border-radius: 4px; /* Optional: slightly rounded corners */
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: var(--base-spacing-unit);
+  font-size: 0.95em;
+}
+th,
+td {
+  border: 1px solid var(--color-border);
+  padding: calc(var(--base-spacing-unit) / 3);
+  text-align: left;
+  vertical-align: top;
+}
+th {
+  background-color: var(--color-code-bg); /* Use code bg for consistency */
+  font-weight: 600;
+}
+
+/* Blockquotes */
+blockquote {
+  border-left: 4px solid var(--color-blockquote-border);
+  padding: calc(var(--base-spacing-unit) / 2) var(--base-spacing-unit);
+  background-color: var(--color-blockquote-bg);
+  color: var(--color-muted);
+  margin: 0 0 var(--base-spacing-unit);
+  font-style: italic;
+}
+blockquote p:last-child {
+  margin-bottom: 0; /* Remove margin from last paragraph inside quote */
+}
+
+/* Post Specific Styles */
+.post-content h1 {
+  margin-bottom: calc(var(--base-spacing-unit) / 2); /* Less space after main title */
+}
+.post-meta {
+  color: var(--color-muted);
+  font-size: 0.9rem;
+  margin-bottom: var(--base-spacing-unit);
+  margin-top: calc(-1 * var(--base-spacing-unit) / 2); /* Pull up slightly */
+}
+.post-meta a {
+    color: var(--color-muted);
+    text-decoration: underline;
+}
+.post-meta a:hover {
+    color: var(--color-text);
+}
+
+
+/* Add styles for codehilite syntax classes if needed, e.g.: */
+/* .codehilite .k { color: #0077aa; font-weight: bold; } */
+/* .codehilite .s { color: #dd1144; } */
+/* .codehilite .c { color: #999988; font-style: italic; } */
+/* ... etc. ... */
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  html {
+    font-size: 15px; /* Slightly smaller base on small screens */
+  }
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.75rem; }
+  h3 { font-size: 1.5rem; }
+}
