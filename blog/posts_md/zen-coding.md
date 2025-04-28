@@ -178,7 +178,7 @@ Over time:
 
 Files will eventually become just an optional access layer for humans. The real software will live in structured graph databases.
 
-## Programming Languages — Which Ones Are Best
+## Programming Languages — Which Ones Are Best (for AI)
 
 The stricter the language, the better for AI coding. Structure is not for humans — it's to minimize the possibility of errors.
 

@@ -341,11 +341,11 @@ blockquote p:last-child {
 @media (max-width: 600px) {
   /* Responsive typography: larger base font on mobile (book-like) */
   html {
-    font-size: clamp(20px, 6vw, 24px);
+    font-size: clamp(16px, 6vw, 16px);
   }
   /* Enhance leading and letter-spacing for mobile readability */
   body {
-    line-height: 2; /* Increase leading for large text */
+    line-height: 1.8; /* Increase leading for large text */
     letter-spacing: 0.03em; /* Maintain adequate letter spacing */
   }
   /* Ensure adequate padding and spacing */
