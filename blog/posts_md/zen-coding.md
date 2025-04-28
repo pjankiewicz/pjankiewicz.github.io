@@ -88,7 +88,7 @@ The instructions must mention that each function or data structure needs to be i
 
 ## Data Structures and Functions — Simple Examples
 
-Example of a data structure:
+Example of a data structure (single file):
 
 ```rust
 //! Represents a rectangle defined by its width and height.
@@ -105,7 +105,7 @@ pub struct Rectangle {
 }
 ```
 
-Example of a function:
+Example of a function (single file):
 
 ```rust
 //! Calculates the area of a rectangle.

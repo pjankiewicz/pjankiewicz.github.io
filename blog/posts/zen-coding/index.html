@@ -69,7 +69,7 @@ AI will write code but someone has to plan it, orchestrate it. Ideas more than a
 <li>Functions</li>
 </ul>
 <p>When you began your coding career, what was the first thing you learned? It was writing simple functions and creating data structures — or even working with primitive ones.</p>
-<p>It is proven that you can model even very complex systems purely with data structures and functions.  verything can be seen from a functional standpoint:</p>
+<p>It is proven that you can model even very complex systems purely with data structures and functions. Everything can be seen from a functional standpoint:</p>
 <div class="codehilite"><pre><span></span><code><span class="n">next_state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">application</span><span class="p">(</span><span class="n">previous_state</span><span class="p">,</span><span class="w"> </span><span class="n">action</span><span class="p">)</span>
 </code></pre></div>
 
@@ -97,7 +97,7 @@ And while we don't like to be constrained, AI written code must be constrained.<
 <p>Of course it is best if you review data structures and functions definitions. The prompt that create functions declarations should mention it very explicitly that if there is a risk that a function will exceed 50 lines of code it must use other functions. This is a bit of a chicken and egg problem but in my opinion it is solveable.</p>
 <p>The instructions must mention that each function or data structure needs to be in a separate file.</p>
 <h2 id="data-structures-and-functions-simple-examples">Data Structures and Functions — Simple Examples</h2>
-<p>Example of a data structure:</p>
+<p>Example of a data structure (single file):</p>
 <div class="codehilite"><pre><span></span><code><span class="sd">//! Represents a rectangle defined by its width and height.</span>
 <span class="sd">//!</span>
 <span class="sd">//! The rectangle is axis-aligned and does not carry position information.</span>
@@ -112,7 +112,7 @@ And while we don't like to be constrained, AI written code must be constrained.<
 <span class="p">}</span>
 </code></pre></div>
 
-<p>Example of a function:</p>
+<p>Example of a function (single file):</p>
 <div class="codehilite"><pre><span></span><code><span class="sd">//! Calculates the area of a rectangle.</span>
 <span class="sd">//!</span>
 <span class="sd">//! Multiplies the rectangle&#39;s width by its height to compute the area.</span>
