@@ -72,6 +72,32 @@
 <p>Alright, it's not magic. I get the worries. How <em>good</em> is this AI code, really? Can you trust it? How do you debug something an AI generated? What about sneaky bugs? And version control when code generation gets this dynamic? These are real questions.</p>
 <p>Still, the potential upside – ditching dependency hell, maybe getting safer bespoke code, having full control – it's pretty compelling. As these AIs get smarter (and believe me, they're improving <em>fast</em>), the way we code could fundamentally shift. Maybe the "framework" of the future <em>is</em> the AI itself, building our stuff on demand. Feels like we're on the edge of something big here, like that metacircular evaluator idea.</p>
 </article>
+<!-- Copy-to-clipboard functionality for code blocks -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.codehilite').forEach(function(container) {
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.type = 'button';
+      btn.innerText = 'Copy';
+      container.appendChild(btn);
+      btn.addEventListener('click', function() {
+        var codeElem = container.querySelector('code') || container;
+        var text = codeElem.innerText;
+        navigator.clipboard.writeText(text).then(function() {
+          btn.innerText = 'Copied!';
+          btn.classList.add('copied');
+          setTimeout(function() {
+            btn.innerText = 'Copy';
+            btn.classList.remove('copied');
+          }, 2000);
+        }, function() {
+          btn.innerText = 'Error';
+        });
+      });
+    });
+  });
+</script>
 
   </main>
   <footer class="site-footer">

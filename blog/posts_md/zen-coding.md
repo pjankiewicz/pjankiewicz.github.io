@@ -32,7 +32,9 @@ Let's start with some strong assumptions:
 That sounds grim but it is not the death of software engineers - just the opposite.
 AI will write code but someone has to plan it, orchestrate it. Ideas more than anything will be what matters.
 
-This AI evolution won't happen automatically. Code needs structure. AI more than anything needs very rigid structure to succeed. For example, I see a lot of posts negating the need for "types" or compiled languages — claiming it doesn't matter. It doesn't matter for us when writing human instructions to AI coding assistants. But it *does* matter for the AI, depending on the kind of structure it sees.
+This AI evolution won't happen automatically. Code needs structure. AI more than anything needs a rigid framework to succeed.
+
+For example, many posts negate the need for "types" or compiled languages — arguing they aren’t important for us writing AI prompts. However, it *does* matter for the AI, depending on the structure it encounters.
 
 Right now AI sees and writes our code - the way humans write code - but this needs to change so that AI can evolve software faster. 
 
@@ -64,11 +66,9 @@ AI won't need such structures if all it sees are functions and data structures.
 
 ## Constraints and simplicity
 
-Right now I see that the trend is to write AI code without any constraints.
-That is nice for smaller projects. Serious projects need structure and constraints.
-And while we don't like to be constrained, AI written code must be constrained.
+Right now, the trend is to write AI code without any guardrails. That may suffice for smaller projects, but serious ones require clear structure. Though they can feel restrictive, constraints are essential for reliable AI-generated code.
 
-The AI written code should have a very narrow path to succeed at any task and our role as software engineers is to constrain it as much as possible. The rules that I'm about to share would be hated by probably majority of software developers but the same rules will make the AI written code rock solid.
+AI-generated code should follow a narrow path to succeed at any task, and our role as software engineers is to constrain it as much as possible. These rules might be unpopular with many developers, but they’ll make the resulting code rock solid.
 
 ## From Problem to Code: Practical Methodology
 
