@@ -47,7 +47,7 @@ Zen coding is going back to the roots of programming — simplifying every task 
 
 When you began your coding career, what was the first thing you learned? It was writing simple functions and creating data structures — or even working with primitive ones.
 
-It is proven that you can model even very complex systems purely with data structures and functions.  verything can be seen from a functional standpoint:
+It is proven that you can model even very complex systems purely with data structures and functions. Everything can be seen from a functional standpoint:
 
 ```rust
 next_state = application(previous_state, action)
@@ -182,14 +182,13 @@ Files will eventually become just an optional access layer for humans. The real 
 
 The stricter the language, the better for AI coding. Structure is not for humans — it's to minimize the possibility of errors.
 
-<div style="text-align: center; font-family: sans-serif; font-size: 18px; margin-top: 20px;">
+<div style="text-align: center; font-family: sans-serif; font-size: 18px; margin-top: 40px; margin-bottom: 40px">
     <strong>Programming Languages by Strictness</strong><br><br>
     Python → JavaScript → Ruby → PHP → Go → C# → Java → Kotlin → C++ → Rust → Haskell
 </div>
 
 Personally, I think Rust is currently the best language for AI coding. It enforces explicitness and structure, while remaining powerful enough for high-level abstractions.
-
-I mentioned this idea in the other article.
+And, yes that makes Python the worst language for AI to write code.
 
 ## Summary
 
