@@ -14,8 +14,9 @@
   --color-text: hsl(210, 10%, 15%);
   --color-muted: #6c757d;
   --color-border: #dee2e6;
-  --color-link: #0d6efd;
-  --color-link-hover: #0a58ca;
+  /* Primary link color changed to old-patine brown */
+  --color-link: #5a381e;
+  --color-link-hover: #3e220f;
   --color-code-bg: #f8f9fa;
   --color-code-text: #212529;
   --color-blockquote-bg: #f8f9fa;
@@ -77,6 +78,15 @@ p, ul, ol {
   border-bottom: 1px solid var(--color-border);
   padding: var(--base-spacing-unit) calc(var(--base-spacing-unit) / 2);
   text-align: center;
+}
+/* Header link styling: replace default blue with dark brown for aged-paper vibe */
+.site-header a {
+  color: #5a381e;
+  text-decoration: none;
+}
+.site-header a:hover {
+  color: #3e220f;
+  text-decoration: underline;
 }
 .site-header h1 {
   margin-top: 0;
