@@ -68,7 +68,7 @@ Right now I see that the trend is to write AI code without any constraints.
 That is nice for smaller projects. Serious projects need structure and constraints.
 And while we don't like to be constrained, AI written code must be constrained.
 
-The AI written code should have a very narrow path to succeed at any task and our role as software engineers is to constraint it as much as possible. The rules that I'm about to share would be hated by probably majority of software developers but the same rules will make the AI written code rock solid.
+The AI written code should have a very narrow path to succeed at any task and our role as software engineers is to constrain it as much as possible. The rules that I'm about to share would be hated by probably majority of software developers but the same rules will make the AI written code rock solid.
 
 ## From Problem to Code: Practical Methodology
 
@@ -82,7 +82,7 @@ Believe me or not but the workflow below can solve any problem. I tested it mult
 6. Ask AI to implement the functions (this can be parallelized).
 7. Fix errors.
 
-Of course it is best if you review data structures and functions definitions. The prompt that create functions declarations should mention it very explicitly that if there is a risk that a function will exceed 50 lines of code it must use other functions. This is a bit of a chicken and egg problem but in my opinion it is solveable.
+Of course it is best if you review data structures and functions definitions. The prompt that create functions declarations should mention it very explicitly that if there is a risk that a function will exceed 50 lines of code it must use other functions. This is a bit of a chicken and egg problem but in my opinion it is solvable.
 
 The instructions must mention that each function or data structure needs to be in a separate file.
 
@@ -192,7 +192,7 @@ And, yes that makes Python the worst language for AI to write code.
 
 ## Summary
 
-That's it. You need only data structures and functions. No fancy frameworks. No spaghetti code. Every problem is solveable using this methodology and it will guarantee that your code is maintainable and AI will have no problems to evolve it.
+That's it. You need only data structures and functions. No fancy frameworks. No spaghetti code. Every problem is solvable using this methodology and it will guarantee that your code is maintainable and AI will have no problems to evolve it.
 
 Happy Zen Coding!
 
