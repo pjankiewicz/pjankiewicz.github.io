@@ -5,7 +5,7 @@ description: "How to write software with AI"
 publish: true 
 ---
 
-<img src="../static/images/zencoding.png" alt="ying and yang with data and functions">
+<img src="/blog/static/images/zencoding.png" alt="ying and yang with data and functions">
 
 ## Table of Contents
 
