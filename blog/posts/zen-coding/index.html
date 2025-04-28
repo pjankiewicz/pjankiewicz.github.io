@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Zen Coding: Building Software That AI Can Understand and Evolve - Paweł Jankiewicz</title>
+  <meta name="description" content="How to write software with AI">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/blog/style.css">
+
+  <link rel="alternate" type="application/rss+xml" title="Paweł Jankiewicz" href="/blog/feed.xml">
+  <meta property="og:site_name" content="Paweł Jankiewicz">
+  <meta property="og:title" content="Zen Coding: Building Software That AI Can Understand and Evolve">
+  <meta property="og:description" content="How to write software with AI">
+  <meta property="og:url" content="https://pjankiewicz.github.io/blog/posts/zen-coding/">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Zen Coding: Building Software That AI Can Understand and Evolve">
+  <meta name="twitter:description" content="How to write software with AI">
+  
+</head>
+<body>  <div class="site-wrapper">
+
+  <header class="site-header">
+    <h1><a href="/blog/">Paweł Jankiewicz</a></h1>
+    <p>Blog about programming, AI, Machine Learning</p>
+    <p class="site-social">
+      <a href="https://www.linkedin.com/in/pjankiewicz/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </p>
+  </header>
+  <main class="site-main">
+    
+<article class="post-content">
+  <h1>Zen Coding: Building Software That AI Can Understand and Evolve</h1>
+  <p class="post-meta">April 28, 2025</p>
+  <p><img src="../static/images/zencoding.png" alt="ying and yang with data and functions"></p>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#data-and-functions-are-enough">Data and Functions Are Enough</a></li>
+<li><a href="#frameworks">Frameworks</a></li>
+<li><a href="#constraints-and-simplicity">Constraints and simplicity</a></li>
+<li><a href="#from-problem-to-code-practical-methodology">From Problem to Code: Practical Methodology</a></li>
+<li><a href="#data-structures-and-functions--simple-examples">Data Structures and Functions — Simple Examples</a></li>
+<li><a href="#code-as-a-graph">Code as a Graph</a></li>
+<li><a href="#why-one-item-per-file">Why One Item per File</a></li>
+<li><a href="#evolution-of-software-in-this-model">Evolution of Software in This Model</a></li>
+<li><a href="#programming-languages--which-ones-are-best">Programming Languages — Which Ones Are Best</a></li>
+<li><a href="#summary">Summary</a></li>
+<li><a href="#listings-and-prompts">Listings and Prompts</a></li>
+</ul>
+<h2 id="introduction">Introduction</h2>
+<p>Let's start with some strong assumptions:</p>
+<ul>
+<li>AI can and will write the majority of code in near future</li>
+<li>AI will handle arbitrarily complex problems and create better solutions than humans can — and much faster than humans can</li>
+</ul>
+<p>That sounds grim but it is not the death of software engineers - just the opposite.
+AI will write code but someone has to plan it, orchestrate it. Ideas more than anything will be what matters.</p>
+<p>This AI evolution won't happen automatically. Code needs structure. AI more than anything needs very rigid structure to succeed. For example, I see a lot of posts negating the need for "types" or compiled languages — claiming it doesn't matter. It doesn't matter for us when writing human instructions to AI coding assistants. But it <em>does</em> matter for the AI, depending on the kind of structure it sees.</p>
+<p>Right now AI sees and writes our code - the way humans write code - but this needs to change so that AI can evolve software faster. </p>
+<h2 id="data-and-functions-are-enough">Data and Functions Are Enough</h2>
+<p>That's all you need. The simpler, the better.</p>
+<p>Zen coding is going back to the roots of programming — simplifying every task into two major components:</p>
+<ul>
+<li>Data (structures)</li>
+<li>Functions</li>
+</ul>
+<p>When you began your coding career, what was the first thing you learned? It was writing simple functions and creating data structures — or even working with primitive ones.</p>
+<p>It is proven that you can model even very complex systems purely with data structures and functions.  verything can be seen from a functional standpoint:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">next_state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">application</span><span class="p">(</span><span class="n">previous_state</span><span class="p">,</span><span class="w"> </span><span class="n">action</span><span class="p">)</span>
+</code></pre></div>
+
+<p>When you're moving a mouse cursor and clicking something on the screen, it’s an action.  The system adapts.  APIs are functions.</p>
+<h2 id="frameworks">Frameworks</h2>
+<p>Over the years, to simplify programming, we seemed to forget that fact.
+We created frameworks that made it easier for us to reason about systems — hiding complexity behind bigger abstractions.</p>
+<p>AI won't need such structures if all it sees are functions and data structures.</p>
+<h2 id="constraints-and-simplicity">Constraints and simplicity</h2>
+<p>Right now I see that the trend is to write AI code without any constraints.
+That is nice for smaller projects. Serious projects need structure and constraints.
+And while we don't like to be constrained, AI written code must be constrained.</p>
+<p>The AI written code should have a very narrow path to succeed at any task and our role as software engineers is to constraint it as much as possible. The rules that I'm about to share would be hated by probably majority of software developers but the same rules will make the AI written code rock solid.</p>
+<h2 id="from-problem-to-code-practical-methodology">From Problem to Code: Practical Methodology</h2>
+<p>Believe me or not but the workflow below can solve any problem. I tested it multiple times and it allowed me to create code faster than I ever imagined.</p>
+<ol>
+<li>Start with the problem definition.</li>
+<li>Expand it with AI — think about details, user scenarios, what happens for users, what needs to happen inside the system.</li>
+<li>Ask AI to create data structures that solve the problem.</li>
+<li>Ask AI for function signatures that solve the problem.</li>
+<li>Ask AI to organize the functions into modules.</li>
+<li>Ask AI to implement the functions (this can be parallelized).</li>
+<li>Fix errors.</li>
+</ol>
+<p>Of course it is best if you review data structures and functions definitions. The prompt that create functions declarations should mention it very explicitly that if there is a risk that a function will exceed 50 lines of code it must use other functions. This is a bit of a chicken and egg problem but in my opinion it is solveable.</p>
+<p>The instructions must mention that each function or data structure needs to be in a separate file.</p>
+<h2 id="data-structures-and-functions-simple-examples">Data Structures and Functions — Simple Examples</h2>
+<p>Example of a data structure:</p>
+<div class="codehilite"><pre><span></span><code><span class="sd">//! Represents a rectangle defined by its width and height.</span>
+<span class="sd">//!</span>
+<span class="sd">//! The rectangle is axis-aligned and does not carry position information.</span>
+<span class="sd">//! Used for basic geometric calculations.</span>
+
+<span class="cp">#[derive(Debug, Clone, Copy, serde::Serialize, serde::Deserialize)]</span>
+<span class="k">pub</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">Rectangle</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="sd">/// The width of the rectangle.</span>
+<span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">width</span><span class="p">:</span><span class="w"> </span><span class="kt">f64</span><span class="p">,</span>
+<span class="w">    </span><span class="sd">/// The height of the rectangle.</span>
+<span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">height</span><span class="p">:</span><span class="w"> </span><span class="kt">f64</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Example of a function:</p>
+<div class="codehilite"><pre><span></span><code><span class="sd">//! Calculates the area of a rectangle.</span>
+<span class="sd">//!</span>
+<span class="sd">//! Multiplies the rectangle&#39;s width by its height to compute the area.</span>
+
+<span class="k">pub</span><span class="w"> </span><span class="k">fn</span><span class="w"> </span><span class="nf">calculate_area</span><span class="p">(</span><span class="n">rectangle</span><span class="p">:</span><span class="w"> </span><span class="kp">&amp;</span><span class="nc">crate</span><span class="p">::</span><span class="n">rectangle</span><span class="p">::</span><span class="n">Rectangle</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="kt">f64</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">rectangle</span><span class="p">.</span><span class="n">width</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">rectangle</span><span class="p">.</span><span class="n">height</span>
+<span class="p">}</span>
+
+<span class="cp">#[cfg(test)]</span>
+<span class="k">mod</span><span class="w"> </span><span class="nn">tests</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="cp">#[test]</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">test_calculate_area</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">rectangle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">crate</span><span class="p">::</span><span class="n">rectangle</span><span class="p">::</span><span class="n">Rectangle</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">width</span><span class="p">:</span><span class="w"> </span><span class="mf">3.0</span><span class="p">,</span>
+<span class="w">            </span><span class="n">height</span><span class="p">:</span><span class="w"> </span><span class="mf">4.0</span><span class="p">,</span>
+<span class="w">        </span><span class="p">};</span>
+<span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">area</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">super</span><span class="p">::</span><span class="n">calculate_area</span><span class="p">(</span><span class="o">&amp;</span><span class="n">rectangle</span><span class="p">);</span>
+<span class="w">        </span><span class="fm">assert_eq!</span><span class="p">(</span><span class="n">area</span><span class="p">,</span><span class="w"> </span><span class="mf">12.0</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="cp">#[test]</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">test_calculate_area_zero</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">rectangle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">crate</span><span class="p">::</span><span class="n">rectangle</span><span class="p">::</span><span class="n">Rectangle</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">width</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span>
+<span class="w">            </span><span class="n">height</span><span class="p">:</span><span class="w"> </span><span class="mf">5.0</span><span class="p">,</span>
+<span class="w">        </span><span class="p">};</span>
+<span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">area</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">super</span><span class="p">::</span><span class="n">calculate_area</span><span class="p">(</span><span class="o">&amp;</span><span class="n">rectangle</span><span class="p">);</span>
+<span class="w">        </span><span class="fm">assert_eq!</span><span class="p">(</span><span class="n">area</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="cp">#[test]</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">test_calculate_area_negative_dimensions</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">rectangle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">crate</span><span class="p">::</span><span class="n">rectangle</span><span class="p">::</span><span class="n">Rectangle</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">width</span><span class="p">:</span><span class="w"> </span><span class="o">-</span><span class="mf">2.0</span><span class="p">,</span>
+<span class="w">            </span><span class="n">height</span><span class="p">:</span><span class="w"> </span><span class="mf">3.0</span><span class="p">,</span>
+<span class="w">        </span><span class="p">};</span>
+<span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">area</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">super</span><span class="p">::</span><span class="n">calculate_area</span><span class="p">(</span><span class="o">&amp;</span><span class="n">rectangle</span><span class="p">);</span>
+<span class="w">        </span><span class="fm">assert_eq!</span><span class="p">(</span><span class="n">area</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mf">6.0</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h2 id="code-as-a-graph">Code as a Graph</h2>
+<p>A single file per data structure or function might feel a bit strange. So why do it?</p>
+<p>The code that has nothing but data structures and functions becomes a <strong>graph</strong>. Functions and data structures are <strong>nodes</strong> in the graph. Connections (function calls, struct usage) are the edges.</p>
+<p>The code is no longer a linear text file — it becomes a <strong>living graph</strong>. Soon, all software will be written like this — living in databases, managed and improved continuously by AI. Files are just a human-readable slice of the real structure.</p>
+<p>The advantages are clear:</p>
+<ul>
+<li>Dependency graphs become obvious and easy to analyze.</li>
+<li>Parallel editing by humans and AI becomes trivial.</li>
+<li>Merge conflicts become rare and localized.</li>
+<li>Changes are surgical: updating one function doesn’t risk unrelated parts.</li>
+</ul>
+<h2 id="evolution-of-software-in-this-model">Evolution of Software in This Model</h2>
+<p>In this model, software stops being text files and becomes a <strong>dynamic graph</strong> of small, meaningful pieces.</p>
+<p>Over time:</p>
+<ul>
+<li>AI will analyze, optimize, and repair parts of the graph.</li>
+<li>Functions and structs will evolve.</li>
+<li>Unused nodes will be pruned.</li>
+<li>Codebases will no longer "rot" — they will live, adapt, and improve.</li>
+</ul>
+<p>Files will eventually become just an optional access layer for humans. The real software will live in structured graph databases.</p>
+<h2 id="programming-languages-which-ones-are-best">Programming Languages — Which Ones Are Best</h2>
+<p>The stricter the language, the better for AI coding. Structure is not for humans — it's to minimize the possibility of errors.</p>
+<div style="text-align: center; font-family: sans-serif; font-size: 18px; margin-top: 20px;">
+    <strong>Programming Languages by Strictness</strong><br><br>
+    Python → JavaScript → Ruby → PHP → Go → C# → Java → Kotlin → C++ → Rust → Haskell
+</div>
+
+<p>Personally, I think Rust is currently the best language for AI coding. It enforces explicitness and structure, while remaining powerful enough for high-level abstractions.</p>
+<p>I mentioned this idea in the other article.</p>
+<h2 id="summary">Summary</h2>
+<p>That's it. You need only data structures and functions. No fancy frameworks. No spaghetti code. Every problem is solveable using this methodology and it will guarantee that your code is maintainable and AI will have no problems to evolve it.</p>
+<p>Happy Zen Coding!</p>
+<h2 id="listings-and-prompts">Listings and Prompts</h2>
+<p>Example coding guidelines for Rust</p>
+<div class="codehilite"><pre><span></span><code><span class="gu">## Rust Coding Standards: One Item Per File</span>
+
+These standards promote extreme modularity and clarity of origin by enforcing a strict &quot;one item per file&quot; structure and mandating the use of fully qualified paths.
+
+<span class="gs">**1. Granularity: One Logical Item Per File**</span>
+
+<span class="k">*</span><span class="w"> </span>  <span class="gs">**Rule:**</span> Each <span class="sb">`.rs`</span> file must contain exactly one primary logical Rust item.
+<span class="k">*</span><span class="w"> </span>  <span class="gs">**Definition of &quot;Item&quot;:**</span> This typically refers to a single <span class="sb">`fn`</span>, <span class="sb">`struct`</span>, <span class="sb">`enum`</span>, <span class="sb">`type`</span> alias, or constant (<span class="sb">`const`</span>/<span class="sb">`static`</span>). Traits and generic items are generally discouraged unless strictly required for interaction with external library APIs.
+<span class="w">    </span><span class="k">*</span><span class="w"> </span>  Associated <span class="sb">`impl`</span> blocks for a <span class="sb">`struct`</span> or <span class="sb">`enum`</span> defined in <span class="sb">`my_item.rs`</span> should also reside within <span class="sb">`my_item.rs`</span>.
+<span class="w">    </span><span class="k">*</span><span class="w"> </span>  <span class="sb">`impl Trait for Type`</span> blocks might reside with <span class="sb">`Type`</span>&#39;s definition if <span class="sb">`Type`</span> is local, or potentially in their own file (e.g., <span class="sb">`my_type_impl_some_trait.rs`</span>) if the implementation itself is complex or significant, especially when implementing external traits for local types or vice-versa. For simplicity, start by keeping implementations with the type definition.
+<span class="k">*</span><span class="w"> </span>  <span class="gs">**File Naming:**</span> Files should be named using <span class="sb">`snake_case.rs`</span>, matching the name of the item they contain (e.g., <span class="sb">`my_function.rs`</span> for <span class="sb">`fn my_function`</span>, <span class="sb">`my_struct.rs`</span> for <span class="sb">`struct MyStruct`</span>).
+<span class="k">*</span><span class="w"> </span>  <span class="gs">**Modules:**</span> Module files (<span class="sb">`mod.rs`</span> or <span class="sb">`directory/mod.rs`</span>) are exceptions as their purpose is to declare and organize sub-modules or re-export items. However, they should generally not contain item definitions themselves, only <span class="sb">`mod`</span> statements.
+
+<span class="gs">**2. File Preamble Documentation**</span>
+
+<span class="k">*</span><span class="w"> </span>  <span class="gs">**Rule:**</span> Every <span class="sb">`.rs`</span> file <span class="ge">*must*</span> begin with file-level documentation comments (<span class="sb">`//!`</span>).
+<span class="k">*</span><span class="w"> </span>  <span class="gs">**Structure:**</span>
+<span class="w">    </span><span class="k">*</span><span class="w"> </span>  The very first line must be a single, concise sentence summarizing the purpose or content of the file (the item it defines).
+<span class="w">    </span><span class="k">*</span><span class="w"> </span>  Follow this immediately with a blank documentation line (<span class="sb">`//!`</span>).
+<span class="w">    </span><span class="k">*</span><span class="w"> </span>  Provide 3-5 additional lines (<span class="sb">`//!`</span>) expanding on the summary, detailing purpose, context, high-level usage, or important considerations.
+
+<span class="gs">**3. No Imports: Use Fully Qualified Paths**</span>
+
+<span class="k">*</span><span class="w"> </span>  <span class="gs">**Rule:**</span> <span class="sb">`use`</span> statements are forbidden, with no exceptions.
+<span class="k">*</span><span class="w"> </span>  <span class="gs">**Usage:**</span> All types, functions, macros, traits, etc., from the standard library, external crates, or other modules within the current crate must be referred to by their fully qualified path.
+<span class="w">    </span><span class="k">*</span><span class="w"> </span>  Example (Standard Library): <span class="sb">`std::collections::HashMap`</span>, <span class="sb">`std::vec::Vec`</span>, <span class="sb">`std::string::String`</span>, <span class="sb">`std::println!`</span>
+<span class="w">    </span><span class="k">*</span><span class="w"> </span>  But things that are available without imports are ok without FQN: <span class="sb">`Vec`</span>, <span class="sb">`String`</span>, <span class="sb">`println!`</span>, <span class="sb">`Option`</span> etc
+<span class="w">    </span><span class="k">*</span><span class="w"> </span>  Example (External Crate <span class="sb">`serde`</span>): <span class="sb">`serde::Serialize`</span>, <span class="sb">`serde_json::to_string`</span>
+<span class="w">    </span><span class="k">*</span><span class="w"> </span>  Example (Internal Crate): <span class="sb">`crate::Mymod::MyStruct`</span>, <span class="sb">`crate::utils::helper_function`</span>
+<span class="k">*</span><span class="w"> </span>  <span class="gs">**Rationale:**</span> This makes the origin of every identifier immediately explicit, reducing ambiguity, although it increases verbosity.
+
+<span class="gs">**Functional Style Encouraged**</span>
+
+<span class="k">*</span><span class="w"> </span>  <span class="gs">**Guideline:**</span> While adhering to the rules above, favor a functional programming style where appropriate.
+<span class="k">*</span><span class="w"> </span>  <span class="gs">**Rationale:**</span> Aligns with the broader framework&#39;s emphasis on pure functions and data transformations (as outlined in the main <span class="sb">`CODING_STANDARDS.md`</span>). Prefer immutable data, pure functions, and iterator-based transformations (<span class="sb">`map`</span>, <span class="sb">`filter`</span>, <span class="sb">`fold`</span>, <span class="sb">`sum`</span>, etc.) over imperative loops and mutable state when it enhances clarity and maintains conciseness.
+<span class="k">*</span><span class="w"> </span>  <span class="gs">**Example:**</span> The example function <span class="sb">`calculate_weighted_sum`</span> demonstrates using iterators (<span class="sb">`zip`</span>, <span class="sb">`map`</span>, <span class="sb">`sum`</span>) for calculation.
+
+---
+
+<span class="gs">**4. Function Length Limit**</span>
+
+<span class="k">*</span><span class="w"> </span>  <span class="gs">**Rule:**</span> Functions should not exceed 50 lines of code (LoC).
+<span class="k">*</span><span class="w"> </span>  <span class="gs">**Measurement:**</span> This count includes lines within the function body <span class="sb">`{ ... }`</span>, excluding the function signature, comments, and blank lines.
+<span class="k">*</span><span class="w"> </span>  <span class="gs">**Goal:**</span> Encourage breaking down complex logic into smaller, more focused, testable, and reusable functions. Promotes the Single Responsibility Principle at the function level.
+<span class="k">*</span><span class="w"> </span>  <span class="gs">**Exceptions:**</span> Permitted rarely and must be justified. Examples include:
+<span class="w">    </span><span class="k">*</span><span class="w"> </span>  Large but simple <span class="sb">`match`</span> statements that are inherently sequential and difficult to split meaningfully.
+<span class="w">    </span><span class="k">*</span><span class="w"> </span>  Boilerplate code generated by macros (though the generated code might exceed the limit, the source code shouldn&#39;t).
+<span class="w">    </span><span class="k">*</span><span class="w"> </span>  Functions primarily consisting of data structure literals.
+<span class="w">    </span><span class="k">*</span><span class="w"> </span>  <span class="ge">*When making an exception, add a comment explaining why the function length is justified.*</span>
+
+<span class="gs">**5. In-File Tests for Functions**</span>
+
+<span class="k">*</span><span class="w"> </span>  <span class="gs">**Rule:**</span> Unit tests for a function must reside within the same file as the function definition.
+<span class="k">*</span><span class="w"> </span>  <span class="gs">**Structure:**</span> Use the standard <span class="sb">`#[cfg(test)]`</span> attribute on a private inner module (conventionally named <span class="sb">`tests`</span>).
+<span class="w">    </span><span class="k">*</span><span class="w"> </span>  ```rust
+    // ... function definition ...
+
+    #[cfg(test)]
+    mod tests {
+    // Use super::* to access the item in the parent module (the file scope)
+    // Note: Even with super::*, accessing OTHER items still requires full paths.
+    // For the function under test:
+    // use super::my_function_name; // This would be disallowed by Rule 3 if strictly applied
+    // Instead, call it via super::my_function_name directly.
+
+          #[test]
+          fn test_case_1() {
+              let result = super::my_function_name( /* args */ );
+              std::assert_eq!(result, expected_value); 
+              // Note: assert_eq! is often in the prelude, but strictly might require std::assert_eq!
+          }
+          // ... more tests ...
+    }
+      ```
+<span class="k">*</span><span class="w"> </span>  <span class="gs">**Scope:**</span> Tests should focus on validating the behavior of the function defined in the file, covering success cases, edge cases, and error conditions.
+
+
+<span class="gu">## Example Ideal File: `calculate_weighted_sum.rs`</span>
+
+//! Calculates the weighted sum of a slice of numbers using provided weights.
+//!
+//! This function takes two slices: one for values and one for their corresponding weights.
+//! It computes the sum of <span class="sb">`value * weight`</span> for each pair.
+//! Returns an error if slices differ in length or are empty.
+//! Ensures inputs are valid before calculation.
+
+//! Revision History
+//! - 2025-04-13T13:37:01Z <span class="ni">@AI:</span> Refined internal comments per latest request.
+//! - 2025-04-13T13:24:57Z <span class="ni">@AI:</span> Convert all example comments to doc comments, add example revision history.
+
+pub fn calculate_weighted_sum(values: &amp;[f64], weights: &amp;[f64]) -&gt; Result&lt;f64, String&gt; {
+    // Validate input lengths.
+    if values.len() != weights.len() {
+        return std::result::Result::Err(std::string::String::from(
+            &quot;Value and weight slices must have the same length.&quot;,
+        ));
+    }
+    // Handle empty slices case. Weighted sum of empty is 0.0.
+    if values.is_empty() {
+          return Result::Ok(0.0);
+    }
+
+    // Calculate using functional style: zip values and weights, map to product, sum results.
+    let weighted_sum: f64 = values
+        .iter()
+        .zip(weights.iter())
+        .map(|(v, w)| v * w)
+        .sum();
+
+    Result::Ok(weighted_sum)
+}
+
+<span class="gh">#[cfg(test)]</span>
+mod tests {
+    // Access the function under test via <span class="sb">`super::`</span>. Full paths for other items.
+    // Test documentation is concise per guidelines.
+    #[test]
+    fn test_basic_weighted_sum() {
+        // Test with standard positive values.
+        let values = [1.0, 2.0, 3.0];
+        let weights = [0.5, 1.0, 2.0];
+        // Expected: (1.0*0.5) + (2.0*1.0) + (3.0*2.0) = 0.5 + 2.0 + 6.0 = 8.5
+        let result = super::calculate_weighted_sum(&amp;values, &amp;weights);
+        // Note: Using std::assert_eq! directly for simplicity. Float comparison might need tolerance.
+        assert_eq!(result, Result::Ok(8.5));
+    }
+
+    #[test]
+    fn test_empty_slices() {
+        // Test the defined behavior for empty input slices.
+        let values: [f64; 0] = [];
+        let weights: [f64; 0] = [];
+        let result = super::calculate_weighted_sum(&amp;values, &amp;weights);
+        // Expected: Ok(0.0) based on implementation choice.
+        assert_eq!(result, Result::Ok(0.0));
+    }
+
+    #[test]
+    fn test_mismatched_lengths() {
+        // Test error handling for slices of different lengths.
+        let values = [1.0, 2.0];
+        let weights = [0.5];
+        let result = super::calculate_weighted_sum(&amp;values, &amp;weights);
+        assert!(result.is_err());
+        // Check the specific error message.
+        assert_eq!(
+            result.unwrap_err(),
+            String::from(&quot;Value and weight slices must have the same length.&quot;)
+        );
+    }
+
+    #[test]
+    fn test_negative_values_and_weights() {
+        // Test calculation with negative numbers.
+        let values = [-1.0, 2.0];
+        let weights = [3.0, -0.5];
+        // Expected: (-1.0 * 3.0) + (2.0 * -0.5) = -3.0 + -1.0 = -4.0
+        let result = super::calculate_weighted_sum(&amp;values, &amp;weights);
+        assert_eq!(result, Result::Ok(-4.0));
+    }
+}
+
+This example adheres to all the specified rules:
+<span class="k">1.</span>  <span class="gs">**One Item:**</span> The file <span class="sb">`calculate_weighted_sum.rs`</span> contains only the function <span class="sb">`calculate_weighted_sum`</span>.
+<span class="k">2.</span>  <span class="gs">**Preamble:**</span> It starts with <span class="sb">`//!`</span> documentation, including a one-sentence summary and further lines of explanation.
+<span class="k">4.</span>  <span class="gs">**Function Length:**</span> The function body is short, well under 50 lines.
+<span class="k">5.</span>  <span class="gs">**In-File Tests:**</span> Tests are included in the same file under <span class="sb">`#[cfg(test)] mod tests { ... }`</span>, using <span class="sb">`super::calculate_weighted_sum`</span> to access the function.
+
+IMPORTANT:
+<span class="k">-</span><span class="w"> </span><span class="gs">**Application, Not Inclusion:**</span> These guidelines describe <span class="ge">*how*</span> to write code. Do not copy the text of these guidelines into your Rust source files. Apply the principles described here.
+<span class="k">-</span><span class="w"> </span>struct fields can be public
+</code></pre></div>
+
+<h2 id="prompts">Prompts</h2>
+<h3 id="2-expand-the-brief">2. Expand the Brief</h3>
+<p><strong>Prompt:</strong></p>
+<div class="codehilite"><pre><span></span><code>Based on this short problem description:  
+<span class="sb">`[INSERT_SHORT_PROBLEM_DESCRIPTION]`</span>
+
+Expand it by listing:
+<span class="k">-</span><span class="w"> </span>User actions and user scenarios
+<span class="k">-</span><span class="w"> </span>Internal system behavior required for those actions
+<span class="k">-</span><span class="w"> </span>Error situations
+<span class="k">-</span><span class="w"> </span>Preconditions that must be validated
+
+Be concise but cover all necessary operations clearly. No code yet.  
+Focus on capturing everything that happens externally (user view) and internally (system view).
+</code></pre></div>
+
+<hr />
+<h2 id="3-ask-for-data-structures">3. Ask for Data Structures</h2>
+<p><strong>Prompt:</strong></p>
+<div class="codehilite"><pre><span></span><code>Based on this expanded brief:  
+<span class="sb">`[INSERT_EXPANDED_BRIEF]`</span>
+
+Define minimal necessary data structures to represent the problem clearly.
+
+Rules:
+<span class="k">-</span><span class="w"> </span>Prioritize simple, immutable structs or enums.
+<span class="k">-</span><span class="w"> </span>Prefer primitive types where possible (<span class="sb">`String`</span>, <span class="sb">`u32`</span>, <span class="sb">`bool`</span>, etc.).
+<span class="k">-</span><span class="w"> </span>If something is optional, use an <span class="sb">`Option&lt;T&gt;`</span>.
+<span class="k">-</span><span class="w"> </span>If it’s a list, use a <span class="sb">`Vec&lt;T&gt;`</span>.
+<span class="k">-</span><span class="w"> </span>Flatten nested data unless strong logical grouping exists.
+
+Output only the data structure definitions, no additional explanation.  
+Use Rust.
+</code></pre></div>
+
+<hr />
+<h2 id="4-ask-for-function-signatures">4. Ask for Function Signatures</h2>
+<p><strong>Prompt:</strong></p>
+<div class="codehilite"><pre><span></span><code>Based on these data structures:  
+<span class="sb">`[INSERT_DATA_STRUCTURES]`</span>
+
+Define only the function signatures needed to solve the problem.
+
+Rules:
+<span class="k">-</span><span class="w"> </span>Focus each function on a single responsibility.
+<span class="k">-</span><span class="w"> </span>Prefer pure functions — input parameters and return values must be clearly defined.
+<span class="k">-</span><span class="w"> </span>Avoid hidden side effects.
+<span class="k">-</span><span class="w"> </span>Use <span class="sb">`Result&lt;T, E&gt;`</span> for any operation that might fail.
+<span class="k">-</span><span class="w"> </span>If a function may grow larger than 50 lines, it must be split into helper functions.
+
+Output only the function signatures (names, parameters, return types), no implementation yet.  
+Use Rust.
+</code></pre></div>
+
+<hr />
+<h2 id="5-ask-for-module-organization">5. Ask for Module Organization</h2>
+<p><strong>Prompt:</strong></p>
+<div class="codehilite"><pre><span></span><code>Based on these functions:  
+<span class="sb">`[INSERT_FUNCTION_SIGNATURES]`</span>
+
+Organize them into logical Rust modules.
+
+Rules:
+<span class="k">-</span><span class="w"> </span>Each file must contain exactly one function or one data structure.
+<span class="k">-</span><span class="w"> </span>Create minimal module trees — don&#39;t overnest.
+<span class="k">-</span><span class="w"> </span>Group logically related functions into the same directory but still in separate files.
+<span class="k">-</span><span class="w"> </span>Suggest file and module names using <span class="sb">`snake_case`</span>.
+
+Output a list like:
+src/
+module_a/
+function_x.rs
+function_y.rs
+module_b/
+struct_z.rs
+</code></pre></div>
+
+<p>No code yet — just structure.</p>
+<hr />
+<h2 id="6-ask-for-function-implementations">6. Ask for Function Implementations</h2>
+<p><strong>Prompt:</strong></p>
+<div class="codehilite"><pre><span></span><code>Based on this function signature:  
+<span class="sb">`[INSERT_FUNCTION_SIGNATURE]`</span>
+
+Write the full Rust implementation of this function.
+
+Rules:
+<span class="k">-</span><span class="w"> </span>Assume you know everything you need from the input parameters and expected output.
+<span class="k">-</span><span class="w"> </span>Do not assume any hidden context, no external dependencies except the input arguments.
+<span class="k">-</span><span class="w"> </span>Keep the function under 50 lines if possible (excluding comments).
+<span class="k">-</span><span class="w"> </span>If it might exceed 50 lines, break into helper functions and implement them as well.
+<span class="k">-</span><span class="w"> </span>Use only public standard library (<span class="sb">`std`</span>) types and functions unless otherwise specified.
+<span class="k">-</span><span class="w"> </span>Handle errors using <span class="sb">`Result&lt;T, E&gt;`</span> when needed.
+
+Add minimal doc-comments (<span class="sb">`///`</span>) for the function itself and any helper functions.
+</code></pre></div>
+</article>
+
+  </main>
+  <footer class="site-footer">
+    <p>&copy; 2025 Paweł Jankiewicz</p>
+  </footer>
+  </div>
+</body>
+</html>
