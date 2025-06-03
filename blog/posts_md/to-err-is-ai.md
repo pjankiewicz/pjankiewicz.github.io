@@ -715,4 +715,8 @@ of very good guesses to improve some hard problems.
 
 ## AI code might become hard to follow
 
-If we keep pushing in the direction of chess, AI will eventually write solutions that are ahead of what people write. Some of those solutions will be difficult to understand. And they’ll be studied just to figure out how they work.
+If we keep pushing in the direction of chess, AI will eventually write solutions that are ahead of what people write. Some of those solutions will be difficult to understand. And they’ll be studied just to figure out how they work. 
+
+But as with chess, people still play it and enjoy it. Computers didn’t kill the game - they deepened it. They showed us patterns we missed, and the game is more popular than ever. Coding might follow the same path.
+
+AI might write code that solves complex problems better. But writing code, solving problems, building things - it should still be fun. That’s the part we shouldn’t lose.
