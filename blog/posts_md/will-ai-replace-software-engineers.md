@@ -1,3 +1,10 @@
+---
+title: "To Err is AI"
+date: "2025-04-28"
+description: "Why 80% AI performance is still good"
+publish: false 
+---
+
 ## Will AI replace software engineers?
 
 If you take a look at the statistics of AI models they are making mistakes but we agreed that it is still ok.

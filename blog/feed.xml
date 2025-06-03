@@ -7,24 +7,6 @@
   <atom:link href="/blog/feed.xml" rel="self" type="application/rss+xml" /> 
   
   <item>
-    <title>will-ai-replace-software-engineers</title>
-    
-    <link>https://pjankiewicz.github.io/blog/posts/will-ai-replace-software-engineers/</link>
-    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/will-ai-replace-software-engineers/</guid>
-    <pubDate>Tue, 03 Jun 2025 16:11:00 +0000</pubDate>
-    <description>Will AI replace software engineers?
-If you take a look at the statistics of AI models they are making mistakes but we agreed that it is still ok.
-However in terms of vision, determining the best UX/UI people still will be important. AI can make us faster
-and to some extend better programmers but the technology is for humans.
-Unfortunately in the short term it can indeed reduce the number of jobs related to some type of software engineering.
-Things that are easily automatable, writing CRUD apps, even frontend code is likely to be automated to a large extent.
-But large projects will be so complex and the human interaction so important that it is unlikely that big projects
-will be 100% automated.
-The role of software engineers right now is under a lot of pressure but we must think how to make AI our super power
-to build better, bigger and higher quality software.</description>
-  </item>
-  
-  <item>
     <title>To Err is AI</title>
     
     <link>https://pjankiewicz.github.io/blog/posts/to-err-is-ai/</link>

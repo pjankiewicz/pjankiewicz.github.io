@@ -330,6 +330,16 @@ So with three tries, you’re already above 99%. Obviously this is simplified, b
   </script>
 </div>
 
+## We're stuck expecting perfect output
+
+Right now we expect the AI to write perfect code in one shot. That's not realistic. Without proper backtracking, you’re basically rolling the dice once and hoping it lands on a full solution. That’s not how real coding works.
+
+The real work starts after the first version. Refactoring, debugging, shifting abstractions, sometimes going back to rethink what the system even is. AI doesn’t do that yet in a meaningful way - or it would be extremely expensive and time-consuming to apply it.
+
+You can’t solve non-trivial problems without exploring dead ends and doubling back. And real backtracking is expensive. It requires keeping internal state, understanding where things broke, and trying again in a smarter way. It’s not just running the same prompt with different wording.
+
+We’re not there yet.
+
 ## Backtracking should be built in
 
 Being wrong and <a href="https://en.wikipedia.org/wiki/Backtracking">backtracking</a> is fundamental. That’s something future AI coding systems will do better than now.
