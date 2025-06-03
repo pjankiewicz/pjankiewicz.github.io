@@ -1,0 +1,708 @@
+---
+title: "To Err is AI"
+date: "2025-04-28"
+description: "Why 80% AI performance is still good"
+publish: true 
+---
+
+## Chess and coding
+
+I was thinking about the progress of AI and the progress of chess. There are a lot of parallels here.
+
+One less obvious analogy is how chess algorithms work. They analyze the game tree and quickly prune obviously wrong parts of it. People often say things like “I asked AI to do one thing and it did it wrong.” That’s not a useful framing. If you compare solving a problem to exploring a game tree, it’s actually quite similar. AI, like humans, can invest in the wrong solution path.
+
+When solving a problem starts getting harder and harder, that’s often a sign that the approach is wrong. Right now, AI gets stuck exactly like that — it follows one solution and commits to it. But that’s not how we solve problems. We make mistakes, rewrite, sometimes throw out most of the code.
+
+## AI doesn’t have to be perfect
+
+I often see people benchmarking AI with numbers like “80% accuracy” on some coding tasks. Two things to keep in mind:
+
+1. These benchmarks are biased and likely overfit
+2. You don’t need the first output to be perfect
+
+What matters is that the output is above a certain threshold and that the reasoning can self-correct.
+
+Let’s say solving a problem has a certain probability of success. And let’s assume the chance of fixing a broken solution is the same as getting it right in the first place.
+
+If the AI is 80% accurate, the chance of success looks like this:
+
+* n = 1 → 80%
+* n = 2 → 96%
+* n = 3 → 99.2%
+
+So with three tries, you’re already above 99%. Obviously this is simplified, but it shows you don’t need perfection. You need retries and some form of feedback.
+
+<div id="prob-container">
+  <style>
+    /* Container */
+    #prob-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-family: sans-serif;
+      margin: 20px;
+    }
+
+    /* Controls */
+    #controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    #controls label {
+      font-size: 14px;
+    }
+    #controls input[type="number"] {
+      width: 60px;
+      padding: 4px;
+      font-size: 14px;
+    }
+    #controls input[type="range"] {
+      width: 150px;
+    }
+    #controls .field {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      font-size: 14px;
+    }
+    #controls .field span {
+      font-size: 12px;
+      color: #555;
+    }
+
+    /* Canvas */
+    #chart-wrapper {
+      position: relative;
+      width: 600px;
+      height: 400px;
+      border: 1px solid #ccc;
+      background-color: #fafafa;
+    }
+    #prob-chart {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Legend / Info below chart */
+    #info {
+      margin-top: 12px;
+      font-size: 14px;
+    }
+    #info span {
+      font-weight: bold;
+      color: #007bff;
+    }
+  </style>
+
+   <div id="controls">
+      <div class="field">
+        <label for="base-prob">Base Accuracy (p):</label>
+        <input type="number" id="base-prob" min="0" max="100" step="1" value="80" /> %
+        <span>(e.g. 80 → 0.80)</span>
+      </div>
+
+      <div class="field">
+        <label for="threshold">Threshold (%):</label>
+        <input type="number" id="threshold" min="0" max="100" step="1" value="95" /> %
+        <span>(e.g. 95 → 0.95)</span>
+      </div>
+
+      <div class="field">
+        <label for="max-n">Max Attempts (n):</label>
+        <input type="number" id="max-n" min="1" max="50" step="1" value="10" />
+      </div>
+    </div>
+
+    <div id="chart-wrapper">
+      <canvas id="prob-chart"></canvas>
+    </div>
+
+    <div id="info">
+      At <span id="cross-n">n = –</span>, cumulative probability ≥ threshold.
+      Current threshold crossing probability: <span id="cross-pct">–</span>%
+    </div>
+
+  <script>
+    // ======== SETUP ========
+    const canvas = document.getElementById("prob-chart");
+    const ctx = canvas.getContext("2d");
+    // Make the canvas high‐DPI–ready
+    function resizeCanvasToDisplaySize(canvas) {
+      const rect = canvas.getBoundingClientRect();
+      if (
+        canvas.width !== rect.width ||
+        canvas.height !== rect.height
+      ) {
+        canvas.width = rect.width * window.devicePixelRatio;
+        canvas.height = rect.height * window.devicePixelRatio;
+        ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+      }
+    }
+    resizeCanvasToDisplaySize(canvas);
+
+    // Control elements
+    const baseProbInput = document.getElementById("base-prob");
+    const thresholdInput = document.getElementById("threshold");
+    const maxNInput = document.getElementById("max-n");
+
+    const crossNSpan = document.getElementById("cross-n");
+    const crossPctSpan = document.getElementById("cross-pct");
+
+    // When any input changes, redraw
+    [baseProbInput, thresholdInput, maxNInput].forEach((el) => {
+      el.addEventListener("input", drawChart);
+    });
+
+    // ======== CORE LOGIC ========
+    function drawChart() {
+      resizeCanvasToDisplaySize(canvas);
+
+      // Parse inputs
+      let p = parseFloat(baseProbInput.value) / 100;
+      let threshold = parseFloat(thresholdInput.value) / 100;
+      let maxN = parseInt(maxNInput.value, 10);
+
+      if (isNaN(p) || p < 0) p = 0;
+      if (p > 1) p = 1;
+      if (isNaN(threshold) || threshold < 0) threshold = 0;
+      if (threshold > 1) threshold = 1;
+      if (isNaN(maxN) || maxN < 1) maxN = 1;
+
+      // Compute cumulative probabilities for n = 1…maxN
+      // cumProb[n] = 1 - (1 - p)^n
+      const cumProbs = [];
+      for (let n = 1; n <= maxN; n++) {
+        const cp = 1 - Math.pow(1 - p, n);
+        cumProbs.push(cp);
+      }
+
+      // Find smallest n where cumProbs[n-1] >= threshold
+      let crossN = null;
+      for (let i = 0; i < cumProbs.length; i++) {
+        if (cumProbs[i] >= threshold) {
+          crossN = i + 1;
+          break;
+        }
+      }
+      let crossPct = crossN !== null ? (cumProbs[crossN - 1] * 100).toFixed(1) : null;
+
+      crossNSpan.textContent = crossN === null ? "—" : `n = ${crossN}`;
+      crossPctSpan.textContent = crossPct === null ? "—" : `${crossPct}`;
+
+      // === DRAWING ===
+      const W = canvas.clientWidth;
+      const H = canvas.clientHeight;
+      const MARGIN = { top: 40, right: 40, bottom: 40, left: 50 };
+      const innerW = W - MARGIN.left - MARGIN.right;
+      const innerH = H - MARGIN.top - MARGIN.bottom;
+
+      // Clear background
+      ctx.clearRect(0, 0, W, H);
+      ctx.save();
+      ctx.translate(MARGIN.left, MARGIN.top);
+
+      // Axes lines
+      ctx.strokeStyle = "#333";
+      ctx.lineWidth = 1;
+      // X-axis
+      ctx.beginPath();
+      ctx.moveTo(0, innerH);
+      ctx.lineTo(innerW, innerH);
+      ctx.stroke();
+      // Y-axis
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(0, innerH);
+      ctx.stroke();
+
+      // Labels
+      ctx.fillStyle = "#333";
+      ctx.font = "14px sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText("n (attempts)", innerW / 2, innerH + 30);
+      ctx.save();
+      ctx.rotate(-Math.PI / 2);
+      ctx.textAlign = "center";
+      ctx.fillText("Cum. Probability (%)", -innerH / 2, -35);
+      ctx.restore();
+
+      // Determine Y-axis scale: from 0% up to 100%
+      const yMin = 0;
+      const yMax = 1; // represent 100% as 1
+
+      // Tick marks and gridlines
+      ctx.strokeStyle = "#ddd";
+      ctx.fillStyle = "#333";
+      ctx.lineWidth = 0.5;
+      ctx.font = "12px sans-serif";
+      ctx.textAlign = "right";
+      ctx.textBaseline = "middle";
+
+      // Horizontal grid at 0.0, 0.2, 0.4, 0.6, 0.8, 1.0
+      for (let frac = 0; frac <= 1.0 + 1e-9; frac += 0.2) {
+        const y = innerH - (frac - yMin) / (yMax - yMin) * innerH;
+        // light grid line
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(innerW, y);
+        ctx.stroke();
+        // label at left
+        ctx.fillStyle = "#333";
+        const pctLabel = Math.round(frac * 100);
+        ctx.fillText(pctLabel + "%", -8, y);
+      }
+
+      // X-axis ticks for each integer n = 1…maxN
+      ctx.textAlign = "center";
+      ctx.textBaseline = "top";
+      for (let n = 1; n <= maxN; n++) {
+        const x = ((n - 1) / (maxN - 1)) * innerW;
+        // small vertical tick
+        ctx.beginPath();
+        ctx.moveTo(x, innerH);
+        ctx.lineTo(x, innerH + 6);
+        ctx.stroke();
+        // label
+        ctx.fillStyle = "#333";
+        ctx.fillText(n.toString(), x, innerH + 8);
+      }
+
+      // Plot cumulative-probability curve
+      ctx.strokeStyle = "#007bff";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      for (let i = 0; i < cumProbs.length; i++) {
+        const n = i + 1;
+        const pct = cumProbs[i]; // between 0 and 1
+        const x = ((n - 1) / (maxN - 1)) * innerW;
+        const y = innerH - ((pct - yMin) / (yMax - yMin)) * innerH;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      // Draw points as dots
+      ctx.fillStyle = "#007bff";
+      for (let i = 0; i < cumProbs.length; i++) {
+        const n = i + 1;
+        const pct = cumProbs[i];
+        const x = ((n - 1) / (maxN - 1)) * innerW;
+        const y = innerH - ((pct - yMin) / (yMax - yMin)) * innerH;
+        ctx.beginPath();
+        ctx.arc(x, y, 4, 0, 2 * Math.PI);
+        ctx.fill();
+      }
+
+      // Draw threshold horizontal line
+      ctx.strokeStyle = "#ff4d4d";
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([6, 4]);
+      const yThresh = innerH - ((threshold - yMin) / (yMax - yMin)) * innerH;
+      ctx.beginPath();
+      ctx.moveTo(0, yThresh);
+      ctx.lineTo(innerW, yThresh);
+      ctx.stroke();
+      ctx.setLineDash([]); // reset
+
+      // If crossN exists, highlight that point
+      if (crossN !== null) {
+        const i = crossN - 1;
+        const x = ((crossN - 1) / (maxN - 1)) * innerW;
+        const y = innerH - ((cumProbs[i] - yMin) / (yMax - yMin)) * innerH;
+        // draw a larger circle
+        ctx.fillStyle = "#ff4d4d";
+        ctx.beginPath();
+        ctx.arc(x, y, 6, 0, 2 * Math.PI);
+        ctx.fill();
+      }
+
+      ctx.restore();
+    }
+
+    // Initial draw
+    drawChart();
+
+    // Redraw on window resize
+    window.addEventListener("resize", drawChart);
+  </script>
+</div>
+
+## Backtracking should be built in
+
+Being wrong and <a href="https://en.wikipedia.org/wiki/Backtracking">backtracking</a> is fundamental. That’s something future AI coding systems will do better than now.
+
+Don’t think of problem-solving as a straight path. It’s more like a labyrinth with dead ends. Right now, AI gets stuck by just following one line. But real problem-solving involves jumping out of a path and trying something else entirely.
+
+I think it is often overlooked that in complex systems an initial solution is often not the best one.
+It is sometimes a matter of performing multiple experiments and going back to the "whiteboard" to plan another approach.
+With AI written code we must take a similar approach - just don't assume that the first solution is the best one.
+
+## Horizon effect and why AI just cannot solve it?
+
+Again the analogy to chess seems appropriate. With AI chess algorithms there is something like <a href="https://www.chessprogramming.org/Horizon_Effect#:~:text=The%20Horizon%20Effect%20is%20caused,this%20is%20not%20the%20case.">Horizon Effect</a>.
+Basically what it implies that even with the best and fastest algorithms there is some future state of the game
+that we cannot predict the outcome of. 
+
+Any complex solution will probably deal with a similar effect - you cannot write the whole system in one go because
+there are some unforseen consequences of future choices that you cannot just predict.
+
+## Backtracking sudoku example
+
+Below you can see how backtracking works when solving a sudoku puzzle with only 1 good answer.
+In this naive implementation it tries to fill the missing numbers just trying out different possibilities.
+With every new entry in the grid it checks whether the conditions are still met - all blocks, lines, and rows
+must have unique numbers. If it happens that the solution is wrong it tries another number until it cannot
+try any new number - at this point it means that the previous number was wrong. 
+
+In the worst case this algorithm can start over if the initial guess was wrong. There are many heurestics that
+can be applied here - but this implementation is naive on purpose.
+
+<div markdown="0">
+  <style>
+    /* Container for the whole widget */
+    #sudoku-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-family: sans-serif;
+      margin: 20px;
+    }
+
+    /* The grid itself */
+    #sudoku-grid {
+      display: grid;
+      grid-template-columns: repeat(9, 40px);
+      grid-template-rows: repeat(9, 40px);
+      gap: 2px;
+      margin-bottom: 15px;
+    }
+
+    .cell {
+      width: 40px;
+      height: 40px;
+      line-height: 40px;
+      text-align: center;
+      font-size: 20px;
+      border: 1px solid #999;
+      box-sizing: border-box;
+      user-select: none;
+      background-color: #fff;
+    }
+
+    /* Thicker borders every 3 cells for 3×3 sub-grid boundaries */
+    .cell:nth-child(3n) {
+      border-right: 2px solid #000;
+    }
+    .cell:nth-child(n+19):nth-child(-n+27),
+    .cell:nth-child(n+46):nth-child(-n+54),
+    .cell:nth-child(n+73):nth-child(-n+81) {
+      border-bottom: 2px solid #000;
+    }
+    .cell:nth-child(1), .cell:nth-child(10), .cell:nth-child(19),
+    .cell:nth-child(28), .cell:nth-child(37), .cell:nth-child(46),
+    .cell:nth-child(55), .cell:nth-child(64), .cell:nth-child(73) {
+      border-left: 2px solid #000;
+    }
+    .cell:nth-child(-n+9) {
+      border-top: 2px solid #000;
+    }
+
+    /* Highlight coloring */
+    .cell.trying {
+      background-color: #e0f7fa; /* light cyan when placing a candidate */
+    }
+    .cell.failed {
+      background-color: #ffcdd2; /* light red when backtracking (removal) */
+    }
+    .cell.fixed {
+      color: #333;
+      font-weight: bold;
+    }
+
+    /* Controls area */
+    #controls {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    #controls > button {
+      padding: 6px 12px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    #controls > label {
+      font-size: 14px;
+    }
+    #speed-slider {
+      width: 150px;
+    }
+  </style>
+
+  <div id="sudoku-container">
+    <div id="sudoku-grid"></div>
+
+    <div id="controls">
+      <button id="start-btn">Start</button>
+      <button id="stop-btn" disabled>Stop</button>
+      <button id="reset-btn">Reset</button>
+      <label>
+        Speed:
+        <input type="range" id="speed-slider" min="1" max="500" value="100" />
+        <span id="speed-label">100ms</span>
+      </label>
+    </div>
+  </div>
+
+  <script>
+    // ======== GLOBAL STATE ========
+    const GRID_SIZE = 9;
+    let board = [];               // 2D array [row][col], 0 = empty
+    let cells = [];               // Flat array of all 81 .cell DIVs
+    let isSolving = false;        // true once solve() has started
+    let isPaused = false;         // true when “Stop” has been clicked
+    let abortRequested = false;   // true after Reset: cancel current solver
+    let resumeFunc = null;        // Function to call to resume from pause
+    let delayMs = 100;            // Milliseconds delay between each step
+
+    // ======== INITIAL PUZZLE (unique solution) ========
+    // 0 = empty. This puzzle has exactly one solution.
+    const initialBoard = [
+      [5, 3, 0, 0, 7, 0, 0, 0, 0],
+      [6, 0, 0, 1, 9, 5, 0, 0, 0],
+      [0, 9, 8, 0, 0, 0, 0, 6, 0],
+
+      [8, 0, 0, 0, 6, 0, 0, 0, 3],
+      [4, 0, 0, 8, 0, 3, 0, 0, 1],
+      [7, 0, 0, 0, 2, 0, 0, 0, 6],
+
+      [0, 6, 0, 0, 0, 0, 2, 8, 0],
+      [0, 0, 0, 4, 1, 9, 0, 0, 5],
+      [0, 0, 0, 0, 8, 0, 0, 7, 9],
+    ];
+
+    // ======== INITIAL RENDER ========
+    function createGrid() {
+      const grid = document.getElementById("sudoku-grid");
+      grid.innerHTML = "";
+      cells = [];
+      board = [];
+
+      for (let r = 0; r < GRID_SIZE; r++) {
+        board[r] = [];
+        for (let c = 0; c < GRID_SIZE; c++) {
+          const cell = document.createElement("div");
+          cell.classList.add("cell");
+          cell.dataset.row = r;
+          cell.dataset.col = c;
+
+          // If initialBoard[r][c] is nonzero, mark it as a fixed "given"
+          const value = initialBoard[r][c];
+          if (value !== 0) {
+            board[r][c] = value;
+            cell.textContent = value;
+            cell.classList.add("fixed");
+          } else {
+            board[r][c] = 0;
+            cell.textContent = "";
+          }
+
+          grid.appendChild(cell);
+          cells.push(cell);
+        }
+      }
+    }
+
+    // ======== UTILITY FUNCTIONS ========
+    function sleep(ms) {
+      return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+
+    async function checkPause() {
+      if (abortRequested) throw new Error("abort");
+      if (!isPaused) return;
+      await new Promise((resolve) => {
+        resumeFunc = resolve;
+      });
+      if (abortRequested) throw new Error("abort");
+    }
+
+    function updateCellUI(r, c, num, statusClass = "") {
+      const idx = r * GRID_SIZE + c;
+      const cell = cells[idx];
+      if (num === 0) {
+        cell.textContent = "";
+      } else {
+        cell.textContent = num;
+      }
+      cell.classList.remove("trying", "failed");
+      if (statusClass) {
+        cell.classList.add(statusClass);
+      }
+    }
+
+    function canPlace(r, c, val) {
+      // Check row and column
+      for (let i = 0; i < GRID_SIZE; i++) {
+        if (board[r][i] === val) return false;
+        if (board[i][c] === val) return false;
+      }
+      // Check 3×3 subgrid
+      const br = Math.floor(r / 3) * 3;
+      const bc = Math.floor(c / 3) * 3;
+      for (let dr = 0; dr < 3; dr++) {
+        for (let dc = 0; dc < 3; dc++) {
+          if (board[br + dr][bc + dc] === val) return false;
+        }
+      }
+      return true;
+    }
+
+    // ======== BACKTRACKING SOLVER ========
+    async function solveBacktrack() {
+      // Find next empty cell
+      let row = -1,
+        col = -1;
+      for (let r = 0; r < GRID_SIZE; r++) {
+        for (let c = 0; c < GRID_SIZE; c++) {
+          if (board[r][c] === 0) {
+            row = r;
+            col = c;
+            break;
+          }
+        }
+        if (row !== -1) break;
+      }
+      if (row === -1) {
+        // No empty cells → solved
+        return true;
+      }
+
+      for (let num = 1; num <= 9; num++) {
+        await checkPause();
+
+        if (canPlace(row, col, num)) {
+          board[row][col] = num;
+          updateCellUI(row, col, num, "trying");
+          await sleep(delayMs);
+
+          let solved = false;
+          try {
+            solved = await solveBacktrack();
+          } catch (e) {
+            throw e; // propagate abort
+          }
+          if (solved) return true;
+
+          // Backtrack
+          board[row][col] = 0;
+          updateCellUI(row, col, 0, "failed");
+          await sleep(delayMs);
+          updateCellUI(row, col, 0);
+        }
+      }
+      return false;
+    }
+
+    async function startSolving() {
+      isSolving = true;
+      abortRequested = false;
+      isPaused = false;
+      document.getElementById("start-btn").textContent = "Pause";
+      document.getElementById("stop-btn").disabled = false;
+      try {
+        await solveBacktrack();
+      } catch (e) {
+        if (e.message === "abort") {
+          return; // aborted
+        }
+        console.error(e);
+      }
+      isSolving = false;
+      document.getElementById("start-btn").textContent = "Start";
+      document.getElementById("stop-btn").disabled = true;
+    }
+
+    // ======== CONTROL HANDLERS ========
+    document.getElementById("start-btn").addEventListener("click", () => {
+      if (!isSolving) {
+        startSolving();
+      } else if (isPaused) {
+        // Resume
+        isPaused = false;
+        resumeFunc();
+        document.getElementById("start-btn").textContent = "Pause";
+        document.getElementById("stop-btn").disabled = false;
+      } else {
+        // Pause
+        isPaused = true;
+        document.getElementById("start-btn").textContent = "Resume";
+        document.getElementById("stop-btn").disabled = true;
+      }
+    });
+
+    document.getElementById("stop-btn").addEventListener("click", () => {
+      if (isSolving && !isPaused) {
+        isPaused = true;
+        document.getElementById("start-btn").textContent = "Resume";
+        document.getElementById("stop-btn").disabled = true;
+      }
+    });
+
+    document.getElementById("reset-btn").addEventListener("click", () => {
+      if (isSolving) {
+        abortRequested = true;
+        if (isPaused && resumeFunc) {
+          isPaused = false;
+          resumeFunc();
+        }
+      }
+      isSolving = false;
+      isPaused = false;
+      abortRequested = false;
+      document.getElementById("start-btn").textContent = "Start";
+      document.getElementById("stop-btn").disabled = true;
+
+      // Restore the initial puzzle state
+      for (let r = 0; r < GRID_SIZE; r++) {
+        for (let c = 0; c < GRID_SIZE; c++) {
+          const val = initialBoard[r][c];
+          board[r][c] = val;
+          updateCellUI(r, c, val);
+          if (val !== 0) {
+            const idx = r * GRID_SIZE + c;
+            cells[idx].classList.add("fixed");
+          } else {
+            const idx = r * GRID_SIZE + c;
+            cells[idx].classList.remove("fixed");
+          }
+        }
+      }
+    });
+
+    document.getElementById("speed-slider").addEventListener("input", (e) => {
+      delayMs = parseInt(e.target.value, 10);
+      document.getElementById("speed-label").textContent = `${delayMs}ms`;
+    });
+
+    // ======== INITIALIZE ========
+    createGrid();
+    document.getElementById("stop-btn").disabled = true;
+  </script>
+</div>
+
+## Compute won’t just make responses smarter
+
+GPUs aren’t just about model size. They’ll probably be used to explore multiple solution paths in parallel. Not just deeper thinking, but more branches. More pruning. More restarts.
+
+Just like chess engines didn’t just become “smarter,” they became better at searching.
+
+The recent success of <a href="https://deepmind.google/discover/blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/">AlphaEvolve</a> seems to confirm that. AI is very good at guessing and it still takes thousands or millions
+of very good guesses to improve some hard problems.
+
+## AI code might become hard to follow
+
+If we keep pushing in the direction of chess, AI will eventually write solutions that are ahead of what people write. Some of those solutions will be difficult to understand. And they’ll be studied just to figure out how they work.
