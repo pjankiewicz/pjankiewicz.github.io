@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>egui-shadcn: Beautiful UI Components for Rust - Paweł Jankiewicz</title>
+  <meta name="description" content="Announcing egui-shadcn, a library that brings shadcn/ui-style components to egui — 55+ widgets with built-in theming, from buttons and inputs to dialogs and date pickers.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/blog/style.css">
+
+  <link rel="alternate" type="application/rss+xml" title="Paweł Jankiewicz" href="/blog/feed.xml">
+  <meta property="og:site_name" content="Paweł Jankiewicz">
+  <meta property="og:title" content="egui-shadcn: Beautiful UI Components for Rust">
+  <meta property="og:description" content="Announcing egui-shadcn, a library that brings shadcn/ui-style components to egui — 55+ widgets with built-in theming, from buttons and inputs to dialogs and date pickers.">
+  <meta property="og:url" content="https://pjankiewicz.github.io/blog/posts/egui-shadcn/">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="egui-shadcn: Beautiful UI Components for Rust">
+  <meta name="twitter:description" content="Announcing egui-shadcn, a library that brings shadcn/ui-style components to egui — 55+ widgets with built-in theming, from buttons and inputs to dialogs and date pickers.">
+  
+</head>
+<body>  <div class="site-wrapper">
+
+  <header class="site-header">
+    <h1><a href="/blog/">Paweł Jankiewicz</a></h1>
+    <p>Blog about programming, AI, Machine Learning</p>
+    <p class="site-social">
+      <a href="https://www.linkedin.com/in/pjankiewicz/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </p>
+  </header>
+  <main class="site-main">
+    
+<article class="post-content">
+  <h1>egui-shadcn: Beautiful UI Components for Rust</h1>
+  <p class="post-meta">February 15, 2026 | Tags: 
+    
+    <a href="/blog/tags/rust/">rust</a>, 
+  
+    
+    <a href="/blog/tags/open-source/">open-source</a>, 
+  
+    
+    <a href="/blog/tags/programming/">programming</a>
+  </p>
+  <h3 id="tldr">TL;DR</h3>
+<p>I built <a href="https://github.com/pjankiewicz/egui-shadcn">egui-shadcn</a>, an open-source Rust library that brings <a href="https://ui.shadcn.com">shadcn/ui</a>-style components to <a href="https://github.com/emilk/egui">egui</a>. It ships 55+ widgets with built-in light and dark theming, 1600+ Lucide icons, and works on desktop, web, and anywhere egui runs.</p>
+<p><strong><a href="https://pjankiewicz.github.io/egui-shadcn/">Try the live demo</a></strong> (runs in your browser via WebAssembly).</p>
+<h3 id="why">Why?</h3>
+<p>egui is one of the best immediate-mode GUI libraries out there. It's fast, portable, and the API is delightful. But the default look is... utilitarian. If you want your egui app to look polished — with proper spacing, rounded corners, hover states, focus rings, and a consistent design language — you end up writing a lot of styling code.</p>
+<p>Meanwhile, in the web world, <a href="https://ui.shadcn.com">shadcn/ui</a> solved exactly this problem for React. Beautiful, accessible, composable components that just look right out of the box. I wanted that same experience in Rust.</p>
+<h3 id="whats-inside">What's Inside</h3>
+<p>The library is a single <code>egui-shadcn</code> crate with zero runtime dependencies beyond egui itself (plus <code>egui_flex</code> for flexbox layout). Here's the component breakdown:</p>
+<p><strong>Inputs</strong>: Button, Checkbox, Input, InputOtp, Radio, RadioGroup, Select, Slider, Switch, Textarea, Toggle, ToggleGroup, Combobox, DatePicker</p>
+<p><strong>Layout</strong>: Accordion, AspectRatio, Card, Collapsible, Resizable, ScrollArea, Separator, Tabs, Flex</p>
+<p><strong>Overlays</strong>: AlertDialog, Command, ContextMenu, Dialog, Drawer, DropdownMenu, HoverCard, Menubar, NavigationMenu, Popover, Sheet, Tooltip</p>
+<p><strong>Feedback</strong>: Alert, Badge, Progress, Skeleton, Spinner, Toast</p>
+<p><strong>Data</strong>: Avatar, Breadcrumb, Calendar, Carousel, Pagination, Sidebar, Table</p>
+<p><strong>Typography</strong>: Typography, Label, Kbd</p>
+<p><strong>Icons</strong>: 1600+ Lucide icons rendered as vector paths</p>
+<h3 id="quick-start">Quick Start</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">[dependencies]</span>
+<span class="n">egui-shadcn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;0.1&quot;</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="c1">// Set up the theme</span>
+<span class="kd">let</span><span class="w"> </span><span class="n">theme</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">egui_shadcn</span><span class="p">::</span><span class="n">theme</span><span class="p">::</span><span class="n">shadcn_theme_dark</span><span class="p">::</span><span class="n">dark</span><span class="p">();</span>
+<span class="n">egui_shadcn</span><span class="p">::</span><span class="n">ShadcnThemeExt</span><span class="p">::</span><span class="n">set_shadcn_theme</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span><span class="w"> </span><span class="n">theme</span><span class="p">);</span>
+
+<span class="c1">// Use components</span>
+<span class="n">egui_shadcn</span><span class="p">::</span><span class="n">Button</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="s">&quot;Click me&quot;</span><span class="p">).</span><span class="n">show</span><span class="p">(</span><span class="n">ui</span><span class="p">);</span>
+
+<span class="n">ui</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">egui_shadcn</span><span class="p">::</span><span class="n">Switch</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="n">value</span><span class="p">).</span><span class="n">label</span><span class="p">(</span><span class="s">&quot;Dark mode&quot;</span><span class="p">));</span>
+
+<span class="n">ui</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">egui_shadcn</span><span class="p">::</span><span class="n">Input</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="n">text</span><span class="p">).</span><span class="n">placeholder</span><span class="p">(</span><span class="s">&quot;Type here...&quot;</span><span class="p">));</span>
+
+<span class="n">ui</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">egui_shadcn</span><span class="p">::</span><span class="n">Select</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="n">selected</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">options</span><span class="p">)</span>
+<span class="w">    </span><span class="p">.</span><span class="n">placeholder</span><span class="p">(</span><span class="s">&quot;Pick one...&quot;</span><span class="p">));</span>
+</code></pre></div>
+
+<p>Each component follows egui conventions — either implement <code>egui::Widget</code> for use with <code>ui.add()</code>, or provide a <code>.show(ui)</code> builder pattern.</p>
+<h3 id="theming">Theming</h3>
+<p>The library comes with light and dark themes built in. Switching is a single line:</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">let</span><span class="w"> </span><span class="n">theme</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">dark_mode</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">egui_shadcn</span><span class="p">::</span><span class="n">theme</span><span class="p">::</span><span class="n">shadcn_theme_dark</span><span class="p">::</span><span class="n">dark</span><span class="p">()</span>
+<span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">egui_shadcn</span><span class="p">::</span><span class="n">theme</span><span class="p">::</span><span class="n">shadcn_theme_light</span><span class="p">::</span><span class="n">light</span><span class="p">()</span>
+<span class="p">};</span>
+<span class="n">egui_shadcn</span><span class="p">::</span><span class="n">ShadcnThemeExt</span><span class="p">::</span><span class="n">set_shadcn_theme</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span><span class="w"> </span><span class="n">theme</span><span class="p">);</span>
+</code></pre></div>
+
+<p>The theme covers all components — backgrounds, borders, foreground colors, accent states, destructive variants, muted text, and more. Every color is defined in a single <code>ShadcnTheme</code> struct, so creating your own theme is straightforward.</p>
+<h3 id="flexbox-layout">Flexbox Layout</h3>
+<p>One thing I missed from web development was proper flexbox. The library wraps <code>egui_flex</code> with a simpler API:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// Row with gap, grow, and justify</span>
+<span class="n">egui_shadcn</span><span class="p">::</span><span class="n">Flex</span><span class="p">::</span><span class="n">row</span><span class="p">().</span><span class="n">gap</span><span class="p">(</span><span class="mf">8.0</span><span class="p">).</span><span class="n">w_full</span><span class="p">().</span><span class="n">show</span><span class="p">(</span><span class="n">ui</span><span class="p">,</span><span class="w"> </span><span class="o">|</span><span class="n">f</span><span class="o">|</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">f</span><span class="p">.</span><span class="n">grow</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="n">egui_shadcn</span><span class="p">::</span><span class="n">Input</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="n">text</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="n">placeholder</span><span class="p">(</span><span class="s">&quot;Type a message...&quot;</span><span class="p">));</span>
+<span class="w">    </span><span class="n">f</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">egui_shadcn</span><span class="p">::</span><span class="n">Button</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="s">&quot;Send&quot;</span><span class="p">));</span>
+<span class="p">});</span>
+
+<span class="c1">// Wrapping tags</span>
+<span class="n">egui_shadcn</span><span class="p">::</span><span class="n">Flex</span><span class="p">::</span><span class="n">row</span><span class="p">().</span><span class="n">gap</span><span class="p">(</span><span class="mf">4.0</span><span class="p">).</span><span class="n">wrap</span><span class="p">().</span><span class="n">show</span><span class="p">(</span><span class="n">ui</span><span class="p">,</span><span class="w"> </span><span class="o">|</span><span class="n">f</span><span class="o">|</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">tag</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="o">&amp;</span><span class="n">tags</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">f</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">egui_shadcn</span><span class="p">::</span><span class="n">Badge</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="o">*</span><span class="n">tag</span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">});</span>
+</code></pre></div>
+
+<h3 id="icons">Icons</h3>
+<p>All 1600+ Lucide icons are embedded as SVG path data and rendered as vector strokes at any size:</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">let</span><span class="w"> </span><span class="p">(</span><span class="n">rect</span><span class="p">,</span><span class="w"> </span><span class="n">_</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ui</span><span class="p">.</span><span class="n">allocate_exact_size</span><span class="p">(</span>
+<span class="w">    </span><span class="n">egui</span><span class="p">::</span><span class="n">vec2</span><span class="p">(</span><span class="mf">24.0</span><span class="p">,</span><span class="w"> </span><span class="mf">24.0</span><span class="p">),</span><span class="w"> </span><span class="n">egui</span><span class="p">::</span><span class="n">Sense</span><span class="p">::</span><span class="n">hover</span><span class="p">()</span>
+<span class="p">);</span>
+<span class="n">egui_shadcn</span><span class="p">::</span><span class="n">paint_icon</span><span class="p">(</span>
+<span class="w">    </span><span class="n">ui</span><span class="p">.</span><span class="n">painter</span><span class="p">(),</span><span class="w"> </span><span class="n">rect</span><span class="p">,</span>
+<span class="w">    </span><span class="o">&amp;</span><span class="n">egui_shadcn</span><span class="p">::</span><span class="n">LucideIcon</span><span class="p">::</span><span class="n">Heart</span><span class="p">,</span>
+<span class="w">    </span><span class="n">theme</span><span class="p">.</span><span class="n">foreground</span><span class="p">,</span>
+<span class="p">);</span>
+</code></pre></div>
+
+<p>Buttons can also take icons directly:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">egui_shadcn</span><span class="p">::</span><span class="n">Button</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="s">&quot;Download&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">.</span><span class="n">icon</span><span class="p">(</span><span class="n">egui_shadcn</span><span class="p">::</span><span class="n">LucideIcon</span><span class="p">::</span><span class="n">Download</span><span class="p">)</span>
+<span class="w">    </span><span class="p">.</span><span class="n">show</span><span class="p">(</span><span class="n">ui</span><span class="p">);</span>
+
+<span class="n">egui_shadcn</span><span class="p">::</span><span class="n">Button</span><span class="p">::</span><span class="n">icon_only</span><span class="p">(</span><span class="n">egui_shadcn</span><span class="p">::</span><span class="n">LucideIcon</span><span class="p">::</span><span class="n">Settings</span><span class="p">)</span>
+<span class="w">    </span><span class="p">.</span><span class="n">variant</span><span class="p">(</span><span class="n">egui_shadcn</span><span class="p">::</span><span class="n">ButtonVariant</span><span class="p">::</span><span class="n">Outline</span><span class="p">)</span>
+<span class="w">    </span><span class="p">.</span><span class="n">show</span><span class="p">(</span><span class="n">ui</span><span class="p">);</span>
+</code></pre></div>
+
+<h3 id="webassembly">WebAssembly</h3>
+<p>The whole thing compiles to WebAssembly and runs in the browser. The <a href="https://pjankiewicz.github.io/egui-shadcn/">live demo</a> is a full interactive showcase of every component — buttons, inputs, dialogs, toasts, calendars, the icon browser, everything. It's about 3.6 MB of wasm.</p>
+<h3 id="getting-started">Getting Started</h3>
+<div class="codehilite"><pre><span></span><code>cargo<span class="w"> </span>add<span class="w"> </span>egui-shadcn
+</code></pre></div>
+
+<p>Then check out the examples:</p>
+<div class="codehilite"><pre><span></span><code>cargo<span class="w"> </span>run<span class="w"> </span>--example<span class="w"> </span>demo
+cargo<span class="w"> </span>run<span class="w"> </span>--example<span class="w"> </span>shadcn_demo
+cargo<span class="w"> </span>run<span class="w"> </span>--example<span class="w"> </span>component_dashboard
+</code></pre></div>
+
+<p>The source is on <a href="https://github.com/pjankiewicz/egui-shadcn">GitHub</a>. Contributions welcome.</p>
+</article>
+<!-- Copy-to-clipboard functionality for code blocks -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.codehilite').forEach(function(container) {
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.type = 'button';
+      btn.innerText = 'Copy';
+      container.appendChild(btn);
+      btn.addEventListener('click', function() {
+        var codeElem = container.querySelector('code') || container;
+        var text = codeElem.innerText;
+        navigator.clipboard.writeText(text).then(function() {
+          btn.innerText = 'Copied!';
+          btn.classList.add('copied');
+          setTimeout(function() {
+            btn.innerText = 'Copy';
+            btn.classList.remove('copied');
+          }, 2000);
+        }, function() {
+          btn.innerText = 'Error';
+        });
+      });
+    });
+  });
+</script>
+
+  </main>
+  <footer class="site-footer">
+    <p>&copy; 2026 Paweł Jankiewicz</p>
+  </footer>
+  </div>
+</body>
+</html>

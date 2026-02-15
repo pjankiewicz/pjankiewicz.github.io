@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<head>
+    <title>egui-shadcn — Component Dashboard</title>
+    
+<script type="module" nonce="0tcoi5HxVYvadzSjNQ60+g==">
+import init, * as bindings from '/egui-shadcn-web-demo-3e3151638a31df30.js';
+const wasm = await init('/egui-shadcn-web-demo-3e3151638a31df30_bg.wasm');
+
+
+window.wasmBindings = bindings;
+
+
+dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
+
+</script>
+    <base href="/" />
+    <style>
+        html, body {
+            overflow: hidden;
+            margin: 0 !important;
+            padding: 0 !important;
+            height: 100%;
+            width: 100%;
+        }
+        html { touch-action: manipulation; }
+        body { background: #09090b; }
+        canvas {
+            display: block;
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+        }
+        .centered {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fafafa;
+            font-size: 18px;
+            font-family: system-ui, -apple-system, sans-serif;
+            text-align: center;
+        }
+        .spinner {
+            display: inline-block;
+            width: 20px; height: 20px;
+            border: 3px solid #fafafa;
+            border-color: #fafafa transparent #fafafa transparent;
+            border-radius: 50%;
+            animation: spin 1.2s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+
+<link rel="modulepreload" href="/egui-shadcn-web-demo-3e3151638a31df30.js" crossorigin=anonymous integrity="sha384-xdASaGanbefN5/vTs+ucu3DqctGwN856vct2P54j7OXb9HvWhhdpESjwn904csCc">
+<link rel="preload" href="/egui-shadcn-web-demo-3e3151638a31df30_bg.wasm" crossorigin=anonymous integrity="sha384-wUmhV8dFr+/2cZe4Mqx4IfRdud5xm8XbuN9b1Ls3QM7KgvixKfXfBu0U9RGNZvLF" as="fetch" type="application/wasm"></head>
+<body>
+    <canvas id="the_canvas_id"></canvas>
+    <div class="centered" id="loading_text">
+        <p>Loading egui-shadcn demo...</p>
+        <div class="spinner"></div>
+    </div>
+</body>
+</html>

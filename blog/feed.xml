@@ -7,6 +7,15 @@
   <atom:link href="/blog/feed.xml" rel="self" type="application/rss+xml" /> 
   
   <item>
+    <title>egui-shadcn: Beautiful UI Components for Rust</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/egui-shadcn/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/egui-shadcn/</guid>
+    <pubDate>Sun, 15 Feb 2026 00:00:00 +0000</pubDate>
+    <description>Announcing egui-shadcn, a library that brings shadcn/ui-style components to egui — 55+ widgets with built-in theming, from buttons and inputs to dialogs and date pickers.</description>
+  </item>
+  
+  <item>
     <title>To Err is AI</title>
     
     <link>https://pjankiewicz.github.io/blog/posts/to-err-is-ai/</link>
