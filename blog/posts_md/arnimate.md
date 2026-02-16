@@ -1,24 +1,23 @@
 ---
 title: "Arnimate: A 2D Animation Editor Built in Rust"
 date: "2026-02-16"
-description: "Announcing Arnimate, an open-source 2D vector animation editor built with Rust, wgpu, and egui. Think Adobe Animate, but native, GPU-accelerated, and running in your browser via WebAssembly."
+description: "Announcing Arnimate, a 2D vector animation editor built with Rust, wgpu, and egui. Think Adobe Animate, but native, GPU-accelerated, and free to use in your browser via WebAssembly."
 publish: true
 tags:
   - rust
-  - open-source
   - animation
   - programming
 ---
 
 ### TL;DR
 
-I'm building [Arnimate](https://github.com/pjankiewicz/arnimate), an open-source 2D vector animation editor in Rust. It's GPU-accelerated via wgpu, runs on desktop and web, and aims to fill the gap left by Adobe Animate's slow decline.
+I'm building Arnimate, a 2D vector animation editor in Rust. It's GPU-accelerated via wgpu, runs on desktop and web, and aims to fill the gap left by Adobe Animate's slow decline. The web version is free to use.
 
 **[Try the live demo](https://pjankiewicz.github.io/arnimate/)** (Chrome/Edge only — requires WebGPU).
 
 ### Why Build Another Animation Editor?
 
-Adobe Animate is effectively in maintenance mode. Rive and Lottie tools are great for motion graphics, but they're not full animation editors — you can't do frame-by-frame character animation in them. There's a real gap in the market for a proper 2D animation tool that's modern, fast, and open-source.
+Adobe Animate is effectively in maintenance mode. Rive and Lottie tools are great for motion graphics, but they're not full animation editors — you can't do frame-by-frame character animation in them. There's a real gap in the market for a proper 2D animation tool that's modern and fast.
 
 Arnimate is my attempt at filling that gap. It's a full-featured 2D vector animation editor with:
 
@@ -52,4 +51,4 @@ WebGPU support is still limited to Chrome and Edge, but it's the future of GPU o
 
 ### What's Next
 
-Arnimate is still in active development. The core animation engine and rendering pipeline are solid, but there's a lot of polish work ahead — better tool UX, more export formats, skeletal animation/rigging, and community features. If you're interested in 2D animation tooling or Rust GPU programming, check out the [GitHub repo](https://github.com/pjankiewicz/arnimate).
+Arnimate is still in active development. The core animation engine and rendering pipeline are solid, but there's a lot of polish work ahead — better tool UX, more export formats, skeletal animation/rigging, and community features. The web version is and will remain free to use.

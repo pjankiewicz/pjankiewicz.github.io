@@ -12,7 +12,7 @@
     <link>https://pjankiewicz.github.io/blog/posts/arnimate/</link>
     <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/arnimate/</guid>
     <pubDate>Mon, 16 Feb 2026 00:00:00 +0000</pubDate>
-    <description>Announcing Arnimate, an open-source 2D vector animation editor built with Rust, wgpu, and egui. Think Adobe Animate, but native, GPU-accelerated, and running in your browser via WebAssembly.</description>
+    <description>Announcing Arnimate, a 2D vector animation editor built with Rust, wgpu, and egui. Think Adobe Animate, but native, GPU-accelerated, and free to use in your browser via WebAssembly.</description>
   </item>
   
   <item>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Arnimate: A 2D Animation Editor Built in Rust - Paweł Jankiewicz</title>
-  <meta name="description" content="Announcing Arnimate, an open-source 2D vector animation editor built with Rust, wgpu, and egui. Think Adobe Animate, but native, GPU-accelerated, and running in your browser via WebAssembly.">
+  <meta name="description" content="Announcing Arnimate, a 2D vector animation editor built with Rust, wgpu, and egui. Think Adobe Animate, but native, GPU-accelerated, and free to use in your browser via WebAssembly.">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,12 +13,12 @@
   <link rel="alternate" type="application/rss+xml" title="Paweł Jankiewicz" href="/blog/feed.xml">
   <meta property="og:site_name" content="Paweł Jankiewicz">
   <meta property="og:title" content="Arnimate: A 2D Animation Editor Built in Rust">
-  <meta property="og:description" content="Announcing Arnimate, an open-source 2D vector animation editor built with Rust, wgpu, and egui. Think Adobe Animate, but native, GPU-accelerated, and running in your browser via WebAssembly.">
+  <meta property="og:description" content="Announcing Arnimate, a 2D vector animation editor built with Rust, wgpu, and egui. Think Adobe Animate, but native, GPU-accelerated, and free to use in your browser via WebAssembly.">
   <meta property="og:url" content="https://pjankiewicz.github.io/blog/posts/arnimate/">
   
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Arnimate: A 2D Animation Editor Built in Rust">
-  <meta name="twitter:description" content="Announcing Arnimate, an open-source 2D vector animation editor built with Rust, wgpu, and egui. Think Adobe Animate, but native, GPU-accelerated, and running in your browser via WebAssembly.">
+  <meta name="twitter:description" content="Announcing Arnimate, a 2D vector animation editor built with Rust, wgpu, and egui. Think Adobe Animate, but native, GPU-accelerated, and free to use in your browser via WebAssembly.">
   
 </head>
 <body>  <div class="site-wrapper">
@@ -39,19 +39,16 @@
     <a href="/blog/tags/rust/">rust</a>, 
   
     
-    <a href="/blog/tags/open-source/">open-source</a>, 
-  
-    
     <a href="/blog/tags/animation/">animation</a>, 
   
     
     <a href="/blog/tags/programming/">programming</a>
   </p>
   <h3 id="tldr">TL;DR</h3>
-<p>I'm building <a href="https://github.com/pjankiewicz/arnimate">Arnimate</a>, an open-source 2D vector animation editor in Rust. It's GPU-accelerated via wgpu, runs on desktop and web, and aims to fill the gap left by Adobe Animate's slow decline.</p>
+<p>I'm building Arnimate, a 2D vector animation editor in Rust. It's GPU-accelerated via wgpu, runs on desktop and web, and aims to fill the gap left by Adobe Animate's slow decline. The web version is free to use.</p>
 <p><strong><a href="https://pjankiewicz.github.io/arnimate/">Try the live demo</a></strong> (Chrome/Edge only — requires WebGPU).</p>
 <h3 id="why-build-another-animation-editor">Why Build Another Animation Editor?</h3>
-<p>Adobe Animate is effectively in maintenance mode. Rive and Lottie tools are great for motion graphics, but they're not full animation editors — you can't do frame-by-frame character animation in them. There's a real gap in the market for a proper 2D animation tool that's modern, fast, and open-source.</p>
+<p>Adobe Animate is effectively in maintenance mode. Rive and Lottie tools are great for motion graphics, but they're not full animation editors — you can't do frame-by-frame character animation in them. There's a real gap in the market for a proper 2D animation tool that's modern and fast.</p>
 <p>Arnimate is my attempt at filling that gap. It's a full-featured 2D vector animation editor with:</p>
 <ul>
 <li><strong>Frame-by-frame animation</strong> with onion skinning</li>
@@ -77,7 +74,7 @@
 <p>The whole editor compiles to WebAssembly and runs in the browser via WebGPU. The wasm binary is about 7 MB — not small, but reasonable for a full animation editor with GPU shaders. It's the same codebase as the desktop version, with platform abstraction for file I/O and audio.</p>
 <p>WebGPU support is still limited to Chrome and Edge, but it's the future of GPU on the web. Safari and Firefox support is coming.</p>
 <h3 id="whats-next">What's Next</h3>
-<p>Arnimate is still in active development. The core animation engine and rendering pipeline are solid, but there's a lot of polish work ahead — better tool UX, more export formats, skeletal animation/rigging, and community features. If you're interested in 2D animation tooling or Rust GPU programming, check out the <a href="https://github.com/pjankiewicz/arnimate">GitHub repo</a>.</p>
+<p>Arnimate is still in active development. The core animation engine and rendering pipeline are solid, but there's a lot of polish work ahead — better tool UX, more export formats, skeletal animation/rigging, and community features. The web version is and will remain free to use.</p>
 </article>
 <!-- Copy-to-clipboard functionality for code blocks -->
 <script>
