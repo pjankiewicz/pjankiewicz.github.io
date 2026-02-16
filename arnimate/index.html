@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Arnimate — 2D Animation Editor</title>
+    <meta name="description" content="Arnimate is a 2D vector animation editor built with Rust and WebGPU. Try it in your browser.">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #242424;
+        }
+        html { touch-action: manipulation; }
+        canvas {
+            display: block;
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+        }
+        .centered {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fafafa;
+            font-size: 18px;
+            font-family: system-ui, -apple-system, sans-serif;
+            text-align: center;
+            max-width: 500px;
+            line-height: 1.6;
+        }
+        .spinner {
+            display: inline-block;
+            width: 20px; height: 20px;
+            border: 3px solid #fafafa;
+            border-color: #fafafa transparent #fafafa transparent;
+            border-radius: 50%;
+            animation: spin 1.2s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .error { color: #ff6b6b; }
+        .error a { color: #74b9ff; }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <div class="centered" id="loading_text">
+        <p>Loading Arnimate...</p>
+        <div class="spinner"></div>
+        <p style="font-size: 14px; opacity: 0.7;">~7 MB download</p>
+    </div>
+
+    <script type="module">
+        const loadingEl = document.getElementById('loading_text');
+
+        // Check for WebGPU support
+        if (!navigator.gpu) {
+            loadingEl.innerHTML = `
+                <div class="error">
+                    <p><strong>WebGPU is not supported in your browser.</strong></p>
+                    <p>Arnimate requires WebGPU, which is available in:</p>
+                    <ul style="text-align: left;">
+                        <li>Chrome 113+ (desktop)</li>
+                        <li>Edge 113+ (desktop)</li>
+                    </ul>
+                    <p>Safari and Firefox do not support WebGPU yet.</p>
+                    <p>Try opening this page in <a href="https://www.google.com/chrome/">Chrome</a> or <a href="https://www.microsoft.com/edge">Edge</a>.</p>
+                </div>
+            `;
+        } else {
+            try {
+                const { default: init } = await import('/arnimate/arnimate.js');
+                await init('/arnimate/arnimate_bg.wasm');
+                loadingEl.style.display = 'none';
+            } catch (e) {
+                loadingEl.innerHTML = `
+                    <div class="error">
+                        <p><strong>Failed to load Arnimate</strong></p>
+                        <p>${e.message}</p>
+                    </div>
+                `;
+                console.error(e);
+            }
+        }
+    </script>
+</body>
+</html>
