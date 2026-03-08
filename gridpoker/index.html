@@ -42,6 +42,31 @@
             background: radial-gradient(circle at top, rgba(94, 43, 17, 0.25), transparent 45%);
         }
 
+        .start {
+            appearance: none;
+            border: 2px solid #d6cebb;
+            background: rgba(214, 206, 187, 0.08);
+            color: #f4ecd6;
+            padding: 12px 18px;
+            font: inherit;
+            letter-spacing: 0.08em;
+            cursor: pointer;
+        }
+
+        .start:disabled {
+            opacity: 0.65;
+            cursor: wait;
+        }
+
+        .hint {
+            font-size: 0.95rem;
+            opacity: 0.82;
+            text-align: center;
+            max-width: 28rem;
+            line-height: 1.5;
+            padding: 0 24px;
+        }
+
         .spinner {
             width: 22px;
             height: 22px;
@@ -66,26 +91,36 @@
 </head>
 <body>
     <div class="status" id="status">
-        <div>Loading GridPoker Wasteland...</div>
-        <div class="spinner"></div>
+        <div>GridPoker Wasteland</div>
+        <button class="start" id="start">Click To Start</button>
+        <div class="hint">Browser audio usually needs a user gesture before the game starts.</div>
     </div>
 
     <script type="module">
         const statusEl = document.getElementById("status");
+        const startEl = document.getElementById("start");
 
-        try {
-            const { default: init } = await import("/gridpoker/gridpoker.js");
-            await init("/gridpoker/gridpoker_bg.wasm");
-            statusEl.style.display = "none";
-        } catch (error) {
-            console.error(error);
+        startEl.addEventListener("click", async () => {
+            startEl.disabled = true;
             statusEl.innerHTML = `
-                <div class="error">
-                    <strong>Failed to load GridPoker Wasteland.</strong><br>
-                    ${error?.message ?? error}
-                </div>
+                <div>Loading GridPoker Wasteland...</div>
+                <div class="spinner"></div>
             `;
-        }
+
+            try {
+                const { default: init } = await import("/gridpoker/gridpoker.js");
+                await init("/gridpoker/gridpoker_bg.wasm");
+                statusEl.style.display = "none";
+            } catch (error) {
+                console.error(error);
+                statusEl.innerHTML = `
+                    <div class="error">
+                        <strong>Failed to load GridPoker Wasteland.</strong><br>
+                        ${error?.message ?? error}
+                    </div>
+                `;
+            }
+        }, { once: true });
     </script>
 </body>
 </html>
