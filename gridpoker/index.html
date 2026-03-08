@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>GridPoker Wasteland</title>
+    <meta name="description" content="GridPoker Wasteland: a 5x5 arcade poker puzzle with radioactive cards.">
+    <base href="/gridpoker/">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #0e0a08;
+        }
+
+        html {
+            touch-action: manipulation;
+        }
+
+        body, canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        .status {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            color: #d6cebb;
+            font-family: system-ui, sans-serif;
+            background: radial-gradient(circle at top, rgba(94, 43, 17, 0.25), transparent 45%);
+        }
+
+        .spinner {
+            width: 22px;
+            height: 22px;
+            border: 3px solid #d6cebb;
+            border-color: #d6cebb transparent #d6cebb transparent;
+            border-radius: 50%;
+            animation: spin 1.2s linear infinite;
+        }
+
+        .error {
+            color: #ff8b6e;
+            max-width: 560px;
+            text-align: center;
+            line-height: 1.5;
+            padding: 0 24px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="status" id="status">
+        <div>Loading GridPoker Wasteland...</div>
+        <div class="spinner"></div>
+    </div>
+
+    <script type="module">
+        const statusEl = document.getElementById("status");
+
+        try {
+            const { default: init } = await import("/gridpoker/gridpoker.js");
+            await init("/gridpoker/gridpoker_bg.wasm");
+            statusEl.style.display = "none";
+        } catch (error) {
+            console.error(error);
+            statusEl.innerHTML = `
+                <div class="error">
+                    <strong>Failed to load GridPoker Wasteland.</strong><br>
+                    ${error?.message ?? error}
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
