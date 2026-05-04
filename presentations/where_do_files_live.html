@@ -1,0 +1,785 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Where Do Files Live?</title>
+  <style>
+    :root {
+      --ink: #f7f3ea;
+      --muted: #b9b0a0;
+      --paper: #171512;
+      --panel: #211d18;
+      --panel-2: #2a261f;
+      --line: #4a4034;
+      --amber: #f08a24;
+      --blue: #5e9bff;
+      --green: #47c98f;
+      --red: #ef5b4c;
+      --shadow: 0 32px 90px rgba(0, 0, 0, .42);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 22% 18%, rgba(240, 138, 36, .22), transparent 24rem),
+        radial-gradient(circle at 78% 72%, rgba(94, 155, 255, .16), transparent 28rem),
+        linear-gradient(135deg, #10100f 0%, #1b1714 46%, #0e1115 100%);
+      color: var(--ink);
+      font-family: "Avenir Next", "Segoe UI", ui-sans-serif, sans-serif;
+      letter-spacing: 0;
+    }
+
+    body::before {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      content: "";
+      opacity: .28;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, .045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, .035) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(circle at center, #000 0%, transparent 78%);
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .deck-shell {
+      height: 100%;
+      display: grid;
+      grid-template-rows: 1fr auto;
+      padding: clamp(14px, 2.2vw, 30px);
+      gap: 14px;
+    }
+
+    .stage {
+      position: relative;
+      min-height: 0;
+      display: grid;
+      place-items: center;
+      perspective: 1600px;
+    }
+
+    .slide {
+      display: none;
+      width: min(92vw, calc(92vh * 16 / 9));
+      aspect-ratio: 16 / 9;
+      position: relative;
+      overflow: hidden;
+      padding: clamp(34px, 5vw, 76px);
+      border: 1px solid rgba(255, 255, 255, .12);
+      border-radius: 8px;
+      background:
+        linear-gradient(145deg, rgba(255, 255, 255, .055), transparent 32%),
+        linear-gradient(180deg, rgba(33, 29, 24, .98), rgba(19, 19, 18, .99));
+      box-shadow: var(--shadow);
+      isolation: isolate;
+    }
+
+    .slide::before {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      content: "";
+      opacity: .42;
+      background:
+        linear-gradient(90deg, rgba(240, 138, 36, .11) 0 1px, transparent 1px 100%),
+        linear-gradient(0deg, rgba(94, 155, 255, .08) 0 1px, transparent 1px 100%);
+      background-size: 64px 64px;
+      transform: rotate(-1deg) scale(1.06);
+    }
+
+    .slide::after {
+      position: absolute;
+      right: 36px;
+      bottom: 30px;
+      width: 220px;
+      height: 220px;
+      z-index: -1;
+      content: "";
+      border: 1px solid rgba(240, 138, 36, .18);
+      transform: rotate(12deg);
+      opacity: .7;
+    }
+
+    .slide.active {
+      display: grid;
+      animation: enter .26s ease-out both;
+    }
+
+    @keyframes enter {
+      from {
+        opacity: 0;
+        transform: translateY(12px) rotateX(2deg);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) rotateX(0);
+      }
+    }
+
+    .slide-title,
+    .slide-section,
+    .slide-quote,
+    .slide-code {
+      align-content: center;
+    }
+
+    .slide-content {
+      grid-template-rows: auto 1fr;
+      gap: 28px;
+    }
+
+    .slide-two-column {
+      grid-template-rows: auto 1fr;
+      gap: 30px;
+    }
+
+    .eyebrow {
+      margin: 0 0 16px;
+      color: var(--amber);
+      font-size: clamp(12px, 1.2vw, 15px);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .16em;
+    }
+
+    h1,
+    h2 {
+      margin: 0;
+      text-wrap: balance;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      max-width: 980px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(56px, 8vw, 116px);
+      line-height: .92;
+      font-weight: 700;
+    }
+
+    h2 {
+      max-width: 1000px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(42px, 5.8vw, 84px);
+      line-height: .96;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      max-width: 820px;
+      margin: 24px 0 0;
+      color: var(--muted);
+      font-size: clamp(24px, 3vw, 42px);
+      line-height: 1.12;
+      font-weight: 600;
+      text-wrap: balance;
+    }
+
+    .text {
+      max-width: 920px;
+      margin: 0;
+      color: var(--ink);
+      font-size: clamp(27px, 3vw, 43px);
+      line-height: 1.18;
+      font-weight: 650;
+      text-wrap: balance;
+    }
+
+    .body-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      align-content: center;
+      gap: 22px;
+      min-height: 0;
+    }
+
+    .two-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    .stack {
+      display: grid;
+      align-content: center;
+      gap: 22px;
+      min-height: 0;
+    }
+
+    ul,
+    ol {
+      margin: 0;
+      padding-left: 1.25em;
+      color: var(--ink);
+      font-size: clamp(23px, 2.4vw, 35px);
+      line-height: 1.2;
+      font-weight: 620;
+    }
+
+    li + li {
+      margin-top: .48em;
+    }
+
+    li::marker {
+      color: var(--amber);
+    }
+
+    .quote {
+      margin: 0;
+      display: grid;
+      gap: 20px;
+    }
+
+    .quote-text {
+      max-width: 980px;
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      color: var(--ink);
+      font-size: clamp(38px, 5vw, 78px);
+      line-height: 1.04;
+      text-wrap: balance;
+    }
+
+    .quote-text::before {
+      content: open-quote;
+      color: var(--amber);
+    }
+
+    .quote-text::after {
+      content: close-quote;
+      color: var(--amber);
+    }
+
+    .quote-author {
+      color: var(--green);
+      font-size: clamp(18px, 1.6vw, 26px);
+      font-weight: 700;
+    }
+
+    .stat {
+      min-height: 128px;
+      display: grid;
+      align-content: center;
+      gap: 8px;
+      padding: 22px 24px;
+      border: 1px solid rgba(255, 255, 255, .14);
+      border-left: 5px solid var(--amber);
+      border-radius: 8px;
+      background: linear-gradient(145deg, rgba(255, 255, 255, .08), rgba(255, 255, 255, .025));
+    }
+
+    .stat-value {
+      color: var(--amber);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(31px, 4.4vw, 58px);
+      line-height: .98;
+      font-weight: 700;
+      overflow-wrap: anywhere;
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: clamp(15px, 1.35vw, 21px);
+      font-weight: 750;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .divider {
+      width: min(620px, 72%);
+      height: 2px;
+      margin: 4px 0;
+      background: linear-gradient(90deg, var(--amber), transparent);
+    }
+
+    pre {
+      max-height: 62vh;
+      margin: 0;
+      overflow: auto;
+      padding: clamp(18px, 2.4vw, 34px);
+      border: 1px solid rgba(255, 255, 255, .14);
+      border-radius: 8px;
+      background: #0d1110;
+      box-shadow: inset 0 0 0 1px rgba(240, 138, 36, .08);
+    }
+
+    code {
+      color: #f8dcbf;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: clamp(16px, 1.65vw, 25px);
+      line-height: 1.22;
+      white-space: pre;
+    }
+
+    .fragment {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity .18s ease, transform .18s ease;
+    }
+
+    .fragment.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 14px;
+      color: var(--muted);
+      user-select: none;
+    }
+
+    .nav {
+      display: flex;
+      gap: 8px;
+    }
+
+    .nav button {
+      width: 44px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, .16);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .055);
+      color: var(--ink);
+      cursor: pointer;
+    }
+
+    .nav button:hover {
+      border-color: rgba(240, 138, 36, .65);
+      background: rgba(240, 138, 36, .14);
+    }
+
+    .nav button:disabled {
+      opacity: .38;
+      cursor: default;
+    }
+
+    .progress {
+      height: 5px;
+      overflow: hidden;
+      border-radius: 99px;
+      background: rgba(255, 255, 255, .12);
+    }
+
+    .progress span {
+      display: block;
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--amber), var(--blue));
+      transition: width .18s ease;
+    }
+
+    .counter {
+      min-width: 96px;
+      text-align: right;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .notes-panel {
+      position: fixed;
+      right: clamp(14px, 2vw, 28px);
+      bottom: 74px;
+      width: min(560px, calc(100vw - 28px));
+      max-height: 42vh;
+      display: none;
+      overflow: auto;
+      padding: 18px 20px;
+      border: 1px solid rgba(255, 255, 255, .18);
+      border-radius: 8px;
+      background: rgba(16, 16, 15, .95);
+      color: var(--ink);
+      box-shadow: var(--shadow);
+      font-size: 16px;
+      line-height: 1.45;
+    }
+
+    .notes-panel.open {
+      display: block;
+    }
+
+    .notes-panel strong {
+      color: var(--amber);
+    }
+
+    .loading,
+    .error {
+      width: min(92vw, 980px);
+      padding: 28px;
+      border: 1px solid rgba(255, 255, 255, .14);
+      border-radius: 8px;
+      background: rgba(33, 29, 24, .95);
+      color: var(--ink);
+      font-size: 22px;
+      line-height: 1.35;
+    }
+
+    .error {
+      border-color: rgba(239, 91, 76, .55);
+    }
+
+    @media (max-width: 760px) {
+      .deck-shell {
+        padding: 10px;
+      }
+
+      .slide {
+        width: 100%;
+        padding: 24px;
+      }
+
+      .two-cols {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+
+      .body-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stat {
+        min-height: 92px;
+      }
+
+      .controls {
+        grid-template-columns: auto 1fr auto;
+      }
+
+      .nav button {
+        width: 40px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck-shell" aria-live="polite">
+    <section class="stage" id="stage">
+      <div class="loading">Loading presentation data...</div>
+    </section>
+    <footer class="controls">
+      <div class="nav">
+        <button type="button" id="prev" aria-label="Previous slide">←</button>
+        <button type="button" id="next" aria-label="Next slide">→</button>
+      </div>
+      <div class="progress" aria-hidden="true"><span id="progress"></span></div>
+      <div class="counter" id="counter">0 / 0</div>
+    </footer>
+  </main>
+  <aside class="notes-panel" id="notesPanel"></aside>
+
+  <script>
+    const stage = document.getElementById("stage");
+    const prevButton = document.getElementById("prev");
+    const nextButton = document.getElementById("next");
+    const progress = document.getElementById("progress");
+    const counter = document.getElementById("counter");
+    const notesPanel = document.getElementById("notesPanel");
+
+    const state = {
+      deck: null,
+      slides: [],
+      index: 0,
+      step: 0,
+      notesOpen: false
+    };
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function classesFor(slide) {
+      const layout = String(slide.layout || "Content").toLowerCase().replace(/[^a-z0-9]+/g, "-");
+      return `slide slide-${layout}`;
+    }
+
+    function fragmentClass(slide) {
+      return slide.transition === "RevealOne" ? " fragment" : "";
+    }
+
+    function getTitle(slide) {
+      const title = slide.elements.find((element) => typeof element === "object" && element.Title);
+      return title ? title.Title : "";
+    }
+
+    function renderElement(element, slide, index) {
+      const fragment = index > 0 ? fragmentClass(slide) : "";
+
+      if (element === "Divider") {
+        return `<div class="divider${fragment}"></div>`;
+      }
+
+      if (!element || typeof element !== "object") {
+        return "";
+      }
+
+      if (element.Title) {
+        const tag = slide.layout === "Title" || slide.layout === "Section" ? "h1" : "h2";
+        return `<${tag}>${escapeHtml(element.Title)}</${tag}>`;
+      }
+
+      if (element.Subtitle) {
+        return `<p class="subtitle${fragment}">${escapeHtml(element.Subtitle)}</p>`;
+      }
+
+      if (element.Text) {
+        return `<p class="text${fragment}">${escapeHtml(element.Text)}</p>`;
+      }
+
+      if (element.Bullets) {
+        const items = element.Bullets.items.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+        return `<ul class="${fragment.trim()}">${items}</ul>`;
+      }
+
+      if (element.NumberedList) {
+        const items = element.NumberedList.items.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+        return `<ol class="${fragment.trim()}">${items}</ol>`;
+      }
+
+      if (element.Stat) {
+        return `
+          <article class="stat${fragment}">
+            <div class="stat-label">${escapeHtml(element.Stat.label)}</div>
+            <div class="stat-value">${escapeHtml(element.Stat.value)}</div>
+          </article>
+        `;
+      }
+
+      if (element.Quote) {
+        const author = element.Quote.author ? `<figcaption class="quote-author">${escapeHtml(element.Quote.author)}</figcaption>` : "";
+        return `
+          <figure class="quote${fragment}">
+            <blockquote class="quote-text">${escapeHtml(element.Quote.text)}</blockquote>
+            ${author}
+          </figure>
+        `;
+      }
+
+      if (element.CodeBlock) {
+        return `<pre class="${fragment.trim()}"><code>${escapeHtml(element.CodeBlock.content)}</code></pre>`;
+      }
+
+      return "";
+    }
+
+    function renderSlide(slide, index) {
+      const title = getTitle(slide);
+      const bodyElements = slide.elements.filter((element) => !(typeof element === "object" && element.Title));
+
+      if (slide.layout === "TwoColumn") {
+        const columns = bodyElements.filter((element) => element && typeof element === "object" && element.Bullets);
+        const other = bodyElements.filter((element) => !(element && typeof element === "object" && element.Bullets));
+        return `
+          <article class="${classesFor(slide)}" data-slide="${index}">
+            <header>${renderElement({ Title: title }, slide, 0)}</header>
+            ${other.map((element, elementIndex) => renderElement(element, slide, elementIndex + 1)).join("")}
+            <div class="two-cols">
+              ${columns.map((element, elementIndex) => `<div>${renderElement(element, slide, elementIndex + 1)}</div>`).join("")}
+            </div>
+          </article>
+        `;
+      }
+
+      if (slide.layout === "Content") {
+        return `
+          <article class="${classesFor(slide)}" data-slide="${index}">
+            <header>${renderElement({ Title: title }, slide, 0)}</header>
+            <div class="body-grid">
+              ${bodyElements.map((element, elementIndex) => renderElement(element, slide, elementIndex + 1)).join("")}
+            </div>
+          </article>
+        `;
+      }
+
+      if (slide.layout === "Code") {
+        return `
+          <article class="${classesFor(slide)}" data-slide="${index}">
+            <p class="eyebrow">Typed data</p>
+            ${slide.elements.map((element, elementIndex) => renderElement(element, slide, elementIndex)).join("")}
+          </article>
+        `;
+      }
+
+      return `
+        <article class="${classesFor(slide)}" data-slide="${index}">
+          <div class="stack">
+            ${slide.elements.map((element, elementIndex) => renderElement(element, slide, elementIndex)).join("")}
+          </div>
+        </article>
+      `;
+    }
+
+    function updateFragments(slideNode) {
+      const fragments = [...slideNode.querySelectorAll(".fragment")];
+      fragments.forEach((fragment, index) => {
+        fragment.classList.toggle("visible", index < state.step);
+      });
+    }
+
+    function activeSlideNode() {
+      return state.slides[state.index];
+    }
+
+    function fragmentCount() {
+      const slideNode = activeSlideNode();
+      return slideNode ? slideNode.querySelectorAll(".fragment").length : 0;
+    }
+
+    function showSlide(index, step = 0) {
+      state.index = Math.max(0, Math.min(index, state.slides.length - 1));
+      state.step = Math.max(0, Math.min(step, fragmentCount()));
+
+      state.slides.forEach((slide, slideIndex) => {
+        slide.classList.toggle("active", slideIndex === state.index);
+      });
+
+      updateFragments(activeSlideNode());
+      updateChrome();
+      updateHash();
+    }
+
+    function updateChrome() {
+      const total = state.slides.length;
+      const slide = state.deck.presentation.slides[state.index];
+      const pct = total <= 1 ? 100 : (state.index / (total - 1)) * 100;
+
+      prevButton.disabled = state.index === 0 && state.step === 0;
+      nextButton.disabled = state.index === total - 1 && state.step >= fragmentCount();
+      progress.style.width = `${pct}%`;
+      counter.textContent = `${state.index + 1} / ${total}`;
+
+      const notes = slide.notes ? escapeHtml(slide.notes) : "No notes for this slide.";
+      notesPanel.innerHTML = `<strong>Speaker notes</strong><br>${notes}`;
+      notesPanel.classList.toggle("open", state.notesOpen);
+    }
+
+    function updateHash() {
+      const hash = `#/${state.index + 1}/${state.step}`;
+      if (window.location.hash !== hash) {
+        history.replaceState(null, "", hash);
+      }
+    }
+
+    function next() {
+      const fragments = fragmentCount();
+      if (state.step < fragments) {
+        showSlide(state.index, state.step + 1);
+      } else if (state.index < state.slides.length - 1) {
+        showSlide(state.index + 1, 0);
+      }
+    }
+
+    function prev() {
+      if (state.step > 0) {
+        showSlide(state.index, state.step - 1);
+      } else if (state.index > 0) {
+        const previousIndex = state.index - 1;
+        showSlide(previousIndex, state.slides[previousIndex].querySelectorAll(".fragment").length);
+      }
+    }
+
+    function readHash() {
+      const parts = window.location.hash.replace(/^#\/?/, "").split("/");
+      const index = Number.parseInt(parts[0], 10);
+      const step = Number.parseInt(parts[1], 10);
+      return {
+        index: Number.isFinite(index) ? index - 1 : 0,
+        step: Number.isFinite(step) ? step : 0
+      };
+    }
+
+    async function loadDeck() {
+      try {
+        const response = await fetch("where_do_files_live.json", { cache: "no-cache" });
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+
+        state.deck = await response.json();
+        stage.innerHTML = state.deck.presentation.slides.map(renderSlide).join("");
+        state.slides = [...stage.querySelectorAll(".slide")];
+
+        document.title = state.deck.presentation.title;
+        const initial = readHash();
+        showSlide(initial.index, initial.step);
+      } catch (error) {
+        stage.innerHTML = `
+          <div class="error">
+            Could not load <strong>where_do_files_live.json</strong>. Serve this directory over HTTP
+            or open the published GitHub Pages URL so the browser can fetch the deck data.
+            <br><br>${escapeHtml(error.message)}
+          </div>
+        `;
+        prevButton.disabled = true;
+        nextButton.disabled = true;
+      }
+    }
+
+    prevButton.addEventListener("click", prev);
+    nextButton.addEventListener("click", next);
+
+    window.addEventListener("keydown", (event) => {
+      if (["ArrowRight", "PageDown", " "].includes(event.key)) {
+        event.preventDefault();
+        next();
+      }
+
+      if (["ArrowLeft", "PageUp"].includes(event.key)) {
+        event.preventDefault();
+        prev();
+      }
+
+      if (event.key.toLowerCase() === "n") {
+        state.notesOpen = !state.notesOpen;
+        updateChrome();
+      }
+
+      if (event.key.toLowerCase() === "f") {
+        document.documentElement.requestFullscreen?.();
+      }
+    });
+
+    window.addEventListener("hashchange", () => {
+      const nextPosition = readHash();
+      showSlide(nextPosition.index, nextPosition.step);
+    });
+
+    let touchStart = null;
+    window.addEventListener("touchstart", (event) => {
+      touchStart = event.changedTouches[0].clientX;
+    }, { passive: true });
+
+    window.addEventListener("touchend", (event) => {
+      if (touchStart === null) return;
+      const delta = event.changedTouches[0].clientX - touchStart;
+      if (Math.abs(delta) > 48) {
+        delta < 0 ? next() : prev();
+      }
+      touchStart = null;
+    }, { passive: true });
+
+    loadDeck();
+  </script>
+</body>
+</html>

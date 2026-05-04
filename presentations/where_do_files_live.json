@@ -1,0 +1,463 @@
+{
+  "presentation": {
+    "author": "Paweł Jankiewicz",
+    "slides": [
+      {
+        "elements": [
+          {
+            "Title": "Where Do Files Live?"
+          },
+          {
+            "Subtitle": "In AI Generated Programs"
+          }
+        ],
+        "layout": "Title",
+        "notes": "Opening slide. Provocative question — we take files for granted, but should we?",
+        "transition": "None"
+      },
+      {
+        "elements": [
+          {
+            "Title": "Who Am I?"
+          },
+          {
+            "Bullets": {
+              "items": [
+                "Paweł Jankiewicz",
+                "Writing Rust almost exclusively for ~7 years",
+                "Functional programming background (Scala stages of grief)",
+                "Rust = best balance of FP rigor + procedural flexibility"
+              ]
+            }
+          }
+        ],
+        "layout": "Content",
+        "notes": "Quick intro. Establish Rust and FP credentials. The Scala journey is relatable for many.",
+        "transition": "RevealOne"
+      },
+      {
+        "elements": [
+          {
+            "Title": "About This Talk"
+          },
+          {
+            "Quote": {
+              "author": "",
+              "text": "This presentation does not answer a lot of questions. You will probably have more questions than answers at the end. But that's a good thing."
+            }
+          },
+          {
+            "Text": "I hope you'll start thinking about these problems a bit more."
+          }
+        ],
+        "layout": "Quote",
+        "notes": "Set expectations. This is exploratory, not prescriptive.",
+        "transition": "None"
+      },
+      {
+        "elements": [
+          {
+            "Title": "AI Coding — Early Days"
+          },
+          {
+            "Bullets": {
+              "items": [
+                "~3 years ago it was clear AI would transform software engineering",
+                "Built tools to automate programming aspects early on",
+                "github.com/pjankiewicz/mechatyper"
+              ]
+            }
+          }
+        ],
+        "layout": "Content",
+        "notes": "Personal journey into AI-assisted coding. Mechatyper was an early experiment in automating code writing.",
+        "transition": "RevealOne"
+      },
+      {
+        "elements": [
+          {
+            "Title": "Functions as Atoms"
+          },
+          {
+            "Text": "The most important concept in programming is the function — not the class, module, or file."
+          },
+          "Divider",
+          {
+            "NumberedList": {
+              "items": [
+                "Design data types first (small footprint, many dependencies)",
+                "Design function signatures",
+                "Implement functions",
+                "Profit"
+              ]
+            }
+          }
+        ],
+        "layout": "Content",
+        "notes": "This methodology came from trying to make AI code generation work better. Bottom-up tree traversal of atomic code units produces the best AI-generated code quality (confirmed by Mantle engineering).",
+        "transition": "RevealOne"
+      },
+      {
+        "elements": [
+          {
+            "Title": "AI Code Needs Harnesses"
+          },
+          {
+            "Stat": {
+              "label": "Read:Write token ratio",
+              "value": "165:1"
+            }
+          },
+          {
+            "Stat": {
+              "label": "Tokens spent reading",
+              "value": "99%+"
+            }
+          },
+          {
+            "Stat": {
+              "label": "Text diff accuracy",
+              "value": "70–80%"
+            }
+          },
+          "Divider",
+          {
+            "Text": "AI without constraints creates files it doesn't want to use as context. There is nothing better for AI than reading a file name and knowing what's inside."
+          }
+        ],
+        "layout": "Content",
+        "notes": "Claude Code exhibits a 165:1 read-to-write token ratio. A single whitespace difference between the AI's expectation and actual code results in a failed edit, triggering expensive retry loops.",
+        "transition": "RevealOne"
+      },
+      {
+        "elements": [
+          {
+            "Title": "Why Rust?"
+          },
+          {
+            "Bullets": {
+              "items": [
+                "Rigid and verbose",
+                "Powerful type system",
+                "Very useful compiler",
+                "Compiles to WASM"
+              ]
+            }
+          },
+          {
+            "Bullets": {
+              "items": [
+                "Type system narrows the funnel",
+                "If it compiles, a whole class of bugs is gone",
+                "Ownership enforces explicit data flow",
+                "Rust + LLM = good code"
+              ]
+            }
+          }
+        ],
+        "layout": "TwoColumn",
+        "notes": "The compiler is the harness (Adam Benenson). The type system reduces ambiguity for AI. GitHub confirmed in 2025: AI is pushing developers toward typed languages. TypeScript overtook Python and JavaScript as most-used language on GitHub.",
+        "transition": "None"
+      },
+      {
+        "elements": [
+          {
+            "Title": "But..."
+          },
+          {
+            "Text": "If we have functions and data structures forming a graph — why do we need files?"
+          },
+          "Divider",
+          {
+            "Bullets": {
+              "items": [
+                "AI coding assistants use files wrong",
+                "They don't use AST — they use line search and complex text edits",
+                "Files are a human serialization format, not a natural unit of code",
+                "First transition: split files into smallest possible atoms"
+              ]
+            }
+          }
+        ],
+        "layout": "Content",
+        "notes": "The key insight. I write production Rust as if files were graph nodes: functions and data structures are separate, avoiding syntactic sugar like proc macros. When I'm lazy and don't include these guidelines, I regret it.",
+        "transition": "RevealOne"
+      },
+      {
+        "elements": [
+          {
+            "Title": "This Isn't New"
+          },
+          {
+            "Subtitle": "50 years of code without files"
+          }
+        ],
+        "layout": "Section",
+        "notes": "Transition slide. The fileless idea has deep roots going back to the 1970s.",
+        "transition": "None"
+      },
+      {
+        "elements": [
+          {
+            "Title": "The Fileless Lineage"
+          },
+          {
+            "Stat": {
+              "label": "Smalltalk (1970s)",
+              "value": "Code lives in objects"
+            }
+          },
+          {
+            "Stat": {
+              "label": "Unison (2013)",
+              "value": "Content-addressed by SHA3"
+            }
+          },
+          {
+            "Stat": {
+              "label": "Dark (2017)",
+              "value": "Deploy in 50ms"
+            }
+          },
+          {
+            "Stat": {
+              "label": "JetBrains MPS",
+              "value": "Code is always AST"
+            }
+          },
+          {
+            "Stat": {
+              "label": "SpacetimeDB",
+              "value": "Database is the server"
+            }
+          }
+        ],
+        "layout": "Content",
+        "notes": "Smalltalk: live objects in memory images, Alan Kay called it 'a recursion on the notion of computer itself'. Unison: names are just metadata pointers, renaming never breaks anything, builds are unnecessary. Dark: edit = deploy, $3.5M funding, ran out of money but storage model is still relevant. Lamdu: 'no files, folders or line numbers, no merge conflicts on renaming'. SpacetimeDB: written in Rust, powers an entire MMORPG (BitCraft Online).",
+        "transition": "RevealOne"
+      },
+      {
+        "elements": [
+          {
+            "Quote": {
+              "author": "Malte Skarupke, 2014",
+              "text": "I think there is a global maximum out there that does not involve text files, but we keep discovering that we're not at the local maximum for text files yet."
+            }
+          }
+        ],
+        "layout": "Quote",
+        "notes": "This quote perfectly captures the situation. We keep optimizing file-based workflows instead of questioning the premise. Kiro's AST-based editing is still optimizing within the file paradigm.",
+        "transition": "None"
+      },
+      {
+        "elements": [
+          {
+            "Title": "The Breakthrough: AST Editing"
+          },
+          {
+            "Text": "Kiro (AWS, Feb 2026) — first mainstream AST-based AI editing"
+          },
+          {
+            "Stat": {
+              "label": "Fewer tokens",
+              "value": "58%"
+            }
+          },
+          {
+            "Stat": {
+              "label": "Fewer LLM calls",
+              "value": "34%"
+            }
+          },
+          {
+            "Stat": {
+              "label": "Faster execution",
+              "value": "49%"
+            }
+          },
+          {
+            "Stat": {
+              "label": "Tool errors",
+              "value": "Zero"
+            }
+          },
+          {
+            "Text": "But Kiro still operates on files. What if storage were also graph-native?"
+          }
+        ],
+        "layout": "Content",
+        "notes": "Kiro uses structural selectors like ClassName.methodName with typed operations: insert_node, replace_node, delete_node. Formatting changes don't break edits. This validates the thesis but doesn't go far enough.",
+        "transition": "RevealOne"
+      },
+      {
+        "elements": [
+          {
+            "Title": "Capabilities, Not Side Effects"
+          },
+          {
+            "Text": "Inspired by Crux — Core (pure Rust logic) + Shell (platform I/O)"
+          },
+          {
+            "Bullets": {
+              "items": [
+                "Network requests",
+                "Database / KV storage",
+                "Blob storage",
+                "Logging, Time, Scheduling"
+              ]
+            }
+          },
+          {
+            "Quote": {
+              "author": "Ian Bull",
+              "text": "The architecture is the prompt. The structure of your code is the most important instruction you give to the AI."
+            }
+          }
+        ],
+        "layout": "Content",
+        "notes": "Capabilities decompose platform-dependent side effects. If your system is built from sinks (not pipes), AI can reason about components in isolation. Pure functions align with LLMs' stateless nature. Rust already has an effect system: async, const, ?, unsafe.",
+        "transition": "RevealOne"
+      },
+      {
+        "elements": [
+          {
+            "Title": "LambdaGraph"
+          },
+          {
+            "Text": "A self-contained environment where apps are nothing but:"
+          },
+          {
+            "Bullets": {
+              "items": [
+                "Data structures (types)",
+                "Pure functions",
+                "Explicit capabilities"
+              ]
+            }
+          },
+          "Divider",
+          {
+            "Bullets": {
+              "items": [
+                "Content-addressed storage (BLAKE3 hashing)",
+                "TEA architecture: Model / Msg / init / update / view",
+                "MCP as the primary development interface",
+                "Atomic releases via name pointers"
+              ]
+            }
+          }
+        ],
+        "layout": "Content",
+        "notes": "Core architecture overview. No files, no filesystem. Functions and types stored in a database, addressed by content hash. Name pointers can be atomically updated.",
+        "transition": "RevealOne"
+      },
+      {
+        "elements": [
+          {
+            "Title": "Wait..."
+          },
+          {
+            "Subtitle": "This presentation IS a LambdaGraph app"
+          },
+          {
+            "Text": "Built by Claude via MCP for this talk"
+          }
+        ],
+        "layout": "Section",
+        "notes": "Reveal moment! The slides they're looking at are running inside LambdaGraph right now. Then show the LambdaGraph UI.",
+        "transition": "None"
+      },
+      {
+        "elements": [
+          {
+            "Title": "The Slide Is Typed Data"
+          },
+          {
+            "CodeBlock": {
+              "content": "struct Slide {\n    layout: SlideLayout,\n    elements: Vec<SlideElement>,\n    notes: String,\n    transition: Transition,\n}\n\nenum SlideElement {\n    Title(String),\n    Subtitle(String),\n    Bullets { items: Vec<String> },\n    CodeBlock { language: String, content: String },\n    Stat { label: String, value: String },\n    Quote { text: String, author: String },\n    // ...and more\n}",
+              "language": "rust"
+            }
+          }
+        ],
+        "layout": "Code",
+        "notes": "This is the actual type definition driving these slides. No HTML, no markdown — pure typed data rendered by a view function.",
+        "transition": "None"
+      },
+      {
+        "elements": [
+          {
+            "Title": "The Assimilation Pattern"
+          },
+          {
+            "Quote": {
+              "author": "Mykhailo Chalyi",
+              "text": "I stopped using third-party libraries for API calls. I ask my coding agent to generate a client library specifically for the APIs I need."
+            }
+          },
+          {
+            "Bullets": {
+              "items": [
+                "Why import a library for one function when AI can rewrite it?",
+                "Zero-dependency code leaves the model room to think",
+                "The system assimilates functionality rather than importing it"
+              ]
+            }
+          }
+        ],
+        "layout": "Content",
+        "notes": "This pattern is emerging naturally. Dawid Prus: 'Zero-dependency libraries leave the model room to think. Dependency stacks fill it with noise.' The process begins with 'I don't want to import another dependency' and ends with 'I guess I accidentally built one.'",
+        "transition": "RevealOne"
+      },
+      {
+        "elements": [
+          {
+            "Title": "The Future"
+          },
+          {
+            "Bullets": {
+              "items": [
+                "Systems fully managed by AI agent swarms",
+                "Self-healing: 71% of incidents resolved without humans (avg 4.7 min)",
+                "No versions, no releases — continuous development, immediate deployment"
+              ]
+            }
+          },
+          "Divider",
+          {
+            "Bullets": {
+              "items": [
+                "The graph is the file system",
+                "The compiler is the test suite",
+                "The architecture is the prompt"
+              ]
+            }
+          }
+        ],
+        "layout": "Content",
+        "notes": "Think of something and work backwards to achieve it. A swarm of AI agents constantly improving every aspect: speed, security, functionality. Current self-healing systems resolve incidents in 4.7 minutes vs 76.2 minutes manually.",
+        "transition": "RevealOne"
+      },
+      {
+        "elements": [
+          {
+            "Title": "Thank You"
+          },
+          {
+            "Subtitle": "Questions?"
+          },
+          {
+            "Text": "github.com/pjankiewicz/lambdagraph"
+          }
+        ],
+        "layout": "Title",
+        "notes": "Q&A time. The project is open source!",
+        "transition": "None"
+      }
+    ],
+    "title": "Where Do Files Live?"
+  },
+  "show_notes": false,
+  "show_overview": false,
+  "slide": 18,
+  "step": 0
+}
