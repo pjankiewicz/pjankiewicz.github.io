@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <
+    meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Where Do Files Live? - Illustration Assets</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0D0D12;
+            --card-bg: #15151C;
+            --text-main: #EDEDEF;
+            --text-muted: #8A8F98;
+            --border-color: #272732;
+
+            /* Presentation Theme Colors */
+            --color-fn: #f97316;     /* Rust Orange */
+            --color-type: #3b82f6;   /* Blue */
+            --color-cap: #10b981;    /* Green */
+            --color-old: #52525b;    /* Faded File Zinc */
+            --color-error: #ef4444;  /* Red */
+        }
+
+        body {
+            margin: 0;
+            padding: 2rem;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+        }
+
+        header {
+            max-width: 1400px;
+            margin: 0 auto 3rem auto;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(700px, 1fr));
+            gap: 2.5rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-header h2 {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .card-header p {
+            margin: 0.5rem 0 0 0;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .card-body {
+            padding: 0;
+            background-image: radial-gradient(circle at 1px 1px, #ffffff08 1px, transparent 0);
+            background-size: 24px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        svg {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        text {
+            font-family: 'Inter', sans-serif;
+        }
+
+        text.code {
+            font-family: 'Fira Code', monospace;
+        }
+
+        /* SVG Specific Styling handled via attributes and shared defs for standalone portability */
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>"Where Do Files Live?"</h1>
+    <p class="subtitle">Presentation Illustration Assets. Clean vector line-art, dark theme, utilizing a strict visual vocabulary for functions (orange circle), types (blue hex), and capabilities (green shield).</p>
+</header>
+
+<!-- SHARED DEFS FOR ALL SVGS (Ensures portability if combined, but we include them natively in a master def block here for the HTML) -->
+<svg width="0" height="0" style="display:none;">
+    <defs id="master-defs">
+        <!-- Glow Filters -->
+        <filter id="glow-fn" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="6" result="blur" />
+            <feComponentTransfer in="blur" result="coloredBlur">
+                <feFuncA type="linear" slope="0.5"/>
+            </feComponentTransfer>
+            <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+
+        <!-- Node Motifs -->
+        <g id="fn-node">
+            <circle cx="0" cy="0" r="18" fill="#15151C" stroke="var(--color-fn)" stroke-width="2.5"/>
+            <text x="0" y="4" class="code" font-size="11" fill="var(--color-fn)" text-anchor="middle" font-weight="500">fn</text>
+        </g>
+        <g id="fn-node-glow">
+            <circle cx="0" cy="0" r="18" fill="#15151C" stroke="var(--color-fn)" stroke-width="2.5" filter="url(#glow-fn)"/>
+            <text x="0" y="4" class="code" font-size="11" fill="var(--color-fn)" text-anchor="middle" font-weight="500">fn</text>
+        </g>
+        <g id="type-node">
+            <polygon points="0,-18 15.6,-9 15.6,9 0,18 -15.6,9 -15.6,-9" fill="#15151C" stroke="var(--color-type)" stroke-width="2.5"/>
+            <text x="0" y="4" class="code" font-size="11" fill="var(--color-type)" text-anchor="middle" font-weight="500">T</text>
+        </g>
+        <g id="cap-node">
+            <path d="M-14,-14 L14,-14 L14,4 Q14,18 0,22 Q-14,18 -14,4 Z" fill="#15151C" stroke="var(--color-cap)" stroke-width="2.5"/>
+        </g>
+        <g id="cap-node-small">
+            <path d="M-10,-10 L10,-10 L10,3 Q10,13 0,16 Q-10,13 -10,3 Z" fill="#15151C" stroke="var(--color-cap)" stroke-width="2"/>
+        </g>
+
+        <!-- Arrows -->
+        <marker id="arrow-fn" viewBox="0 0 10 10" refX="28" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--color-fn)" />
+        </marker>
+        <marker id="arrow-type" viewBox="0 0 10 10" refX="26" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--color-type)" />
+        </marker>
+        <marker id="arrow-gray" viewBox="0 0 10 10" refX="20" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#52525b" />
+        </marker>
+    </defs>
+</svg>
+
+<main class="gallery">
+
+    <!-- Slide 1 -->
+    <div class="card">
+        <div class="card-header">
+            <h2>Slide 1: "Where Do Files Live?"</h2>
+            <p>A folder dissolving into a constellation of typed graph nodes. Files crumbling, graph emerging.</p>
+        </div>
+        <div class="card-body">
+            <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+                <use href="#master-defs" />
+                <!-- Crumbling Folder -->
+                <path d="M 120 120 L 220 120 L 250 150 L 360 150 L 360 200 L 340 220 L 355 240 L 330 270 L 350 300 L 335 340 L 120 340 Z" fill="none" stroke="var(--color-old)" stroke-width="4" stroke-linejoin="round"/>
+                <path d="M 120 150 L 250 150" fill="none" stroke="var(--color-old)" stroke-width="4"/>
+
+                <!-- Floating Dissolve Particles -->
+                <circle cx="380" cy="180" r="3" fill="var(--color-old)"/>
+                <circle cx="410" cy="230" r="4" fill="var(--color-old)"/>
+                <circle cx="390" cy="280" r="2" fill="var(--color-old)"/>
+                <circle cx="440" cy="150" r="3" fill="var(--color-fn)"/>
+                <circle cx="460" cy="270" r="4" fill="var(--color-type)"/>
+
+                <path d="M 370 210 L 390 200" stroke="var(--color-old)" stroke-width="2"/>
+                <path d="M 400 310 L 420 320" stroke="var(--color-old)" stroke-width="2"/>
+
+                <!-- Transition Lines -->
+                <path d="M 420 230 C 470 230, 480 160, 520 160" fill="none" stroke="#444" stroke-width="1.5" stroke-dasharray="4 4"/>
+                <path d="M 400 280 C 450 280, 480 320, 540 320" fill="none" stroke="#444" stroke-width="1.5" stroke-dasharray="4 4"/>
+                <path d="M 450 150 C 500 150, 520 240, 570 240" fill="none" stroke="#444" stroke-width="1.5" stroke-dasharray="4 4"/>
+
+                <!-- Graph Overlay (Right side) -->
+                <!-- Edges -->
+                <line x1="535" y1="160" x2="650" y2="120" stroke="var(--color-fn)" stroke-width="2" marker-end="url(#arrow-fn)"/>
+                <line x1="535" y1="160" x2="585" y2="240" stroke="var(--color-type)" stroke-width="2" marker-end="url(#arrow-type)"/>
+                <line x1="585" y1="240" x2="680" y2="210" stroke="var(--color-fn)" stroke-width="2" marker-end="url(#arrow-fn)"/>
+                <line x1="555" y1="320" x2="585" y2="240" stroke="var(--color-type)" stroke-width="2" marker-end="url(#arrow-type)"/>
+                <line x1="680" y1="210" x2="710" y2="300" stroke="var(--color-type)" stroke-width="2" marker-end="url(#arrow-type)"/>
+                <line x1="555" y1="320" x2="710" y2="300" stroke="var(--color-fn)" stroke-width="2" marker-end="url(#arrow-fn)"/>
+
+                <!-- Nodes -->
+                <use href="#fn-node" x="535" y="160" />
+                <use href="#fn-node" x="680" y="210" />
+                <use href="#fn-node" x="555" y="320" />
+
+                <use href="#type-node" x="650" y="120" />
+                <use href="#type-node" x="585" y="240" />
+                <use href="#type-node" x="710" y="300" />
+            </svg>
+        </div>
+    </div>
+
+    <!-- Slide 5 -->
+    <div class="card">
+        <div class="card-header">
+            <h2>Slide 5: "Functions as Atoms"</h2>
+            <p>A molecular diagram of stable functions (left) vs a monolithic fragile text block (right).</p>
+        </div>
+        <div class="card-body">
+            <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+                <use href="#master-defs" />
+
+                <!-- Left: Atomic / Modular -->
+                <g transform="translate(200, 225)">
+                    <!-- Bonds -->
+                    <line x1="0" y1="0" x2="0" y2="-100" stroke="var(--color-type)" stroke-width="3" marker-end="url(#arrow-type)"/>
+                    <line x1="0" y1="0" x2="-90" y2="50" stroke="var(--color-type)" stroke-width="3" marker-end="url(#arrow-type)"/>
+                    <line x1="0" y1="0" x2="90" y2="50" stroke="var(--color-type)" stroke-width="3" marker-end="url(#arrow-type)"/>
+
+                    <!-- Bond Labels -->
+                    <text x="5" y="-50" class="code" font-size="12" fill="var(--color-type)">User</text>
+                    <text x="-60" y="20" class="code" font-size="12" fill="var(--color-type)">String</text>
+                    <text x="40" y="20" class="code" font-size="12" fill="var(--color-type)">Auth</text>
+
+                    <!-- Nodes -->
+                    <use href="#type-node" x="0" y="-100" />
+                    <use href="#type-node" x="-90" y="50" />
+                    <use href="#type-node" x="90" y="50" />
+                    <use href="#fn-node-glow" x="0" y="0" />
+                </g>
+
+                <!-- Divider -->
+                <line x1="400" y1="50" x2="400" y2="400" stroke="#272732" stroke-width="2" stroke-dasharray="8 8"/>
+
+                <!-- Right: Monolithic Brittle File -->
+                <g transform="translate(480, 80)">
+                    <rect x="0" y="0" width="240" height="290" rx="8" fill="#1C1C24" stroke="var(--color-old)" stroke-width="3"/>
+                    <!-- Fake text lines -->
+                    <path d="M 20 30 h 120 M 20 50 h 180 M 20 70 h 150 M 20 110 h 200 M 20 130 h 160 M 20 150 h 190 M 20 190 h 140 M 20 210 h 170 M 20 230 h 100" stroke="#333" stroke-width="6" stroke-linecap="round"/>
+
+                    <!-- Jagged Crack -->
+                    <path d="M 120 -5 L 100 60 L 140 120 L 90 190 L 130 250 L 100 295" fill="none" stroke="var(--bg-color)" stroke-width="8"/>
+                    <path d="M 120 -5 L 100 60 L 140 120 L 90 190 L 130 250 L 100 295" fill="none" stroke="var(--color-error)" stroke-width="2"/>
+                </g>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Slide 6 -->
+    <div class="card">
+        <div class="card-header">
+            <h2>Slide 6: "AI Code Needs Harnesses"</h2>
+            <p>A funnel showing massive token input reducing to a tiny drop, with a broken diff patch below showing failed text edits.</p>
+        </div>
+        <div class="card-body">
+            <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+                <!-- Funnel Outline -->
+                <path d="M 250 80 L 550 80 L 430 240 L 430 280 L 370 280 L 370 240 Z" fill="#1C1C24" stroke="#444" stroke-width="3" stroke-linejoin="round"/>
+
+                <!-- Input Token Cloud -->
+                <g fill="var(--text-muted)" class="code" font-size="12" opacity="0.6">
+                    <text x="280" y="40">def</text><text x="320" y="30">{}</text><text x="360" y="50">self</text>
+                    <text x="400" y="25">import</text><text x="460" y="45">()</text><text x="500" y="35">class</text>
+                    <text x="260" y="70">return</text><text x="310" y="60">None</text><text x="380" y="75">if</text>
+                    <text x="430" y="65">else:</text><text x="490" y="75">yield</text><text x="540" y="60">[]</text>
+                </g>
+                <text x="400" y="-10" text-anchor="middle" font-size="16" font-weight="600" fill="var(--text-main)">165x Input Tokens</text>
+
+                <!-- Arrow down -->
+                <path d="M 400 0 v 15" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow-gray)"/>
+
+                <!-- Droplet Output -->
+                <path d="M 400 295 C 415 315, 415 325, 400 325 C 385 325, 385 315, 400 295 Z" fill="var(--color-type)"/>
+                <text x="470" y="315" font-size="16" font-weight="600" fill="var(--color-type)">1x Output</text>
+
+                <!-- Broken Diff -->
+                <g transform="translate(300, 350)">
+                    <rect x="0" y="0" width="200" height="70" rx="6" fill="#2A1010" stroke="var(--color-error)" stroke-width="2" stroke-dasharray="4 4"/>
+                    <text x="15" y="25" class="code" font-size="12" fill="var(--color-error)">- fn update_user() {</text>
+                    <text x="15" y="45" class="code" font-size="12" fill="#888">  // context missing</text>
+                    <text x="15" y="65" class="code" font-size="12" fill="var(--color-error)">+ fn udate_usr() {</text>
+                    <!-- Big Red X -->
+                    <line x1="170" y1="15" x2="190" y2="35" stroke="var(--color-error)" stroke-width="3"/>
+                    <line x1="190" y1="15" x2="170" y2="35" stroke="var(--color-error)" stroke-width="3"/>
+                </g>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Slide 7 -->
+    <div class="card">
+        <div class="card-header">
+            <h2>Slide 7: "Why Rust?"</h2>
+            <p>The compiler as a funnel. AI drops messy code at the top; constraints filter it down to a single perfect node.</p>
+        </div>
+        <div class="card-body">
+            <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+                <use href="#master-defs" />
+
+                <!-- Robot AI dropping code -->
+                <g transform="translate(400, 40)">
+                    <rect x="-20" y="-20" width="40" height="30" rx="4" fill="#1C1C24" stroke="var(--text-main)" stroke-width="2"/>
+                    <circle cx="-8" cy="-10" r="3" fill="var(--color-type)"/>
+                    <circle cx="8" cy="-10" r="3" fill="var(--color-type)"/>
+                    <line x1="-10" y1="0" x2="10" y2="0" stroke="var(--text-main)" stroke-width="2"/>
+                    <path d="M 0 -20 v -10 M -5 -30 h 10" stroke="var(--text-main)" stroke-width="2"/>
+                </g>
+                <!-- Messy code falling -->
+                <path d="M 380 60 Q 390 80, 400 70 T 420 90" fill="none" stroke="var(--text-muted)" stroke-width="2"/>
+
+                <!-- Compiler Funnel -->
+                <path d="M 250 110 L 550 110 L 440 330 L 360 330 Z" fill="#15151C" stroke="var(--color-fn)" stroke-width="2"/>
+
+                <!-- Constraint Layers -->
+                <path d="M 285 180 L 515 180" stroke="var(--color-fn)" stroke-width="2" stroke-dasharray="4 4"/>
+                <path d="M 320 250 L 480 250" stroke="var(--color-fn)" stroke-width="2" stroke-dasharray="4 4"/>
+
+                <text x="400" y="150" text-anchor="middle" font-weight="600" fill="var(--text-main)">Type Check</text>
+                <text x="400" y="220" text-anchor="middle" font-weight="600" fill="var(--text-main)">Borrow Check</text>
+                <text x="400" y="295" text-anchor="middle" font-weight="600" fill="var(--text-main)">Lifetime Check</text>
+
+                <!-- Perfect Output Node -->
+                <use href="#fn-node-glow" x="400" y="380" />
+                <!-- Tiny drop connecting to node -->
+                <path d="M 400 330 v 30" stroke="var(--color-fn)" stroke-width="2" marker-end="url(#arrow-fn)"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Slide 8 -->
+    <div class="card">
+        <div class="card-header">
+            <h2>Slide 8: "But... The File Tree is a Lie"</h2>
+            <p>Rigid hierarchical file tree in the background overlaid with a glowing graph of actual relationships that ignores file boundaries.</p>
+        </div>
+        <div class="card-body">
+            <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+                <use href="#master-defs" />
+
+                <!-- Background File Tree (Faded) -->
+                <g stroke="#333" stroke-width="2" fill="none" font-family="monospace" font-size="12">
+                    <!-- src/ -->
+                    <rect x="100" y="80" width="80" height="30" rx="4" fill="#111" stroke="#444"/>
+                    <text x="140" y="100" fill="#666" text-anchor="middle">src/</text>
+                    <path d="M 140 110 v 20 h -60 v 180"/>
+
+                    <!-- lib.rs -->
+                    <path d="M 80 165 h 20"/>
+                    <rect x="100" y="150" width="100" height="30" rx="4" fill="#111" stroke="#444"/>
+                    <text x="150" y="170" fill="#666" text-anchor="middle">lib.rs</text>
+
+                    <!-- utils.rs -->
+                    <path d="M 80 235 h 20"/>
+                    <rect x="100" y="220" width="100" height="30" rx="4" fill="#111" stroke="#444"/>
+                    <text x="150" y="240" fill="#666" text-anchor="middle">utils.rs</text>
+
+                    <!-- api/ -->
+                    <path d="M 80 305 h 20"/>
+                    <rect x="100" y="290" width="80" height="30" rx="4" fill="#111" stroke="#444"/>
+                    <text x="140" y="310" fill="#666" text-anchor="middle">api/</text>
+                    <path d="M 140 320 v 20 h 40"/>
+
+                    <!-- routes.rs -->
+                    <rect x="180" y="325" width="100" height="30" rx="4" fill="#111" stroke="#444"/>
+                    <text x="230" y="345" fill="#666" text-anchor="middle">routes.rs</text>
+                </g>
+
+                <!-- Foreground Glowing Graph Overlaid -->
+                <g>
+                    <!-- Edges ignoring boundaries -->
+                    <path d="M 350 120 Q 450 150, 550 180" fill="none" stroke="var(--color-type)" stroke-width="3" opacity="0.8" marker-end="url(#arrow-type)"/>
+                    <path d="M 550 180 Q 400 250, 300 280" fill="none" stroke="var(--color-fn)" stroke-width="3" opacity="0.8" marker-end="url(#arrow-fn)"/>
+                    <path d="M 300 280 Q 500 350, 650 300" fill="none" stroke="var(--color-type)" stroke-width="3" opacity="0.8" marker-end="url(#arrow-type)"/>
+                    <path d="M 650 300 Q 500 150, 350 120" fill="none" stroke="var(--color-fn)" stroke-width="3" opacity="0.8" marker-end="url(#arrow-fn)"/>
+                    <path d="M 550 180 Q 650 200, 750 150" fill="none" stroke="var(--color-fn)" stroke-width="3" opacity="0.8" marker-end="url(#arrow-fn)"/>
+
+                    <!-- Nodes randomly placed over the screen -->
+                    <use href="#fn-node-glow" x="350" y="120" />
+                    <use href="#type-node" x="550" y="180" />
+                    <use href="#fn-node-glow" x="300" y="280" />
+                    <use href="#type-node" x="650" y="300" />
+                    <use href="#fn-node-glow" x="750" y="150" />
+                </g>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Slide 10 -->
+    <div class="card">
+        <div class="card-header">
+            <h2>Slide 10: "The Fileless Lineage"</h2>
+            <p>Timeline ribbon showing the ancestors of graph-based programming: Smalltalk, Unison, Dark, MPS, SpacetimeDB.</p>
+        </div>
+        <div class="card-body">
+            <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+                <use href="#master-defs" />
+
+                <!-- Timeline base line -->
+                <line x1="50" y1="200" x2="750" y2="200" stroke="#444" stroke-width="3"/>
+
+                <!-- Points & Labels -->
+                <g text-anchor="middle" font-size="12" fill="var(--text-muted)">
+
+                    <!-- 1. Smalltalk -->
+                    <circle cx="120" cy="200" r="6" fill="var(--color-type)"/>
+                    <text x="120" y="250" font-weight="600" fill="var(--text-main)">Smalltalk</text>
+                    <text x="120" y="270">1970s</text>
+                    <!-- Speech Bubble Icon -->
+                    <path d="M 105 150 h 30 v 20 h -10 l -5 5 l -5 -5 h -10 z" fill="none" stroke="var(--color-type)" stroke-width="2"/>
+
+                    <!-- 2. MPS -->
+                    <circle cx="260" cy="200" r="6" fill="var(--color-fn)"/>
+                    <text x="260" y="250" font-weight="600" fill="var(--text-main)">JetBrains MPS</text>
+                    <text x="260" y="270">2003</text>
+                    <!-- Branching Tree Icon -->
+                    <path d="M 260 170 v -10 M 260 160 l -10 -10 M 260 160 l 10 -10 M 250 150 v -10 M 270 150 v -10" fill="none" stroke="var(--color-fn)" stroke-width="2"/>
+
+                    <!-- 3. Unison -->
+                    <circle cx="400" cy="200" r="6" fill="var(--color-type)"/>
+                    <text x="400" y="250" font-weight="600" fill="var(--text-main)">Unison</text>
+                    <text x="400" y="270">2013</text>
+                    <!-- Hash/Fingerprint Icon (Concentric Arcs) -->
+                    <path d="M 390 155 A 10 10 0 0 1 410 155 M 385 160 A 15 15 0 0 1 415 160 M 380 165 A 20 20 0 0 1 420 165" fill="none" stroke="var(--color-type)" stroke-width="2"/>
+
+                    <!-- 4. Dark -->
+                    <circle cx="540" cy="200" r="6" fill="var(--color-fn)"/>
+                    <text x="540" y="250" font-weight="600" fill="var(--text-main)">Darklang</text>
+                    <text x="540" y="270">2017</text>
+                    <!-- Canvas Nodes Icon -->
+                    <rect x="525" y="145" width="30" height="25" rx="3" fill="none" stroke="var(--color-fn)" stroke-width="2"/>
+                    <circle cx="532" cy="158" r="2" fill="var(--color-fn)"/>
+                    <circle cx="548" cy="158" r="2" fill="var(--color-fn)"/>
+                    <line x1="534" y1="158" x2="546" y2="158" stroke="var(--color-fn)" stroke-width="1"/>
+
+                    <!-- 5. SpacetimeDB -->
+                    <circle cx="680" cy="200" r="6" fill="var(--color-cap)"/>
+                    <text x="680" y="250" font-weight="600" fill="var(--text-main)">SpacetimeDB</text>
+                    <text x="680" y="270">2019</text>
+                    <!-- Cylinder with gear inside Icon -->
+                    <ellipse cx="680" cy="145" rx="12" ry="4" fill="none" stroke="var(--color-cap)" stroke-width="2"/>
+                    <path d="M 668 145 v 20 A 12 4 0 0 0 692 165 v -20" fill="none" stroke="var(--color-cap)" stroke-width="2"/>
+                    <!-- Simple gear teeth indicator -->
+                    <path d="M 676 155 h 8 M 680 151 v 8" stroke="var(--color-cap)" stroke-width="2"/>
+
+                </g>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Slide 11 -->
+    <div class="card">
+        <div class="card-header">
+            <h2>Slide 11: "The Local Maximum"</h2>
+            <p>Topographic elevation map showing the jump from the text file local max to the AST/Graph global max.</p>
+        </div>
+        <div class="card-body">
+            <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+                <!-- Topo Lines Background -->
+                <g fill="none" stroke="#272732" stroke-width="1.5">
+                    <path d="M 50 400 Q 200 420, 300 350 T 500 250 T 750 350"/>
+                    <path d="M 100 380 Q 200 380, 280 300 T 500 200 T 700 280"/>
+                    <path d="M 150 350 Q 220 330, 260 250 T 500 150 T 650 200"/>
+                    <path d="M 180 300 Q 230 280, 240 220 T 500 100 T 600 150"/>
+                </g>
+
+                <!-- The Path (Line) -->
+                <path d="M 240 220 Q 300 250, 400 300 T 580 120" fill="none" stroke="var(--color-fn)" stroke-width="3" stroke-dasharray="6 6"/>
+
+                <!-- Left Peak (Local Max) -->
+                <circle cx="240" cy="220" r="5" fill="var(--text-main)"/>
+                <!-- Stick figure -->
+                <g stroke="var(--text-main)" stroke-width="2" fill="none">
+                    <circle cx="230" cy="205" r="4"/>
+                    <path d="M 230 209 v 10 M 230 212 h -5 M 230 212 h 5 M 230 219 l -5 5 M 230 219 l 5 5"/>
+                </g>
+                <!-- Flags -->
+                <path d="M 200 220 v -30 h -15 v 10 h 15" fill="var(--color-old)" stroke="var(--color-old)" stroke-width="1"/>
+                <text x="180" y="185" font-size="10" fill="var(--color-old)">Git</text>
+                <path d="M 215 220 v -40 h -20 v 15 h 20" fill="var(--color-old)" stroke="var(--color-old)" stroke-width="1"/>
+                <text x="190" y="175" font-size="10" fill="var(--color-old)">VS Code</text>
+
+                <rect x="180" y="240" width="100" height="25" rx="4" fill="#15151C" stroke="#444"/>
+                <text x="230" y="257" text-anchor="middle" font-size="12" fill="var(--text-main)">Text Files</text>
+
+                <!-- Right Peak (Global Max) -->
+                <circle cx="580" cy="120" r="6" fill="var(--color-type)"/>
+                <text x="580" y="100" text-anchor="middle" font-size="36" font-weight="600" fill="var(--color-type)" filter="url(#glow-fn)">?</text>
+
+                <rect x="530" y="140" width="100" height="25" rx="4" fill="#15151C" stroke="var(--color-type)"/>
+                <text x="580" y="157" text-anchor="middle" font-size="12" fill="var(--text-main)">The Unknown</text>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Slide 12 -->
+    <div class="card">
+        <div class="card-header">
+            <h2>Slide 12: "The Breakthrough: AST Editing"</h2>
+            <p>Split screen. Messy text diffs with 70% accuracy vs clean AST node swaps with zero errors.</p>
+        </div>
+        <div class="card-body">
+            <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+                <use href="#master-defs" />
+
+                <!-- Center Divider -->
+                <line x1="400" y1="40" x2="400" y2="410" stroke="#272732" stroke-width="2"/>
+
+                <!-- LEFT: Text Diff -->
+                <text x="200" y="60" text-anchor="middle" font-weight="600" fill="var(--color-error)">Text Diff: 70% accuracy</text>
+
+                <g transform="translate(60, 100)" font-family="'Fira Code', monospace" font-size="12">
+                    <!-- Diff Block -->
+                    <rect x="0" y="0" width="280" height="20" fill="#2A1010"/>
+                    <text x="10" y="14" fill="var(--color-error)">- function calculateTotal(items) {</text>
+                    <line x1="10" y1="10" x2="250" y2="10" stroke="var(--color-error)" stroke-width="1.5"/> <!-- Strikethrough -->
+
+                    <rect x="0" y="20" width="280" height="40" fill="#102A1A"/>
+                    <text x="10" y="34" fill="var(--color-cap)">+ fn calculate_total(items: Vec) {</text>
+                    <text x="10" y="54" fill="var(--color-cap)">+     let mut total = 0;</text>
+
+                    <text x="10" y="74" fill="#888">      for item in items {</text>
+
+                    <rect x="0" y="80" width="280" height="20" fill="#2A1010"/>
+                    <text x="10" y="94" fill="var(--color-error)">-         total += item.price</text>
+
+                    <rect x="0" y="100" width="280" height="20" fill="#102A1A"/>
+                    <text x="10" y="114" fill="var(--color-cap)">+         total += item.price(); // missing bracket</text>
+                </g>
+
+                <!-- Confused Robot -->
+                <g transform="translate(200, 300)" fill="none" stroke="var(--text-muted)" stroke-width="2">
+                    <rect x="-25" y="-20" width="50" height="40" rx="4"/>
+                    <!-- Eyes -->
+                    <line x1="-10" y1="-5" x2="-5" y2="0"/>
+                    <line x1="-5" y1="-5" x2="-10" y2="0"/>
+                    <line x1="10" y1="-5" x2="5" y2="0"/>
+                    <line x1="5" y1="-5" x2="10" y2="0"/>
+                    <!-- Zig-zag mouth -->
+                    <polyline points="-10,10 -5,15 0,10 5,15 10,10"/>
+                </g>
+
+
+                <!-- RIGHT: AST Editing -->
+                <text x="600" y="60" text-anchor="middle" font-weight="600" fill="var(--color-fn)">AST Edit: Zero errors</text>
+
+                <g transform="translate(600, 120)">
+                    <!-- Tree Edges -->
+                    <line x1="0" y1="0" x2="-80" y2="50" stroke="#444" stroke-width="2"/>
+                    <line x1="0" y1="0" x2="80" y2="50" stroke="#444" stroke-width="2"/>
+                    <line x1="-80" y1="50" x2="-110" y2="100" stroke="#444" stroke-width="2"/>
+                    <line x1="-80" y1="50" x2="-50" y2="100" stroke="#444" stroke-width="2"/>
+                    <!-- Glow edge to swapped node -->
+                    <line x1="80" y1="50" x2="80" y2="100" stroke="var(--color-fn)" stroke-width="3"/>
+
+                    <!-- Nodes -->
+                    <use href="#fn-node" x="0" y="0" />
+                    <use href="#type-node" x="-80" y="50" />
+                    <use href="#type-node" x="80" y="50" />
+                    <use href="#type-node" x="-110" y="100" />
+                    <use href="#type-node" x="-50" y="100" />
+
+                    <!-- The Swapped Node -->
+                    <use href="#fn-node-glow" x="80" y="100" />
+
+                    <!-- Swap Icon Overlay -->
+                    <path d="M 110 95 A 10 10 0 0 1 110 115 A 10 10 0 0 1 110 95" fill="none" stroke="var(--color-fn)" stroke-width="2" stroke-dasharray="3 3"/>
+                    <path d="M 110 95 l 4 4 M 110 95 l -4 4" fill="none" stroke="var(--color-fn)" stroke-width="2"/>
+                </g>
+
+                <!-- Happy Robot -->
+                <g transform="translate(600, 300)" fill="none" stroke="var(--color-fn)" stroke-width="2">
+                    <rect x="-25" y="-20" width="50" height="40" rx="4"/>
+                    <!-- Eyes -->
+                    <circle cx="-10" cy="-5" r="2" fill="var(--color-fn)"/>
+                    <circle cx="10" cy="-5" r="2" fill="var(--color-fn)"/>
+                    <!-- Smile -->
+                    <path d="M -10 10 Q 0 18, 10 10" stroke-linecap="round"/>
+                </g>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Slide 13 -->
+    <div class="card">
+        <div class="card-header">
+            <h2>Slide 13: "Capabilities, Not Side Effects"</h2>
+            <p>Pure functions live inside a walled garden. They communicate with the messy outside world only through strictly typed capability gates.</p>
+        </div>
+        <div class="card-body">
+            <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+                <use href="#master-defs" />
+
+                <!-- Walled Garden (Capability Boundary) -->
+                <rect x="100" y="50" width="450" height="350" rx="24" fill="#15151C" stroke="#444" stroke-width="3" stroke-dasharray="12 12"/>
+                <text x="325" y="80" text-anchor="middle" font-weight="600" fill="var(--text-muted)">Pure Function Graph</text>
+
+                <!-- Pure Nodes Inside -->
+                <g>
+                    <line x1="250" y1="150" x2="350" y2="200" stroke="var(--color-fn)" stroke-width="2" marker-end="url(#arrow-fn)"/>
+                    <line x1="350" y1="200" x2="450" y2="150" stroke="var(--color-type)" stroke-width="2" marker-end="url(#arrow-type)"/>
+                    <line x1="350" y1="200" x2="350" y2="300" stroke="var(--color-fn)" stroke-width="2" marker-end="url(#arrow-fn)"/>
+                    <line x1="250" y1="300" x2="350" y2="300" stroke="var(--color-type)" stroke-width="2" marker-end="url(#arrow-type)"/>
+
+                    <use href="#fn-node" x="250" y="150" />
+                    <use href="#type-node" x="450" y="150" />
+                    <use href="#fn-node" x="350" y="200" />
+                    <use href="#type-node" x="250" y="300" />
+                    <use href="#fn-node" x="350" y="300" />
+                </g>
+
+                <!-- The Wall Gates (Capabilities) -->
+                <g>
+                    <!-- Connections to gates -->
+                    <line x1="450" y1="150" x2="550" y2="150" stroke="var(--color-type)" stroke-width="2"/>
+                    <line x1="350" y1="300" x2="550" y2="300" stroke="var(--color-fn)" stroke-width="2"/>
+                    <line x1="350" y1="200" x2="550" y2="225" stroke="var(--color-fn)" stroke-width="2"/>
+
+                    <!-- Gate nodes placed perfectly on the right border -->
+                    <g transform="translate(550, 150)">
+                        <use href="#cap-node" />
+                        <text x="25" y="5" font-weight="600" font-size="12" fill="var(--color-cap)">HTTP</text>
+                    </g>
+                    <g transform="translate(550, 225)">
+                        <use href="#cap-node" />
+                        <text x="25" y="5" font-weight="600" font-size="12" fill="var(--color-cap)">KV</text>
+                    </g>
+                    <g transform="translate(550, 300)">
+                        <use href="#cap-node" />
+                        <text x="25" y="5" font-weight="600" font-size="12" fill="var(--color-cap)">Blob</text>
+                    </g>
+                </g>
+
+                <!-- Messy Outside World -->
+                <g stroke="var(--text-muted)" stroke-width="2" fill="none">
+                    <!-- Messy tangled lines outside HTTP -->
+                    <path d="M 620 150 Q 640 120, 660 160 T 700 130 T 730 160"/>
+                    <!-- DB Icon outside KV -->
+                    <path d="M 650 215 v 20 A 15 5 0 0 0 680 235 v -20" stroke="var(--text-muted)"/>
+                    <ellipse cx="665" cy="215" rx="15" ry="5" stroke="var(--text-muted)"/>
+                    <!-- Cloudy mess outside Blob -->
+                    <path d="M 640 300 Q 640 280, 660 280 Q 680 270, 690 290 Q 720 290, 710 310 Q 720 330, 690 320 Q 660 330, 640 300 Z"/>
+                </g>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Slide 14 -->
+    <div class="card">
+        <div class="card-header">
+            <h2>Slide 14: "LambdaGraph"</h2>
+            <p>Architectural layout showing the 3 pillars (Types, Functions, Capabilities) on a BLAKE3 foundation, driven by AI via MCP.</p>
+        </div>
+        <div class="card-body">
+            <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+                <use href="#master-defs" />
+
+                <!-- Foundation: Content Addressed Store -->
+                <rect x="150" y="350" width="500" height="40" rx="4" fill="#1C1C24" stroke="#444" stroke-width="2"/>
+                <text x="400" y="375" text-anchor="middle" font-weight="600" fill="var(--text-main)">Content-Addressed Store (BLAKE3)</text>
+
+                <!-- Three Pillars Base connections -->
+                <path d="M 250 350 v -20 M 400 350 v -20 M 550 350 v -20" stroke="#444" stroke-width="3"/>
+
+                <!-- Pillar 1: Types -->
+                <g transform="translate(250, 240)">
+                    <use href="#type-node" x="0" y="60" />
+                    <use href="#type-node" x="0" y="0" />
+                    <use href="#type-node" x="0" y="-60" />
+                    <line x1="0" y1="42" x2="0" y2="18" stroke="var(--color-type)" stroke-width="2" marker-end="url(#arrow-type)"/>
+                    <line x1="0" y1="-18" x2="0" y2="-42" stroke="var(--color-type)" stroke-width="2" marker-end="url(#arrow-type)"/>
+                    <text x="0" y="100" text-anchor="middle" font-weight="600" fill="var(--color-type)">Types</text>
+                </g>
+
+                <!-- Pillar 2: Functions -->
+                <g transform="translate(400, 240)">
+                    <use href="#fn-node" x="0" y="60" />
+                    <use href="#fn-node" x="0" y="0" />
+                    <use href="#fn-node" x="0" y="-60" />
+                    <line x1="0" y1="42" x2="0" y2="18" stroke="var(--color-fn)" stroke-width="2" marker-end="url(#arrow-fn)"/>
+                    <line x1="0" y1="-18" x2="0" y2="-42" stroke="var(--color-fn)" stroke-width="2" marker-end="url(#arrow-fn)"/>
+                    <text x="0" y="100" text-anchor="middle" font-weight="600" fill="var(--color-fn)">Functions</text>
+                </g>
+
+                <!-- Pillar 3: Capabilities -->
+                <g transform="translate(550, 240)">
+                    <use href="#cap-node" x="0" y="60" />
+                    <use href="#cap-node" x="0" y="0" />
+                    <use href="#cap-node" x="0" y="-60" />
+                    <!-- Capabilities don't strictly point to each other in the same way, but let's connect them visually -->
+                    <line x1="0" y1="42" x2="0" y2="18" stroke="var(--color-cap)" stroke-width="2" stroke-dasharray="2 2"/>
+                    <line x1="0" y1="-18" x2="0" y2="-42" stroke="var(--color-cap)" stroke-width="2" stroke-dasharray="2 2"/>
+                    <text x="0" y="100" text-anchor="middle" font-weight="600" fill="var(--color-cap)">Capabilities</text>
+                </g>
+
+                <!-- Top: AI Agent / MCP -->
+                <path d="M 400 120 L 250 160 M 400 120 L 400 160 M 400 120 L 550 160" stroke="#888" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#arrow-gray)"/>
+
+                <g transform="translate(400, 70)">
+                    <!-- AI Brain / Bot Icon -->
+                    <rect x="-30" y="-20" width="60" height="40" rx="8" fill="#15151C" stroke="var(--text-main)" stroke-width="2"/>
+                    <circle cx="-10" cy="0" r="4" fill="var(--text-main)"/>
+                    <circle cx="10" cy="0" r="4" fill="var(--text-main)"/>
+                    <path d="M -15 -20 L -20 -30 M 15 -20 L 20 -30" stroke="var(--text-main)" stroke-width="2"/>
+                    <text x="0" y="-40" text-anchor="middle" font-weight="600" font-size="12" fill="var(--text-main)">Claude / MCP</text>
+                </g>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Slide 17 -->
+    <div class="card">
+        <div class="card-header">
+            <h2>Slide 17: "The Assimilation Pattern"</h2>
+            <p>Biological cell absorbing external packages (npm, crates) and turning them into native graph nodes.</p>
+        </div>
+        <div class="card-body">
+            <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+                <use href="#master-defs" />
+
+                <!-- The Cell (Your System) -->
+                <!-- Organic blob shape -->
+                <path d="M 450 60 C 650 30, 750 120, 750 225 C 750 350, 600 400, 450 400 C 350 350, 380 150, 450 60 Z" fill="#15151C" stroke="var(--color-fn)" stroke-width="3" stroke-dasharray="10 10"/>
+                <text x="580" y="360" text-anchor="middle" font-weight="600" fill="var(--color-fn)">Your System</text>
+
+                <!-- Inside the cell (Native Nodes) -->
+                <g>
+                    <line x1="550" y1="150" x2="650" y2="200" stroke="var(--color-type)" stroke-width="2"/>
+                    <line x1="650" y1="200" x2="600" y2="280" stroke="var(--color-fn)" stroke-width="2"/>
+                    <line x1="550" y1="150" x2="500" y2="230" stroke="var(--color-fn)" stroke-width="2"/>
+
+                    <use href="#fn-node" x="550" y="150" />
+                    <use href="#type-node" x="650" y="200" />
+                    <use href="#fn-node" x="600" y="280" />
+                    <use href="#type-node" x="500" y="230" />
+                </g>
+
+                <!-- Outside the cell (Packages) -->
+                <g font-family="monospace" font-size="12">
+                    <!-- NPM -->
+                    <rect x="100" y="120" width="60" height="30" rx="4" fill="#2A1010" stroke="#ef4444" stroke-width="2"/>
+                    <text x="130" y="140" fill="#ef4444" text-anchor="middle">npm</text>
+                    <!-- Motion lines -->
+                    <path d="M 170 135 l 50 20" stroke="#ef4444" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#arrow-gray)"/>
+
+                    <!-- Crates.io -->
+                    <rect x="80" y="250" width="80" height="30" rx="4" fill="#2A1A10" stroke="var(--color-fn)" stroke-width="2"/>
+                    <text x="120" y="270" fill="var(--color-fn)" text-anchor="middle">crates.io</text>
+                    <path d="M 170 265 l 80 -10" stroke="var(--color-fn)" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#arrow-gray)"/>
+                </g>
+
+                <!-- At the membrane (Assimilation) -->
+                <g>
+                    <!-- Box dissolving -->
+                    <rect x="280" y="150" width="40" height="40" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-dasharray="4 4" transform="rotate(15 300 170)"/>
+                    <!-- Particles turning into nodes -->
+                    <path d="M 330 180 Q 380 200, 420 180" stroke="var(--color-fn)" stroke-width="2" stroke-dasharray="2 4" fill="none"/>
+                    <!-- Just inside the membrane -->
+                    <use href="#fn-node-glow" x="430" y="170" />
+                </g>
+
+                <text x="400" y="430" text-anchor="middle" font-style="italic" fill="var(--text-muted)">"Why import when you can generate?"</text>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Slide 18 -->
+    <div class="card">
+        <div class="card-header">
+            <h2>Slide 18: "The Future"</h2>
+            <p>A swarm of AI agents orbiting and continuously evolving a central graph. Continuous time, no release tags.</p>
+        </div>
+        <div class="card-body">
+            <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+                <use href="#master-defs" />
+
+                <!-- Orbit paths -->
+                <ellipse cx="400" cy="225" rx="280" ry="120" fill="none" stroke="#272732" stroke-width="2" stroke-dasharray="8 8" transform="rotate(-10 400 225)"/>
+                <ellipse cx="400" cy="225" rx="180" ry="80" fill="none" stroke="#272732" stroke-width="2" stroke-dasharray="8 8" transform="rotate(20 400 225)"/>
+
+                <!-- Central Graph -->
+                <g>
+                    <line x1="350" y1="180" x2="450" y2="150" stroke="var(--color-fn)" stroke-width="2"/>
+                    <line x1="450" y1="150" x2="480" y2="250" stroke="var(--color-type)" stroke-width="2"/>
+                    <line x1="480" y1="250" x2="380" y2="280" stroke="var(--color-fn)" stroke-width="2"/>
+                    <line x1="380" y1="280" x2="320" y2="220" stroke="var(--color-type)" stroke-width="2"/>
+                    <line x1="320" y1="220" x2="350" y2="180" stroke="var(--color-fn)" stroke-width="2"/>
+                    <line x1="450" y1="150" x2="380" y2="280" stroke="var(--color-fn)" stroke-width="2"/>
+
+                    <use href="#fn-node-glow" x="350" y="180" />
+                    <use href="#type-node" x="450" y="150" />
+                    <use href="#fn-node-glow" x="480" y="250" />
+                    <use href="#type-node" x="380" y="280" />
+                    <use href="#type-node" x="320" y="220" />
+                </g>
+
+                <!-- AI Agents on Orbits -->
+                <!-- Agent 1: Modifying a node -->
+                <g transform="translate(140, 180)">
+                    <circle cx="0" cy="0" r="12" fill="#1C1C24" stroke="var(--text-main)" stroke-width="2"/>
+                    <circle cx="-4" cy="-2" r="2" fill="var(--text-main)"/>
+                    <circle cx="4" cy="-2" r="2" fill="var(--text-main)"/>
+                    <path d="M -15 0 Q -25 -10, -20 -20 M 15 0 Q 25 -10, 20 -20" fill="none" stroke="var(--text-main)" stroke-width="2"/>
+                    <!-- Laser connecting to graph -->
+                    <line x1="15" y1="10" x2="165" y2="35" stroke="var(--color-cap)" stroke-width="2" stroke-dasharray="4 4"/>
+                    <!-- Checkmark bubble -->
+                    <path d="M -20 -30 L -10 -20 L 5 -40" fill="none" stroke="var(--color-cap)" stroke-width="3"/>
+                </g>
+
+                <!-- Agent 2 -->
+                <g transform="translate(640, 280)">
+                    <circle cx="0" cy="0" r="10" fill="#1C1C24" stroke="var(--text-main)" stroke-width="2"/>
+                    <circle cx="-3" cy="-2" r="1.5" fill="var(--text-main)"/>
+                    <circle cx="3" cy="-2" r="1.5" fill="var(--text-main)"/>
+                    <path d="M -12 0 Q -20 -8, -15 -15 M 12 0 Q 20 -8, 15 -15" fill="none" stroke="var(--text-main)" stroke-width="1.5"/>
+                    <!-- Laser -->
+                    <line x1="-10" y1="-5" x2="-140" y2="-30" stroke="var(--color-fn)" stroke-width="2" stroke-dasharray="4 4"/>
+                </g>
+
+                <!-- Agent 3 -->
+                <g transform="translate(300, 100)">
+                    <circle cx="0" cy="0" r="10" fill="#1C1C24" stroke="var(--text-main)" stroke-width="2"/>
+                    <circle cx="-3" cy="-2" r="1.5" fill="var(--text-main)"/>
+                    <circle cx="3" cy="-2" r="1.5" fill="var(--text-main)"/>
+                </g>
+
+                <!-- Continuous Time Clock Icon -->
+                <g transform="translate(720, 380)">
+                    <path d="M 0 -20 A 20 20 0 1 1 -20 0" fill="none" stroke="var(--text-muted)" stroke-width="3"/>
+                    <path d="M -20 0 l -5 -5 M -20 0 l 5 -5" fill="none" stroke="var(--text-muted)" stroke-width="3"/>
+                    <line x1="0" y1="0" x2="0" y2="-10" stroke="var(--text-muted)" stroke-width="3"/>
+                    <line x1="0" y1="0" x2="8" y2="5" stroke="var(--text-muted)" stroke-width="3"/>
+                    <text x="0" y="30" text-anchor="middle" font-size="12" fill="var(--text-muted)">Continuous Time</text>
+                </g>
+            </svg>
+        </div>
+    </div>
+
+</main>
+
+</body>
+</html>
