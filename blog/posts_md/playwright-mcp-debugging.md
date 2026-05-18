@@ -1,68 +1,76 @@
 ---
-title: "The bug at the seam: debugging with Playwright MCP"
+title: "UX testing is the bottleneck — Playwright MCP closes the loop"
 date: "2026-05-18"
-description: "Unit tests pass. Integration tests pass. CI is green. The toggle still doesn't do anything."
+description: "Backend is solid. Frontend is fine. UX testing eats the rest of your day."
 publish: false
 ---
 
-## The bug
+## Where the time actually goes
 
-I shipped a feature today. Public profiles — toggle six switches on `/you/profile-settings`, fill a bio, hit Save. The page should remember it. Click the toggle, click Save, refresh — same thing comes back. That's the test.
+If you've shipped a webapp recently you know the shape of it. The backend is solid — handlers have unit tests, integration tests against a live DB, fixtures that exercise the unhappy paths. The frontend compiles, the types match the OpenAPI schema, vitest passes 200+ specs. Both layers look healthy.
 
-I clicked the toggle. I clicked Save. I refreshed. The toggle was off again. The bio was empty.
+Then you click around the actual app and discover that the form doesn't save. Or the toggle does nothing visible. Or the page renders but the data the page promised isn't there. The bug isn't in the backend. It isn't in the frontend. It's at the seam — the place where your beautiful unit tests don't reach because neither side owns the seam by itself.
 
-Unit tests passed. Integration tests passed. CI was green.
+That seam is where I spend most of my debugging time now. Backend work is solid. Frontend is ok. Testing the UX is the most time-consuming thing in shipping anything user-facing right now.
 
-## The seam
+## A real example
 
-Here's what was wrong. There were two bugs, both at the seam between two layers that were correct in isolation.
+Picture a form. Six toggles, a textarea, a Save button. Standard CRUD. Frontend wraps the generated SDK in a thin adapter; backend has a single upsert handler. The acceptance test is human-level: open the form, change a toggle, hit Save, refresh, see the change persisted.
 
-**Bug 1 — Auth.** The frontend has a thin adapter wrapping the generated SDK. Half the calls go through `authed(() => SDK.foo())`, which attaches the JWT and refreshes it on 401. The Save call skipped the wrapper. The handler returned 401. The mutation surfaced a toast that scrolled off-screen.
+I click the toggle. I click Save. I refresh. The toggle is off again.
 
-**Bug 2 — A destructive "noop POST to read state".** There was no `GET /api/me/profile` endpoint. So on page load, the form fetched current state by POSTing to the upsert endpoint with an empty body, on the theory that an empty upsert reads back the existing row. It didn't. It overwrote bio, location, and goal with empty strings. Every page load nuked the row. Every post-save query invalidation nuked it again 50ms after the save succeeded.
+Unit tests pass. Integration tests pass. CI is green.
 
-Each bug had its own test on its own side. Backend tests insert-and-select on the upsert handler and pass. Frontend tests mock the SDK and assert that Save calls `updateProfileVisibility` with the right body. Both true. Neither catches *what happens when the two run against each other in a real browser*.
+Two bugs, both at the seam:
 
-This is what people mean when they say tests give you false confidence. They do — for behaviour that lives entirely inside one process. For anything that spans the wire, you need a different tool.
+**Bug 1**: the frontend adapter has an `authed()` wrapper for any call that needs a JWT. Half the methods go through it; the Save method forgot. The handler returns 401. The mutation surfaces a toast that scrolls off-screen.
+
+**Bug 2**: there's no `GET /api/me/whatever` endpoint, so the form's "load existing state" path POSTs to the upsert with an empty body, on the theory that an empty upsert is a no-op read. It isn't. The handler treats undefined fields as empty strings and clobbers the row on every page load and every post-save re-fetch.
+
+Each bug had its own test on its own side. Backend round-trips the upsert and passes. Frontend mocks the SDK and asserts Save is called with the right body. Both true. Neither catches what actually happens when both run against the same browser, the same JWT, the same Postgres row.
+
+This is the false confidence shape of testing. Tests give you certainty inside one process. Across the wire, you need something else.
 
 ## Playwright MCP
 
-I was about to start reproducing the bug by hand. Open Chrome. Open devtools. Click the toggle. Read the network tab. Read the response body. Compare to the request. Run a SQL query. Repeat.
+Five years ago debugging this would have looked like: open Chrome, open devtools, click the toggle, read the network tab with my eyes, copy the request body, copy the response body, query the DB in a separate shell, manually diff them, repeat.
 
-Instead I ran:
+This morning it looked like:
 
 ```
-mcp__playwright__browser_navigate('http://localhost:5173/you/profile-settings')
-mcp__playwright__browser_type(textarea#bio-input, '...')
-mcp__playwright__browser_click(#toggle-bio)
-mcp__playwright__browser_click('Save profile settings')
-mcp__playwright__browser_network_requests(filter='api/me/profile')
+mcp__playwright__browser_navigate('http://localhost:5173/...')
+mcp__playwright__browser_type(textarea, '...')
+mcp__playwright__browser_click('Save')
+mcp__playwright__browser_network_requests(filter='api/me/...')
 mcp__playwright__browser_network_request(index=532, part='request-body')
 mcp__playwright__browser_network_request(index=532, part='response-body')
+psql ... -c "SELECT ..."
 ```
 
-Plus a `psql ... -c "SELECT bio_text..."` in a separate shell.
+Inside the same agent loop. I asked for the body of POST #532, got back the JSON. Asked for the response, got back the row the handler returned. Diffed it against the DB query 200ms later. The data was there in the response. Gone in the DB. POST #533 was the reload firing the empty-body trick — same handler, wiped what #532 had just written.
 
-The whole loop ran inside the agent loop. I didn't need to point at devtools and read with my eyes. I asked for the request body of POST #532, got back the full JSON, and saw exactly what was sent. I asked for the response, got back the row the handler returned. Diffed it against the DB query 200ms later. The bio was there in the response. Gone in the DB. The next request, POST #533, was the noop reload — empty body, same handler, just wiped what #532 wrote.
+Both bugs visible in ~15 minutes. No "can you check devtools and screenshot it for me." No back-and-forth. The agent saw what the browser saw, and what the database saw, at the same time.
 
-Both bugs visible within 15 minutes of the report. No back-and-forth, no "can you check the network tab", no screenshots.
+## Why this is the unlock
+
+Coding feedback loops have always been a function of how fast you can close them. Edit, save, see what happened. Type checker. Hot reload. The faster the loop, the harder the problem you can attack.
+
+But every closed loop only proves things about its own slice. Unit tests close a loop on a function. Integration tests close a loop on a process. As soon as the bug spans two processes — browser, server, database — the loop opens up again and a human has to manually fuse the pieces. Read the network tab. Mentally line it up against the SQL query. Hold three windows in your head.
+
+Playwright MCP closes that loop too, just over a wider span. The agent can drive the browser, read the network, query the database, and decide whether the answers agree. That's a different category of tool than "Playwright as a test runner." It's a test runner that's also an investigator.
+
+Cheap to run. Cheap to read the output. Cheap to iterate. The same loop that gets you a unit test in five seconds now gets you a cross-process invariant check in fifteen.
 
 ## What changed for me
 
 Two things.
 
-**First**, I now treat Playwright MCP as the load-bearing tool for any bug that involves the seam between frontend and backend. Not the *only* tool — unit tests still catch their share — but the one I reach for when something works in isolation and breaks in composition. Playwright on its own is fine; Playwright via MCP, where I can ask for the body of request #532 from the same agent that wrote the code, is a different category of tool.
+**One**: Playwright MCP is now the load-bearing tool for any bug that involves the seam between frontend and backend. Not the only tool. Unit tests still catch their share. But when something passes its own tests and breaks in composition, this is what I reach for. Five minutes to set up, three lines of tool calls per loop.
 
-**Second**, "noop POST to read state" is now a smell that gets flagged before merge. Two of my subagents independently came up with this pattern when they needed to load existing form state and there was no GET endpoint. Both worked in isolation. Both deleted data in composition. The right answer was a 10-line `GET /api/me/profile` handler that took less time to write than the workarounds.
+**Two**: "noop POST to read state" is now a smell I flag before merge. Whenever you're tempted to make a write endpoint also serve as a read because "an empty write is a no-op", it isn't. Empty fields and missing fields are different on the wire. The seam between read and write is exactly where idempotency, defaults, and "what does null mean" diverge silently. Spend the 10 minutes to write the GET handler.
 
-The wider pattern: when you're tempted to make a write endpoint *also* serve as a read for convenience, write the read endpoint instead. It's cheap. The seam between read and write is also the seam where idempotency, defaults, and "what does an empty field mean" diverge silently.
+## The wider point
 
-## Coding loops that include the browser
+People talk about AI writing code as if the bottleneck is producing more code. For most user-facing work it isn't. The bottleneck is closing the loop on whether the code, as composed, does what a human expects. That's the slow part. Tools that compress that loop — that let the same agent that wrote the code also drive the browser and inspect the database — buy back the most time per hour I spend.
 
-This is what's interesting about MCP for me. We're used to feedback loops that end at "the test runs and prints OK." That's a closed loop with a fast cycle. But it only proves things about the slice you're testing. As soon as something crosses a process boundary — frontend to backend, backend to database, backend to a third-party — the closed loop breaks.
-
-Playwright MCP closes the loop again, just over a wider span. The agent can ask the browser what it sent, ask the database what it stored, and decide whether those match. That's the test that catches "form looks right but data is gone."
-
-Cheap to run. Cheap to read the output. Cheap to iterate. Five years ago this would have been a Selenium suite that took half a day to set up and broke twice a week. Right now it's three lines of tool calls.
-
-The bug is fixed. The cost was 15 minutes. The bigger win is that this is now how I'll debug anything that crosses the wire.
+If you're shipping webapps and you haven't pointed Playwright MCP at your dev server yet, do that today. The first bug it catches will pay for the setup. Mine took 15 minutes instead of an afternoon, and the bug had been silently live for a day.
