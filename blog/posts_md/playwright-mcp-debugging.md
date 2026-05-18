@@ -5,6 +5,10 @@ description: "Backend is solid. Frontend is fine. UX testing eats the rest of yo
 publish: false
 ---
 
+> *"To anyone vibe coding web apps — testing web apps with Playwright MCP or Chrome DevTools MCP is pretty much obligatory at this time. It saves so much time. If you haven't tried it, do it now. Ask your agent to install those skills. Use it on your project."*
+>
+> — I posted that on [LinkedIn](#TODO-linkedin-url) earlier today. This is the longer version.
+
 ## Where the time actually goes
 
 If you've shipped a webapp recently you know the shape of it. The backend is solid — handlers have unit tests, integration tests against a live DB, fixtures that exercise the unhappy paths. The frontend compiles, the types match the OpenAPI schema, vitest passes 200+ specs. Both layers look healthy.
@@ -51,6 +55,25 @@ Inside the same agent loop. I asked for the body of POST #532, got back the JSON
 
 Both bugs visible in ~15 minutes. No "can you check devtools and screenshot it for me." No back-and-forth. The agent saw what the browser saw, and what the database saw, at the same time.
 
+## Screenshots are basically free now
+
+One thing worth adding to the loop: take screenshots at every meaningful step. With Playwright MCP it's one tool call, the image goes straight into the conversation, and it costs you nothing to look at the result with your own eyes.
+
+```
+mcp__playwright__browser_take_screenshot
+```
+
+I take screenshots of:
+
+- The page after each navigation, so I can see the actual visual state instead of inferring it from the accessibility tree
+- The form before and after a Save, to catch the "field looked right but value is wrong" class of bugs
+- Modal dialogs, dropdowns, hover states — anything I'd otherwise have to inspect manually
+- Side-by-side comparisons when I'm rebuilding a screen and want parity with the old version
+
+Screenshots used to be the thing you took at the end of a PR to put in the description. Now they're part of the inner loop. The agent navigates somewhere new, takes a screenshot, and I get an actual picture of what shipped. If the picture is wrong, I know in the next message — not after I've manually opened the URL and squinted at it. This single habit catches whole categories of bugs (broken layouts, missing icons, wrong copy) that no DOM-level test will ever see.
+
+**Bonus points if you ask the agent to take screenshots specifically to validate design glitches** — the kind of thing a unit test can't see and a human eye picks up in 100ms. Spacing off by 4 pixels. Icon missing from a button. A modal that renders but the overlay didn't. Tell the agent "after each navigation, take a screenshot and tell me what looks wrong." You'll find things you would have shipped past.
+
 ## Why this is the unlock
 
 Coding feedback loops have always been a function of how fast you can close them. Edit, save, see what happened. Type checker. Hot reload. The faster the loop, the harder the problem you can attack.
@@ -74,3 +97,7 @@ Two things.
 People talk about AI writing code as if the bottleneck is producing more code. For most user-facing work it isn't. The bottleneck is closing the loop on whether the code, as composed, does what a human expects. That's the slow part. Tools that compress that loop — that let the same agent that wrote the code also drive the browser and inspect the database — buy back the most time per hour I spend.
 
 If you're shipping webapps and you haven't pointed Playwright MCP at your dev server yet, do that today. The first bug it catches will pay for the setup. Mine took 15 minutes instead of an afternoon, and the bug had been silently live for a day.
+
+---
+
+*If this post matched something you've been hitting, the [LinkedIn version](#TODO-linkedin-url) is a one-liner you can share. If you're already using Playwright MCP or Chrome DevTools MCP, like / share the LinkedIn post anyway — there's a long tail of people still debugging by hand who'd save hours by trying it.*
