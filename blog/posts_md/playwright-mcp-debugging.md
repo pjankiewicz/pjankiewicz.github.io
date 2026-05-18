@@ -2,12 +2,12 @@
 title: "UX testing is the bottleneck — Playwright MCP closes the loop"
 date: "2026-05-18"
 description: "Backend is solid. Frontend is fine. UX testing eats the rest of your day."
-publish: false
+publish: true
 ---
 
 > *"To anyone vibe coding web apps — testing web apps with Playwright MCP or Chrome DevTools MCP is pretty much obligatory at this time. It saves so much time. If you haven't tried it, do it now. Ask your agent to install those skills. Use it on your project."*
 >
-> — I posted that on [LinkedIn](#TODO-linkedin-url) earlier today. This is the longer version.
+> — from a recent LinkedIn post. This is the longer version.
 
 ## Where the time actually goes
 
@@ -100,4 +100,4 @@ If you're shipping webapps and you haven't pointed Playwright MCP at your dev se
 
 ---
 
-*If this post matched something you've been hitting, the [LinkedIn version](#TODO-linkedin-url) is a one-liner you can share. If you're already using Playwright MCP or Chrome DevTools MCP, like / share the LinkedIn post anyway — there's a long tail of people still debugging by hand who'd save hours by trying it.*
+*If this post matched something you've been hitting, share it. There's a long tail of people still debugging by hand who'd save hours by trying these tools.*

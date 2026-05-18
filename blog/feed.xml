@@ -7,6 +7,15 @@
   <atom:link href="/blog/feed.xml" rel="self" type="application/rss+xml" /> 
   
   <item>
+    <title>UX testing is the bottleneck — Playwright MCP closes the loop</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/playwright-mcp-debugging/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/playwright-mcp-debugging/</guid>
+    <pubDate>Mon, 18 May 2026 00:00:00 +0000</pubDate>
+    <description>Backend is solid. Frontend is fine. UX testing eats the rest of your day.</description>
+  </item>
+  
+  <item>
     <title>Arnimate: A 2D Animation Editor Built in Rust</title>
     
     <link>https://pjankiewicz.github.io/blog/posts/arnimate/</link>

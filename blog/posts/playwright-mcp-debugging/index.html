@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>UX testing is the bottleneck — Playwright MCP closes the loop - Paweł Jankiewicz</title>
+  <meta name="description" content="Backend is solid. Frontend is fine. UX testing eats the rest of your day.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/blog/style.css">
+
+  <link rel="alternate" type="application/rss+xml" title="Paweł Jankiewicz" href="/blog/feed.xml">
+  <meta property="og:site_name" content="Paweł Jankiewicz">
+  <meta property="og:title" content="UX testing is the bottleneck — Playwright MCP closes the loop">
+  <meta property="og:description" content="Backend is solid. Frontend is fine. UX testing eats the rest of your day.">
+  <meta property="og:url" content="https://pjankiewicz.github.io/blog/posts/playwright-mcp-debugging/">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="UX testing is the bottleneck — Playwright MCP closes the loop">
+  <meta name="twitter:description" content="Backend is solid. Frontend is fine. UX testing eats the rest of your day.">
+  
+
+  <!-- Umami analytics -->
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="d583f5f2-b49f-48e6-af2a-44599356368e"></script>
+</head>
+<body>  <div class="site-wrapper">
+
+  <header class="site-header">
+    <h1><a href="/blog/">Paweł Jankiewicz</a></h1>
+    <p>Blog about programming, AI, Machine Learning</p>
+    <p class="site-social">
+      <a href="https://www.linkedin.com/in/pjankiewicz/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </p>
+  </header>
+  <main class="site-main">
+    
+<article class="post-content">
+  <h1>UX testing is the bottleneck — Playwright MCP closes the loop</h1>
+  <p class="post-meta">May 18, 2026</p>
+  <blockquote>
+<p><em>"To anyone vibe coding web apps — testing web apps with Playwright MCP or Chrome DevTools MCP is pretty much obligatory at this time. It saves so much time. If you haven't tried it, do it now. Ask your agent to install those skills. Use it on your project."</em></p>
+<p>— from a recent LinkedIn post. This is the longer version.</p>
+</blockquote>
+<h2 id="where-the-time-actually-goes">Where the time actually goes</h2>
+<p>If you've shipped a webapp recently you know the shape of it. The backend is solid — handlers have unit tests, integration tests against a live DB, fixtures that exercise the unhappy paths. The frontend compiles, the types match the OpenAPI schema, vitest passes 200+ specs. Both layers look healthy.</p>
+<p>Then you click around the actual app and discover that the form doesn't save. Or the toggle does nothing visible. Or the page renders but the data the page promised isn't there. The bug isn't in the backend. It isn't in the frontend. It's at the seam — the place where your beautiful unit tests don't reach because neither side owns the seam by itself.</p>
+<p>That seam is where I spend most of my debugging time now. Backend work is solid. Frontend is ok. Testing the UX is the most time-consuming thing in shipping anything user-facing right now.</p>
+<h2 id="a-real-example">A real example</h2>
+<p>Picture a form. Six toggles, a textarea, a Save button. Standard CRUD. Frontend wraps the generated SDK in a thin adapter; backend has a single upsert handler. The acceptance test is human-level: open the form, change a toggle, hit Save, refresh, see the change persisted.</p>
+<p>I click the toggle. I click Save. I refresh. The toggle is off again.</p>
+<p>Unit tests pass. Integration tests pass. CI is green.</p>
+<p>Two bugs, both at the seam:</p>
+<p><strong>Bug 1</strong>: the frontend adapter has an <code>authed()</code> wrapper for any call that needs a JWT. Half the methods go through it; the Save method forgot. The handler returns 401. The mutation surfaces a toast that scrolls off-screen.</p>
+<p><strong>Bug 2</strong>: there's no <code>GET /api/me/whatever</code> endpoint, so the form's "load existing state" path POSTs to the upsert with an empty body, on the theory that an empty upsert is a no-op read. It isn't. The handler treats undefined fields as empty strings and clobbers the row on every page load and every post-save re-fetch.</p>
+<p>Each bug had its own test on its own side. Backend round-trips the upsert and passes. Frontend mocks the SDK and asserts Save is called with the right body. Both true. Neither catches what actually happens when both run against the same browser, the same JWT, the same Postgres row.</p>
+<p>This is the false confidence shape of testing. Tests give you certainty inside one process. Across the wire, you need something else.</p>
+<h2 id="playwright-mcp">Playwright MCP</h2>
+<p>Five years ago debugging this would have looked like: open Chrome, open devtools, click the toggle, read the network tab with my eyes, copy the request body, copy the response body, query the DB in a separate shell, manually diff them, repeat.</p>
+<p>This morning it looked like:</p>
+<div class="codehilite"><pre><span></span><code><span class="nx">mcp__playwright__browser_navigate</span><span class="p">(</span><span class="err">&#39;</span><span class="nx">http</span><span class="p">:</span><span class="c1">//localhost:5173/...&#39;)</span>
+<span class="nx">mcp__playwright__browser_type</span><span class="p">(</span><span class="nx">textarea</span><span class="p">,</span><span class="w"> </span><span class="err">&#39;</span><span class="o">...</span><span class="err">&#39;</span><span class="p">)</span>
+<span class="nx">mcp__playwright__browser_click</span><span class="p">(</span><span class="err">&#39;</span><span class="nx">Save</span><span class="err">&#39;</span><span class="p">)</span>
+<span class="nx">mcp__playwright__browser_network_requests</span><span class="p">(</span><span class="nx">filter</span><span class="p">=</span><span class="err">&#39;</span><span class="kn">api</span><span class="o">/</span><span class="nx">me</span><span class="o">/...</span><span class="err">&#39;</span><span class="p">)</span>
+<span class="nx">mcp__playwright__browser_network_request</span><span class="p">(</span><span class="nx">index</span><span class="p">=</span><span class="mi">532</span><span class="p">,</span><span class="w"> </span><span class="nx">part</span><span class="p">=</span><span class="err">&#39;</span><span class="nx">request</span><span class="o">-</span><span class="nx">body</span><span class="err">&#39;</span><span class="p">)</span>
+<span class="nx">mcp__playwright__browser_network_request</span><span class="p">(</span><span class="nx">index</span><span class="p">=</span><span class="mi">532</span><span class="p">,</span><span class="w"> </span><span class="nx">part</span><span class="p">=</span><span class="err">&#39;</span><span class="nx">response</span><span class="o">-</span><span class="nx">body</span><span class="err">&#39;</span><span class="p">)</span>
+<span class="nx">psql</span><span class="w"> </span><span class="o">...</span><span class="w"> </span><span class="o">-</span><span class="nx">c</span><span class="w"> </span><span class="s">&quot;SELECT ...&quot;</span>
+</code></pre></div>
+
+<p>Inside the same agent loop. I asked for the body of POST #532, got back the JSON. Asked for the response, got back the row the handler returned. Diffed it against the DB query 200ms later. The data was there in the response. Gone in the DB. POST #533 was the reload firing the empty-body trick — same handler, wiped what #532 had just written.</p>
+<p>Both bugs visible in ~15 minutes. No "can you check devtools and screenshot it for me." No back-and-forth. The agent saw what the browser saw, and what the database saw, at the same time.</p>
+<h2 id="screenshots-are-basically-free-now">Screenshots are basically free now</h2>
+<p>One thing worth adding to the loop: take screenshots at every meaningful step. With Playwright MCP it's one tool call, the image goes straight into the conversation, and it costs you nothing to look at the result with your own eyes.</p>
+<div class="codehilite"><pre><span></span><code>mcp__playwright__browser_take_screenshot
+</code></pre></div>
+
+<p>I take screenshots of:</p>
+<ul>
+<li>The page after each navigation, so I can see the actual visual state instead of inferring it from the accessibility tree</li>
+<li>The form before and after a Save, to catch the "field looked right but value is wrong" class of bugs</li>
+<li>Modal dialogs, dropdowns, hover states — anything I'd otherwise have to inspect manually</li>
+<li>Side-by-side comparisons when I'm rebuilding a screen and want parity with the old version</li>
+</ul>
+<p>Screenshots used to be the thing you took at the end of a PR to put in the description. Now they're part of the inner loop. The agent navigates somewhere new, takes a screenshot, and I get an actual picture of what shipped. If the picture is wrong, I know in the next message — not after I've manually opened the URL and squinted at it. This single habit catches whole categories of bugs (broken layouts, missing icons, wrong copy) that no DOM-level test will ever see.</p>
+<p><strong>Bonus points if you ask the agent to take screenshots specifically to validate design glitches</strong> — the kind of thing a unit test can't see and a human eye picks up in 100ms. Spacing off by 4 pixels. Icon missing from a button. A modal that renders but the overlay didn't. Tell the agent "after each navigation, take a screenshot and tell me what looks wrong." You'll find things you would have shipped past.</p>
+<h2 id="why-this-is-the-unlock">Why this is the unlock</h2>
+<p>Coding feedback loops have always been a function of how fast you can close them. Edit, save, see what happened. Type checker. Hot reload. The faster the loop, the harder the problem you can attack.</p>
+<p>But every closed loop only proves things about its own slice. Unit tests close a loop on a function. Integration tests close a loop on a process. As soon as the bug spans two processes — browser, server, database — the loop opens up again and a human has to manually fuse the pieces. Read the network tab. Mentally line it up against the SQL query. Hold three windows in your head.</p>
+<p>Playwright MCP closes that loop too, just over a wider span. The agent can drive the browser, read the network, query the database, and decide whether the answers agree. That's a different category of tool than "Playwright as a test runner." It's a test runner that's also an investigator.</p>
+<p>Cheap to run. Cheap to read the output. Cheap to iterate. The same loop that gets you a unit test in five seconds now gets you a cross-process invariant check in fifteen.</p>
+<h2 id="what-changed-for-me">What changed for me</h2>
+<p>Two things.</p>
+<p><strong>One</strong>: Playwright MCP is now the load-bearing tool for any bug that involves the seam between frontend and backend. Not the only tool. Unit tests still catch their share. But when something passes its own tests and breaks in composition, this is what I reach for. Five minutes to set up, three lines of tool calls per loop.</p>
+<p><strong>Two</strong>: "noop POST to read state" is now a smell I flag before merge. Whenever you're tempted to make a write endpoint also serve as a read because "an empty write is a no-op", it isn't. Empty fields and missing fields are different on the wire. The seam between read and write is exactly where idempotency, defaults, and "what does null mean" diverge silently. Spend the 10 minutes to write the GET handler.</p>
+<h2 id="the-wider-point">The wider point</h2>
+<p>People talk about AI writing code as if the bottleneck is producing more code. For most user-facing work it isn't. The bottleneck is closing the loop on whether the code, as composed, does what a human expects. That's the slow part. Tools that compress that loop — that let the same agent that wrote the code also drive the browser and inspect the database — buy back the most time per hour I spend.</p>
+<p>If you're shipping webapps and you haven't pointed Playwright MCP at your dev server yet, do that today. The first bug it catches will pay for the setup. Mine took 15 minutes instead of an afternoon, and the bug had been silently live for a day.</p>
+<hr />
+<p><em>If this post matched something you've been hitting, share it. There's a long tail of people still debugging by hand who'd save hours by trying these tools.</em></p>
+</article>
+<!-- Copy-to-clipboard functionality for code blocks -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.codehilite').forEach(function(container) {
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.type = 'button';
+      btn.innerText = 'Copy';
+      container.appendChild(btn);
+      btn.addEventListener('click', function() {
+        var codeElem = container.querySelector('code') || container;
+        var text = codeElem.innerText;
+        navigator.clipboard.writeText(text).then(function() {
+          btn.innerText = 'Copied!';
+          btn.classList.add('copied');
+          setTimeout(function() {
+            btn.innerText = 'Copy';
+            btn.classList.remove('copied');
+          }, 2000);
+        }, function() {
+          btn.innerText = 'Error';
+        });
+      });
+    });
+  });
+</script>
+
+  </main>
+  <footer class="site-footer">
+    <p>&copy; 2026 Paweł Jankiewicz</p>
+  </footer>
+  </div>
+</body>
+</html>
