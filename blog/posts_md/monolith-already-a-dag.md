@@ -13,7 +13,7 @@ I've believed that about my own code more than once. Then I got curious and deci
 
 In most languages you can split a big file whenever you like. In Rust the unit of compilation is the crate, and crates are not allowed to depend on each other in a circle. A → B → A doesn't compile, full stop. So splitting a monolith isn't about moving code — your editor does that fine — it's about choosing *what goes where* so the result is a directed acyclic graph. A DAG. No cycles.
 
-That's a graph problem, not a vibes problem. So I wrote a small tool that builds the graph: every module is a node, every `use` of another module is an edge. Then it asks two questions. Is this already acyclic? And if not, what is the *cheapest* set of edges to remove to make it acyclic?
+That's a graph problem, not a vibes problem. So I wrote a small tool — I've since open-sourced it as [`cargo-crate-split`](https://crates.io/crates/cargo-crate-split) — that builds the graph: every module is a node, every `use` of another module is an edge. Then it asks two questions. Is this already acyclic? And if not, what is the *cheapest* set of edges to remove to make it acyclic?
 
 That second question matters because not all edges are equal. If module A references module B three hundred times, that's the real direction of data flow — leave it. If B references A *once*, that single backward reference is what closes the cycle. Cut the one, not the three hundred. (It's the feedback-arc-set problem, and the cheap heuristic for it is older than I am.)
 
@@ -46,3 +46,12 @@ Even with both caveats, the conclusion held: the structure of these projects was
 ## The takeaway
 
 Before you declare a piece of code unsplittable, build the graph and look. Not the mental model of the graph — the actual one. Coupling you can see is coupling you can fix, usually for far less than you feared. The reputation of your monolith is a story your team tells each other. The DAG is a fact. Go check which one is true.
+
+The tool is open source if you want to point it at your own scariest crate:
+
+```sh
+cargo install cargo-crate-split
+cargo crate-split analyze ./your-crate
+```
+
+Or hand the skill to your coding agent and let it do the splitting: `npx skills add zenide/cargo-crate-split`. Either way — measure first.
