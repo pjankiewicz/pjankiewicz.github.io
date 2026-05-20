@@ -7,6 +7,15 @@
   <atom:link href="/blog/feed.xml" rel="self" type="application/rss+xml" /> 
   
   <item>
+    <title>Your monolith is probably already a DAG</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/monolith-already-a-dag/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/monolith-already-a-dag/</guid>
+    <pubDate>Wed, 20 May 2026 00:00:00 +0000</pubDate>
+    <description>We assume big crates are too tangled to split. Most of the time the tangle is imaginary — and measurable.</description>
+  </item>
+  
+  <item>
     <title>UX testing is the bottleneck — Playwright MCP closes the loop</title>
     
     <link>https://pjankiewicz.github.io/blog/posts/playwright-mcp-debugging/</link>
