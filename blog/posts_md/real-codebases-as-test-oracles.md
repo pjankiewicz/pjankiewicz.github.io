@@ -5,6 +5,8 @@ description: "When you build a tool that rewrites source code, the strongest tes
 publish: true
 ---
 
+<img src="/blog/static/images/cargo-split-modules.jpg" alt="Little robots dismantling a monolithic mod.rs and reassembling it as a tidy pyramid of small per-item source files">
+
 I was building a tool that mechanically rewrites source code — the kind of thing that
 moves chunks of a program around and has to not break anything. The scary class of tool.
 A single off-by-one in how it handles visibility or imports and it silently corrupts

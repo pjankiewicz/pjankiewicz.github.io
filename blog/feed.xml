@@ -7,12 +7,48 @@
   <atom:link href="/blog/feed.xml" rel="self" type="application/rss+xml" /> 
   
   <item>
+    <title>The bug was in the path nobody ran</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/the-bug-was-in-the-path-nobody-ran/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/the-bug-was-in-the-path-nobody-ran/</guid>
+    <pubDate>Fri, 05 Jun 2026 08:54:57 +0000</pubDate>
+    <description>A feature can pass every test and still be broken — if your tests take a different road through it than production does.</description>
+  </item>
+  
+  <item>
+    <title>Capabilities you can't call beat capabilities you're told not to use</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/structural-capabilities-beat-policy-flags/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/structural-capabilities-beat-policy-flags/</guid>
+    <pubDate>Fri, 05 Jun 2026 08:54:57 +0000</pubDate>
+    <description>Sandboxing user scripts? Don&#39;t gate the dangerous functions with flags. Build a second environment where they don&#39;t exist.</description>
+  </item>
+  
+  <item>
+    <title>Other People's Codebases Are the Best Test Suite You Never Wrote</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/real-codebases-as-test-oracles/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/real-codebases-as-test-oracles/</guid>
+    <pubDate>Fri, 05 Jun 2026 08:54:57 +0000</pubDate>
+    <description>When you build a tool that rewrites source code, the strongest test isn&#39;t your fixtures — it&#39;s running it on real third-party projects and checking they still compile and pass their own tests.</description>
+  </item>
+  
+  <item>
     <title>Your monolith is probably already a DAG</title>
     
     <link>https://pjankiewicz.github.io/blog/posts/monolith-already-a-dag/</link>
     <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/monolith-already-a-dag/</guid>
     <pubDate>Wed, 20 May 2026 00:00:00 +0000</pubDate>
     <description>We assume big crates are too tangled to split. Most of the time the tangle is imaginary — and measurable.</description>
+  </item>
+  
+  <item>
+    <title>Retrying Is Not Replanning</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/retry-is-not-replan/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/retry-is-not-replan/</guid>
+    <pubDate>Wed, 20 May 2026 00:00:00 +0000</pubDate>
+    <description>Why AI code generation needs to redo the plan, not just redo the function</description>
   </item>
   
   <item>

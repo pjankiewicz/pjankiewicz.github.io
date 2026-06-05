@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Capabilities you can't call beat capabilities you're told not to use - Paweł Jankiewicz</title>
+  <meta name="description" content="Sandboxing user scripts? Don't gate the dangerous functions with flags. Build a second environment where they don't exist.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/blog/style.css">
+
+  <link rel="alternate" type="application/rss+xml" title="Paweł Jankiewicz" href="/blog/feed.xml">
+  <meta property="og:site_name" content="Paweł Jankiewicz">
+  <meta property="og:title" content="Capabilities you can't call beat capabilities you're told not to use">
+  <meta property="og:description" content="Sandboxing user scripts? Don't gate the dangerous functions with flags. Build a second environment where they don't exist.">
+  <meta property="og:url" content="https://pjankiewicz.github.io/blog/posts/structural-capabilities-beat-policy-flags/">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Capabilities you can't call beat capabilities you're told not to use">
+  <meta name="twitter:description" content="Sandboxing user scripts? Don't gate the dangerous functions with flags. Build a second environment where they don't exist.">
+  
+
+  <!-- Umami analytics -->
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="d583f5f2-b49f-48e6-af2a-44599356368e"></script>
+</head>
+<body>  <div class="site-wrapper">
+
+  <header class="site-header">
+    <h1><a href="/blog/">Paweł Jankiewicz</a></h1>
+    <p>Blog about programming, AI, Machine Learning</p>
+    <p class="site-social">
+      <a href="https://www.linkedin.com/in/pjankiewicz/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </p>
+  </header>
+  <main class="site-main">
+    
+<article class="post-content">
+  <h1>Capabilities you can't call beat capabilities you're told not to use</h1>
+  <p class="post-meta">June 05, 2026</p>
+  <p>I was adding user-authored widgets to a webapp this week. Little sandboxed scripts with an Elm-ish shape: <code>update</code> changes state, <code>view</code> renders it. The rule was simple: <code>update</code> may call external APIs, <code>view</code> must not — because <code>view</code> re-runs every time someone reopens a page, and you really don't want a render to fire off CRM calls or LLM requests as a side effect of scrolling back through history.</p>
+<p>My first instinct was the classic one: one sandbox, one flag. Register all the API bindings, set <code>phase = "render"</code> before calling <code>view</code>, and have every binding check the flag and throw.</p>
+<p>I've written that code before. It always rots the same way. Someone adds a new binding and forgets the check. Someone adds a second entry point that doesn't set the flag. The flag becomes load-bearing in fourteen places, and the only thing standing between "render" and "send an email" is a boolean that everyone has to remember exists.</p>
+<p>The better move costs almost nothing: <strong>two environments instead of one flag</strong>. Run <code>update</code> in a VM where the API bindings are registered. Then throw that VM away, spin up a fresh one where the bindings were <em>never registered</em>, and run <code>view</code> there. The only thing that crosses the boundary is plain data — the serialized state.</p>
+<p>Now the security property is structural. <code>view</code> can't call the API for the same reason your toaster can't browse the web: the capability isn't gated, it's absent. A new binding added next year is safe by default, because nobody registers it in the render VM unless they make that decision deliberately. There is no flag to forget.</p>
+<p>People worry about the cost of the second VM. Measure it before you do. A scripting VM that loads a small module is microseconds-to-milliseconds territory — and you're already paying network round-trips on the same path. I'll trade a millisecond for deleting an entire class of "forgot the check" bugs every time.</p>
+<p>It's the chess version of prophylaxis: don't defend the square, remove the piece that attacks it. Whitelists over blocklists, absence over enforcement.</p>
+<p>The takeaway generalizes past sandboxes. Anywhere you find yourself writing <code>if (mode == X) throw</code>, ask whether you could instead build the X-mode context so the forbidden thing isn't reachable at all. A check is a promise you have to keep in every future commit. An absence keeps itself.</p>
+</article>
+<!-- Copy-to-clipboard functionality for code blocks -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.codehilite').forEach(function(container) {
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.type = 'button';
+      btn.innerText = 'Copy';
+      container.appendChild(btn);
+      btn.addEventListener('click', function() {
+        var codeElem = container.querySelector('code') || container;
+        var text = codeElem.innerText;
+        navigator.clipboard.writeText(text).then(function() {
+          btn.innerText = 'Copied!';
+          btn.classList.add('copied');
+          setTimeout(function() {
+            btn.innerText = 'Copy';
+            btn.classList.remove('copied');
+          }, 2000);
+        }, function() {
+          btn.innerText = 'Error';
+        });
+      });
+    });
+  });
+</script>
+
+  </main>
+  <footer class="site-footer">
+    <p>&copy; 2026 Paweł Jankiewicz</p>
+  </footer>
+  </div>
+</body>
+</html>

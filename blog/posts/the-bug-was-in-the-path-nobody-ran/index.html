@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>The bug was in the path nobody ran - Paweł Jankiewicz</title>
+  <meta name="description" content="A feature can pass every test and still be broken — if your tests take a different road through it than production does.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/blog/style.css">
+
+  <link rel="alternate" type="application/rss+xml" title="Paweł Jankiewicz" href="/blog/feed.xml">
+  <meta property="og:site_name" content="Paweł Jankiewicz">
+  <meta property="og:title" content="The bug was in the path nobody ran">
+  <meta property="og:description" content="A feature can pass every test and still be broken — if your tests take a different road through it than production does.">
+  <meta property="og:url" content="https://pjankiewicz.github.io/blog/posts/the-bug-was-in-the-path-nobody-ran/">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The bug was in the path nobody ran">
+  <meta name="twitter:description" content="A feature can pass every test and still be broken — if your tests take a different road through it than production does.">
+  
+
+  <!-- Umami analytics -->
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="d583f5f2-b49f-48e6-af2a-44599356368e"></script>
+</head>
+<body>  <div class="site-wrapper">
+
+  <header class="site-header">
+    <h1><a href="/blog/">Paweł Jankiewicz</a></h1>
+    <p>Blog about programming, AI, Machine Learning</p>
+    <p class="site-social">
+      <a href="https://www.linkedin.com/in/pjankiewicz/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </p>
+  </header>
+  <main class="site-main">
+    
+<article class="post-content">
+  <h1>The bug was in the path nobody ran</h1>
+  <p class="post-meta">June 05, 2026</p>
+  <p>I shipped a feature a while back, wrote tests for it, watched them go green, demoed it. Some time later someone pointed it at a real database and it crashed on the very first try. Not a flaky crash. It had never worked. Not once. And the tests had been green the entire time.</p>
+<p>Here's how that happens, because it's more common than the green dashboard makes it look.</p>
+<p>The feature applied a batch of schema changes at the moment you cut a release. It was written to support a couple of different storage backends. The thing I built it against — the thing the tests ran against, the thing in the demo — used the simplest backend: an in-memory key-value store. Real users pointed it at a real SQL database.</p>
+<p>Those two backends take two different roads through the same feature. The key-value road went through a helper that quietly did its work on a background thread. The SQL road called the database driver directly, inline, on the main request.</p>
+<p>And the SQL driver was a synchronous wrapper around an asynchronous one. To bridge that gap it spins up its own little async runtime under the hood. But the server it was running inside <em>was already</em> an async runtime. You can't start a runtime inside a runtime — the language panics the instant you try. So the publish handler died on its first call, the request came back empty, and the schema change silently never happened.</p>
+<p>Every test passed because every test used the in-memory backend, which never goes anywhere near the driver that panics.</p>
+<p>It's like proofreading a book by re-reading only the chapters you wrote yourself. The typo is always in the chapter you skipped.</p>
+<p>The thing I want to underline is this: "it has tests" and "it works" are different claims, and we constantly let the first one stand in for the second. Tests only prove the paths they actually execute. If your tests and your demo both take the easy road — the in-memory backend, the happy-path login, the ten-row input — then the hard road is unverified no matter how high the coverage number climbs. Coverage counts lines, not configurations. You can run every line of a function and still never run it in the mode that breaks.</p>
+<p>And the easy road wins by default, every time, because it's easy. It's the one in the README. It's the one that doesn't make you provision a real database before you can see a green checkmark. So it quietly becomes the <em>only</em> road anyone ever travels, and the feature rots in the exact configuration you hand to customers.</p>
+<p>Two things help.</p>
+<p>First, the cheap discipline: when a feature forks on configuration — backend, auth mode, platform, free vs. paid — make sure at least one run takes each fork. Not the full cartesian product of every combination; that's a trap of its own. Just answer one question honestly: <em>did the SQL path ever execute, end to end, even a single time?</em> If the answer is "no, but the logic is shared," the answer is no. Shared logic is exactly where the divergence hides, because nobody's looking there.</p>
+<p>Second, the small technical lesson, because it bites people who'd never expect it: a synchronous client that wraps an async one almost always creates a runtime internally. Call it from inside your async server and you get a panic, not a helpful error. If you have to use one, push it onto a real OS thread that isn't part of your runtime, and let it build its private runtime there in peace. My actual fix was three lines — run the blocking work on a dedicated thread, exactly like the key-value path had been doing all along.</p>
+<p>But the three lines were never the bug. The bug was that nobody had ever run the path those three lines lived on. The fix took ten minutes. Finding out it was broken took months, and only happened because someone finally used the boring, important configuration instead of the fun demo one.</p>
+<p>The scary part isn't that it broke. It's how long it sat there, green, waiting.</p>
+</article>
+<!-- Copy-to-clipboard functionality for code blocks -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.codehilite').forEach(function(container) {
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.type = 'button';
+      btn.innerText = 'Copy';
+      container.appendChild(btn);
+      btn.addEventListener('click', function() {
+        var codeElem = container.querySelector('code') || container;
+        var text = codeElem.innerText;
+        navigator.clipboard.writeText(text).then(function() {
+          btn.innerText = 'Copied!';
+          btn.classList.add('copied');
+          setTimeout(function() {
+            btn.innerText = 'Copy';
+            btn.classList.remove('copied');
+          }, 2000);
+        }, function() {
+          btn.innerText = 'Error';
+        });
+      });
+    });
+  });
+</script>
+
+  </main>
+  <footer class="site-footer">
+    <p>&copy; 2026 Paweł Jankiewicz</p>
+  </footer>
+  </div>
+</body>
+</html>

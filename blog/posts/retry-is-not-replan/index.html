@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Retrying Is Not Replanning - Paweł Jankiewicz</title>
+  <meta name="description" content="Why AI code generation needs to redo the plan, not just redo the function">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/blog/style.css">
+
+  <link rel="alternate" type="application/rss+xml" title="Paweł Jankiewicz" href="/blog/feed.xml">
+  <meta property="og:site_name" content="Paweł Jankiewicz">
+  <meta property="og:title" content="Retrying Is Not Replanning">
+  <meta property="og:description" content="Why AI code generation needs to redo the plan, not just redo the function">
+  <meta property="og:url" content="https://pjankiewicz.github.io/blog/posts/retry-is-not-replan/">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Retrying Is Not Replanning">
+  <meta name="twitter:description" content="Why AI code generation needs to redo the plan, not just redo the function">
+  
+
+  <!-- Umami analytics -->
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="d583f5f2-b49f-48e6-af2a-44599356368e"></script>
+</head>
+<body>  <div class="site-wrapper">
+
+  <header class="site-header">
+    <h1><a href="/blog/">Paweł Jankiewicz</a></h1>
+    <p>Blog about programming, AI, Machine Learning</p>
+    <p class="site-social">
+      <a href="https://www.linkedin.com/in/pjankiewicz/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </p>
+  </header>
+  <main class="site-main">
+    
+<article class="post-content">
+  <h1>Retrying Is Not Replanning</h1>
+  <p class="post-meta">May 20, 2026</p>
+  <h2 id="the-function-that-wouldnt-compile">The function that wouldn't compile</h2>
+<p>I was watching an AI system build a piece of software by decomposing it into a graph of small functions. Each function gets written, compiled, and tested on its own. When one fails, the system feeds the compiler error back to the model and asks it to try again. Three tries, then a longer tool-using fix loop, then — if it still won't go green — it gives up on that node and moves on.</p>
+<p>Most of the functions sailed through. A few got fixed on the second or third try. But one function kept failing in a way no amount of retrying could fix. It was a parser for expressions with operator precedence, and the model kept trying to cram the whole thing into one body. Every retry produced a slightly different version of the same too-big function. The error changed; the outcome didn't.</p>
+<p>That's when it clicked: the system could retry, but it couldn't <em>reconsider</em>. And those are very different things.</p>
+<h2 id="two-kinds-of-being-wrong">Two kinds of being wrong</h2>
+<p>When you're stuck on a problem, there are two reasons you might be failing.</p>
+<p>The first is a local mistake. You had the right plan, you just botched a detail — an off-by-one, a wrong type, a forgotten case. The fix is to look at the error and patch the detail. Retrying with feedback works great here. This is the case everyone builds for, because it's the common one.</p>
+<p>The second is a structural mistake. The plan itself was wrong. You decided to write one function where you needed five. No amount of patching the one function helps, because the unit of work was mis-sized from the start. Retrying here is like rewording a sentence that needed to be a paragraph — you can polish forever and never get there.</p>
+<p>Almost every AI coding setup I've seen handles the first kind and silently assumes the second never happens. But the second kind is exactly what shows up the moment the task gets big. Small tasks rarely have structural mistakes — there's not enough structure to get wrong. Big tasks are <em>mostly</em> structure.</p>
+<h2 id="replanning-is-the-missing-primitive">Replanning is the missing primitive</h2>
+<p>The fix is to let failure flow up a level. When a node exhausts its retries, it shouldn't just record "failed" and move on. It should report <em>what</em> failed and <em>why</em>, and hand that back to the planner. The planner then writes a new plan that targets only the gap — and crucially, it's allowed to decompose differently. The function that was too big becomes a handful of helpers plus a thin function on top. That's not a retry. That's a replan.</p>
+<p>This maps onto how people actually write hard code. You build something, see what breaks, and sometimes the lesson is "this should have been three things." You don't keep rewriting the one thing. You step back and re-cut the boundaries.</p>
+<p>The structure that makes this work is a loop, not a line:</p>
+<ol>
+<li>Run the plan.</li>
+<li>Collect the failures — with their errors, not just a count.</li>
+<li>If anything's still broken, re-read the current state of the world and plan only the remaining gap.</li>
+<li>Run that. Repeat until green or you run out of budget.</li>
+</ol>
+<p>The "re-read the current state" step matters more than it looks. By the time you replan, everything that <em>did</em> succeed is already committed. The new plan builds on real, working parts instead of replaying the whole thing. Each round starts from a better world than the last. It's the same reason a chess engine doesn't re-search the whole tree from move one every time — you keep what you've established and push the frontier.</p>
+<p>A subtle bonus: retries are cheap and local, replans are expensive and global, and you want both. Retry the typo. Replan the architecture. Use the cheap tool first and escalate to the expensive one only when the cheap one stops making progress. A node that burns its retries without converging is itself a signal — it's telling you the problem is structural, so stop retrying and replan.</p>
+<h2 id="while-youre-at-it-order-the-work">While you're at it, order the work</h2>
+<p>There's a second lesson hiding next to this one. If you're generating a graph of functions and some call others, the order you build them in matters enormously.</p>
+<p>Naively you fan them all out in parallel — it's faster, and most of them are independent. But if function A calls function B, and you write A before B exists, A won't compile. It references something that isn't there yet. So A "fails," kicks off a retry, maybe even a replan — all to recover from the fact that you simply built things in the wrong order.</p>
+<p>The cure is old and boring: a dependency graph and a topological sort. Figure out what calls what, build the callees first, and run everything that's independent in the same wave, in parallel. Callees before callers; siblings together. Re-snapshot the world between waves so each caller sees its freshly-built callees.</p>
+<p>This is the difference between converging in two rounds and thrashing for eight. Every avoidable ordering failure is a wasted model call, and model calls are the whole cost. Treating code generation like query planning — figure out the dependencies, schedule the work, parallelize what you can — turns a pile of hopeful retries into something that looks a lot more like a build system.</p>
+<h2 id="the-takeaway">The takeaway</h2>
+<p>If you're building anything that has AI generate code at scale, ask two questions. When a piece fails, can the system change the <em>plan</em>, or only redo the <em>piece</em>? And when pieces depend on each other, does the system know the order, or is it hoping parallelism works out?</p>
+<p>Retries get you the easy 80%. Replanning and ordering get you the part that actually matters — the structure. The model was never the bottleneck. The loop around it was.</p>
+</article>
+<!-- Copy-to-clipboard functionality for code blocks -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.codehilite').forEach(function(container) {
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.type = 'button';
+      btn.innerText = 'Copy';
+      container.appendChild(btn);
+      btn.addEventListener('click', function() {
+        var codeElem = container.querySelector('code') || container;
+        var text = codeElem.innerText;
+        navigator.clipboard.writeText(text).then(function() {
+          btn.innerText = 'Copied!';
+          btn.classList.add('copied');
+          setTimeout(function() {
+            btn.innerText = 'Copy';
+            btn.classList.remove('copied');
+          }, 2000);
+        }, function() {
+          btn.innerText = 'Error';
+        });
+      });
+    });
+  });
+</script>
+
+  </main>
+  <footer class="site-footer">
+    <p>&copy; 2026 Paweł Jankiewicz</p>
+  </footer>
+  </div>
+</body>
+</html>
