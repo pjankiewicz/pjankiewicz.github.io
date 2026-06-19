@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>Rotor Glass</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap">
+  <script type="module" crossorigin src="/assets/index-Kunpzi8q.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-EVqx7AU5.css">
+</head>
+<body>
+  <canvas id="gameCanvas"></canvas>
+  <div id="crtOverlay" aria-hidden="true"></div>
+
+  <section id="splash" class="splash">
+    <div class="splash__content">
+      <p class="splash__eyebrow">Field cartridge</p>
+      <h1>Rotor Glass</h1>
+      <p class="splash__copy">Research helicopter sortie over a ruined valley, rendered through surface-stable low-res WebGL.</p>
+      <button id="startButton" type="button">Launch Sortie</button>
+    </div>
+  </section>
+
+  <main id="hud" class="hud is-hidden" aria-live="polite">
+    <section class="instrument-strip" aria-label="Flight instruments">
+      <div class="instrument"><span>HULL</span><b id="hullReadout">100</b></div>
+      <div class="instrument"><span>FUEL</span><b id="fuelReadout">100</b></div>
+      <div class="instrument"><span>ROTOR</span><b id="rotorReadout">100</b></div>
+      <div class="instrument"><span>ALT</span><b id="altitudeReadout">00</b></div>
+      <div class="instrument"><span>SPD</span><b id="speedReadout">000</b></div>
+      <div class="instrument"><span>ORD</span><b id="ammoReadout">00</b></div>
+    </section>
+
+    <section class="mission-panel" aria-label="Mission status">
+      <div class="mission-panel__header">
+        <span id="aircraftName">RG-12</span>
+        <b id="missionIndex">01</b>
+      </div>
+      <h2 id="missionTitle">Stand by</h2>
+      <p id="missionBrief">Awaiting launch.</p>
+      <div class="progress"><span id="missionProgress"></span></div>
+      <p id="systemMessage" class="system-message">Systems cold.</p>
+    </section>
+
+    <section class="radar-panel" aria-label="Tactical radar">
+      <canvas id="radarCanvas" width="192" height="192"></canvas>
+      <div class="radar-panel__label"><span>RADAR</span><b id="rangeReadout">800M</b></div>
+    </section>
+
+    <section class="weapon-bar" aria-label="Weapon select">
+      <button class="weapon" type="button" data-weapon="cannon">
+        <span class="weapon__key">1</span><span class="weapon__name">CANNON</span><b class="weapon__ammo" id="cannonAmmo">--</b>
+      </button>
+      <button class="weapon" type="button" data-weapon="rockets">
+        <span class="weapon__key">2</span><span class="weapon__name">ROCKETS</span><b class="weapon__ammo" id="rocketsAmmo">--</b>
+      </button>
+      <button class="weapon" type="button" data-weapon="missiles">
+        <span class="weapon__key">3</span><span class="weapon__name">MISSILES</span><b class="weapon__ammo" id="missilesAmmo">--</b>
+      </button>
+    </section>
+  </main>
+
+  <button id="settingsToggle" class="settings-toggle" type="button" aria-label="Render &amp; audio settings" title="Render &amp; audio settings (O)">⚙</button>
+  <aside id="settingsPanel" class="settings-panel" aria-label="Render and audio settings"></aside>
+
+  <div id="buildBadge" class="build-badge" aria-label="Current build">ROTOR GLASS</div>
+
+</body>
+</html>
