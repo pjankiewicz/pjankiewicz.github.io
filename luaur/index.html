@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>luaur — Luau, translated to Rust</title>
+  <meta name="description" content="A faithful, line-for-line translation of Luau — Roblox's typed Lua — from C++17 to Rust. Run and type-check Luau in your browser." />
+
+  <!-- Brand typography: Satoshi (headings + prose) via Fontshare, JetBrains Mono (code/UI) via Google -->
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <!-- CodeMirror 6 is vendored as a single local ESM bundle (codemirror.bundle.js) -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!--
+    The generated wasm-bindgen glue imports the two C-variadic libc functions
+    (snprintf, strftime) from the bare module "env". Every other libc symbol is
+    provided in Rust (luaur_common::wasm_libc); these two need a host-side
+    va_list reader. This import map resolves "env" to our shim module.
+  -->
+  <script type="importmap">
+  {
+    "imports": {
+      "env": "./env.js"
+    }
+  }
+  </script>
+  <!-- Rybbit analytics -->
+  <script
+    src="https://app.rybbit.io/api/script.js"
+    data-site-id="a3ed84f02bf6"
+    defer
+  ></script>
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="#top" aria-label="luaur — home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg class="mono-svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-hidden="true">
+            <rect class="mono-tile" x="0.75" y="0.75" width="30.5" height="30.5" rx="6" />
+            <path class="mono-chev" d="M12.4 9.5 6.5 16l5.9 6.5" />
+            <path class="mono-slash" d="M18.6 8.2 13.4 23.8" />
+            <path class="mono-chev" d="M19.6 9.5 25.5 16l-5.9 6.5" />
+          </svg>
+        </span>
+        <span class="brand-name">lua<b>ur</b></span>
+      </a>
+      <nav class="nav-links">
+        <a href="#playground">Playground</a>
+        <a href="#embed">Use from Rust</a>
+        <a href="#how">How it was built</a>
+        <a href="#crates">Crates</a>
+        <a href="#faq">FAQ</a>
+        <a href="https://github.com/luau-lang/luau" target="_blank" rel="noopener">Luau ↗</a>
+        <a class="nav-gh" href="https://github.com/pjankiewicz/luaur" target="_blank" rel="noopener" aria-label="luaur on GitHub">
+          <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          <span>GitHub</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- ───────────────────────── HERO ───────────────────────── -->
+    <section class="hero">
+      <div class="wrap">
+        <div class="hero-badge">Rust · WebAssembly · runs entirely in your browser</div>
+
+        <div class="xlate" aria-hidden="true">
+          <span class="lang cpp">C++17</span>
+          <span class="arrow">→</span>
+          <span class="lang rs">Rust</span>
+          <span>line for line — the same compiler, VM, and type checker</span>
+        </div>
+
+        <h1 class="hero-title">
+          Luau,<br><span class="grad">translated to Rust.</span>
+        </h1>
+        <p class="hero-sub">
+          A faithful, line-for-line translation of
+          <a href="https://github.com/luau-lang/luau" target="_blank" rel="noopener">Luau</a>
+          — Roblox's typed Lua — from C++17 to Rust.
+          <strong>Not bindings. Not a reimplementation.</strong> The actual compiler, virtual
+          machine, and type checker, ported to safe-by-default Rust — and running right here
+          in your browser.
+        </p>
+
+        <div class="hero-stats">
+          <div class="stat">
+            <div class="stat-num">5,347</div>
+            <div class="stat-label">ported unit tests pass</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num"><span class="grad">293</span><span class="stat-den">/293</span></div>
+            <div class="stat-label">conformance scripts, byte-identical</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">205k <span class="stat-den">→</span> 420k</div>
+            <div class="stat-label">lines C++17 → Rust</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">1.96×<a class="stat-aster" href="#faq-size" aria-label="Why is the Rust roughly 2× the C++? See FAQ.">*</a></div>
+            <div class="stat-label">body-to-body size ratio</div>
+          </div>
+        </div>
+
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#playground"><span class="btn-glyph">▶</span> Try it in your browser</a>
+          <a class="btn btn-ghost" href="https://github.com/pjankiewicz/luaur" target="_blank" rel="noopener">
+            <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+            View on GitHub
+          </a>
+          <a class="btn btn-ghost" href="#how">How it was built →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────────────────── PLAYGROUND ───────────────────────── -->
+    <section id="playground" class="playground">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">Live in your browser</p>
+          <h2>Playground</h2>
+          <p>
+            The compiler, VM and type checker are compiled to WebAssembly and run
+            client-side — there is no server. <strong>Type-check</strong> runs the
+            analyzer for precise, line-accurate diagnostics (it runs automatically as
+            you type). <strong>Run</strong> executes the script on the Rust VM and
+            captures its output.
+          </p>
+        </div>
+
+        <div class="pg">
+          <div class="pg-toolbar">
+            <label class="pg-examples">
+              <span>Example</span>
+              <select id="example-select"></select>
+            </label>
+            <div class="pg-actions">
+              <button id="btn-run" class="btn btn-primary" disabled>
+                <span class="btn-glyph">▶</span> Run
+              </button>
+              <button id="btn-check" class="btn btn-accent" disabled>
+                <span class="btn-glyph">✓</span> Type-check
+              </button>
+              <button id="btn-clear" class="btn btn-ghost">Clear</button>
+            </div>
+          </div>
+
+          <div class="pg-grid">
+            <div class="pg-pane pg-editor-pane">
+              <div class="pane-head">
+                <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+                <span class="label">source.luau</span>
+              </div>
+              <div id="editor" class="editor"></div>
+            </div>
+            <div class="pg-pane pg-output-pane">
+              <div class="pane-head">
+                <span class="label">diagnostics &amp; output</span>
+                <span id="status" class="status status-loading">loading wasm…</span>
+              </div>
+              <!-- Type-check diagnostics (live, debounced) and Run output both
+                   render here, aligned by line number. -->
+              <pre id="output" class="output is-booting" aria-live="polite">Loading the Luau engine (WebAssembly)…</pre>
+            </div>
+          </div>
+          <p class="pg-note">
+            <strong>Type-check</strong> uses the path that is fully precise on this
+            <code>wasm32-unknown-unknown</code> build — it reports the exact line and message,
+            and re-runs automatically a moment after you stop typing (click a
+            <span class="kbd-inline">Lnn</span> chip to jump to that line). <strong>Run</strong>
+            executes on the VM; press <kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd> to run.
+            The <em>type-error</em> example shows the checker catching a real mistake before you Run.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────────────────── EMBED / USE FROM RUST ───────────────────────── -->
+    <section id="embed" class="embed">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">Embed it</p>
+          <h2>Use it from Rust</h2>
+          <p>
+            On top of the faithful engine sits <code>luaur-rt</code> — a safe, ergonomic
+            API whose interface deliberately mirrors
+            <a href="https://github.com/mlua-rs/mlua" target="_blank" rel="noopener">mlua</a>,
+            so embedders are immediately at home. Expose Rust functions and types to Luau;
+            a returned <code>Err</code> — or even a <code>panic!</code> — surfaces as a
+            catchable Lua error, not a crash. It is <strong>pure Rust</strong>: no C
+            toolchain, no FFI, runs anywhere Rust does — including
+            <code>wasm32-unknown-unknown</code>.
+          </p>
+        </div>
+
+        <div class="embed-grid">
+          <div class="rs-pane">
+            <div class="pane-head">
+              <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+              <span class="label">main.rs</span>
+            </div>
+<pre class="rs-code"><code><span class="tok-com">// Expose a Rust closure to Luau, then run a script that calls it.</span>
+<span class="tok-kw">use</span> luaur::{Lua, UserData, UserDataMethods};
+
+<span class="tok-kw">let</span> lua = Lua::new();
+lua.globals().set(<span class="tok-str">"add"</span>,
+    lua.create_function(|_, (a, b): (i64, i64)| <span class="tok-fn">Ok</span>(a + b))?)?;
+<span class="tok-kw">let</span> sum: i64 = lua.load(<span class="tok-str">"return add(2, 3)"</span>).eval()?;   <span class="tok-com">// 5</span>
+
+<span class="tok-com">// Expose a Rust type — with methods and metamethods:</span>
+<span class="tok-kw">struct</span> <span class="tok-ty">Vec2</span> { x: f64, y: f64 }
+<span class="tok-kw">impl</span> <span class="tok-ty">UserData</span> <span class="tok-kw">for</span> <span class="tok-ty">Vec2</span> {
+    <span class="tok-kw">fn</span> <span class="tok-fn">add_methods</span>&lt;M: UserDataMethods&lt;Self&gt;&gt;(m: &amp;<span class="tok-kw">mut</span> M) {
+        m.add_method(<span class="tok-str">"magnitude"</span>, |_, v, ()| {
+            <span class="tok-fn">Ok</span>((v.x * v.x + v.y * v.y).sqrt())
+        });
+    }
+}
+lua.globals().set(<span class="tok-str">"v"</span>, lua.create_userdata(Vec2 { x: 3.0, y: 4.0 })?)?;
+<span class="tok-kw">let</span> m: f64 = lua.load(<span class="tok-str">"return v:magnitude()"</span>).eval()?;   <span class="tok-com">// 5.0</span></code></pre>
+          </div>
+
+          <aside class="embed-side">
+            <div class="embed-stat">
+              <div class="embed-stat-num">225<span class="embed-stat-den">/235</span></div>
+              <div class="embed-stat-label">
+                of <a href="https://github.com/mlua-rs/mlua" target="_blank" rel="noopener">mlua</a>'s
+                own tests pass <strong>byte-for-byte</strong> — import-swap only, no rewrites
+                <span class="embed-stat-sub">(235 pass in all; the other 10 are pinned to document genuine Lua-vs-Luau deviations)</span>
+              </div>
+            </div>
+
+            <div class="embed-note">
+              <h3>Same feature flags as mlua</h3>
+              <p>
+                <code>serde</code> (Rust↔Lua serialization), <code>async</code> (Rust
+                futures ↔ Luau coroutines), <code>send</code> (<code>Send</code>/<code>Sync</code>
+                handles), and <code>macros</code> (<code>#[derive(UserData)]</code>).
+              </p>
+            </div>
+
+            <div class="embed-note embed-note-accent">
+              <h3>A type checker mlua can't have</h3>
+              <p>
+                luaur ships Luau's <strong>type checker</strong>, not just its VM — so you can
+                hold a script to the host API <em>before</em> running it:
+              </p>
+<pre class="rs-code rs-code-sm"><code>luaur::<span class="tok-fn">check_with_definitions</span>(
+    <span class="tok-str">"local n: number = add(1, 2)"</span>,
+    <span class="tok-str">"declare function add(a: number, b: number): number"</span>,
+)?;  <span class="tok-com">// type-checks against the host fn</span></code></pre>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────────────────── WHY ───────────────────────── -->
+    <section id="how" class="why">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">The method</p>
+          <h2>How it was built</h2>
+          <p>
+            Automated C++→Rust translation is an open problem. The published state of
+            the art (RustMap, EvoC2Rust, DARPA TRACTOR) tops out around ~13k lines of C
+            at ~87% equivalence with human patching. luaur is ~205k lines of production
+            C++17 — lexer, parser, bytecode compiler, register VM, a full bidirectional
+            type checker, native code generation, CLIs — translated as a <em>convergent</em>
+            system.
+          </p>
+        </div>
+
+        <div class="why-grid">
+          <article class="card">
+            <span class="card-idx">01</span>
+            <h3>A codebase as a graph</h3>
+            <p>
+              The C++ is parsed into a typed semantic graph of ~15k nodes — one node per
+              record, method, free function, macro or enum — with <em>declares</em>,
+              <em>calls</em>, <em>type-uses</em> and <em>inherits</em> edges. The graph,
+              not the file tree, is the unit of work.
+            </p>
+          </article>
+          <article class="card">
+            <span class="card-idx">02</span>
+            <h3>One item per file, bottom-up</h3>
+            <p>
+              Each node becomes its own Rust file with an explicit <code>use</code>
+              header (16,185 files in all). Nodes are topo-sorted and translated only
+              once their dependencies exist, so each prompt sees the <em>real</em>
+              translated types it depends on — not guesses.
+            </p>
+          </article>
+          <article class="card">
+            <span class="card-idx">03</span>
+            <h3>Gate every landing</h3>
+            <p>
+              A translated node must compile in-tree and pass a drift check — it may not
+              silently drop declarations, fake green by deleting <code>mod</code> entries,
+              or stub out logic — before it lands. Failures are reverted and re-queued.
+            </p>
+          </article>
+          <article class="card">
+            <span class="card-idx">04</span>
+            <h3>Two oracles, not spot checks</h3>
+            <p>
+              Equivalence is proven twice: Luau's <strong>own</strong> doctest suite,
+              ported to 5,347 Rust <code>#[test]</code>s, plus a <strong>byte-exact
+              bytecode differential</strong> — programs compiled by C++ Luau, executed on
+              the Rust VM, producing identical results.
+            </p>
+          </article>
+        </div>
+
+        <!-- The lesson -->
+        <div class="lesson">
+          <div class="lesson-quote">
+            “Compiling is not <span class="moon">correct</span>.”
+          </div>
+          <p>
+            The bulk of independent nodes were translated by a round-robin roster of cheap
+            models; the hard tail — mutually-recursive type clusters, the GC, the VM
+            execution core, the type-inference engine — by stronger agents. Ranking those
+            models reveals the central lesson of the project: a drift gate proves a
+            translation <em>builds</em> and didn't fake green — it does not prove it's
+            semantically right.
+          </p>
+
+          <div class="model-table-wrap">
+            <table class="model-table">
+              <thead>
+                <tr><th>model</th><th>landed</th><th>one-shot accept</th><th>survival</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>qwen3-coder-next</td><td>3,602</td><td>76.9%</td><td class="bad">24.6%</td></tr>
+                <tr><td>gemini-3-flash-preview</td><td>2,774</td><td>81.2%</td><td class="good">61.8%</td></tr>
+                <tr><td>gpt-5.4-nano</td><td>1,593</td><td>79.1%</td><td>42.1%</td></tr>
+                <tr><td>gemini-3.1-flash-lite</td><td>1,133</td><td>82.3%</td><td>51.9%</td></tr>
+                <tr><td>gemini-3.5-flash</td><td>288</td><td>68.6%</td><td class="good">73.3%</td></tr>
+                <tr><td>deepseek-v4-flash</td><td>105</td><td>63.8%</td><td>57.1%</td></tr>
+                <tr><td>mimo-v2.5</td><td>57</td><td>80.7%</td><td>63.2%</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="lesson-foot">
+            The <strong>volume</strong> leader (qwen, 77% one-shot) has the
+            <strong>lowest survival</strong> — it produced the most plausible-but-wrong
+            code, concentrated in the hardest subsystems. The real quality leader is
+            <strong>gemini-3-flash-preview</strong>. The takeaway generalizes:
+            <em>rank translation models by survival against a real test oracle, never by
+            “it compiled.”</em>
+          </p>
+        </div>
+
+        <!-- War stories -->
+        <div class="stories">
+          <h3>The bugs that make the point</h3>
+          <ul>
+            <li>
+              <strong><code>!</code> vs <code>!</code>.</strong> The bytecode differential
+              found 6 runtime bugs in a VM that already “passed.” The dominant class: C's
+              logical <code>!x</code> mis-ported as Rust's bitwise <code>!x != 0</code>
+              (which is <em>always</em> true). Invisible to a reviewer; obvious to a diff.
+            </li>
+            <li>
+              <strong>traverse-vs-visit.</strong> Calling single-node <code>visit(ty)</code>
+              where the C++ recursed via <code>traverse(ty)</code> — silent, because it
+              type-checks and “mostly” works.
+            </li>
+            <li>
+              <strong>NP-hard subtyping false-positive.</strong> A graph-coloring subtype
+              query spuriously tripped the type-inference iteration limit. Two strong models
+              stalled; instrumenting <em>our</em> code found a unifier counter not reset per
+              top-level unification. Rigorous measurement beat reasoning.
+            </li>
+            <li>
+              <strong>Bitfield packing.</strong> Luau packs <code>unsigned tt:4; int next:28</code>
+              into one word; translated naively, the node grew past its 32-byte budget and the
+              hash-table layout drifted. Fixed with an explicit packed accessor.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────────────────── CRATES ───────────────────────── -->
+    <section id="crates" class="crates">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">Published layers</p>
+          <h2>The crates</h2>
+          <p>
+            luaur is published as independent crates so you can depend on exactly the
+            layer you need.
+          </p>
+        </div>
+        <div class="crate-table-wrap">
+          <table class="crate-table">
+            <tbody>
+              <tr><td><code>luaur</code></td><td><strong>Start here.</strong> Umbrella: the mlua-style API + <code>compile</code>/<code>eval</code>/<code>check</code> helpers, re-exporting every layer</td></tr>
+              <tr><td><code>luaur-rt</code></td><td>The safe, ergonomic <strong>mlua-style API</strong> — <code>Lua</code>, <code>create_function</code>, <code>UserData</code>, <code>FromLua</code>/<code>IntoLua</code></td></tr>
+              <tr><td><code>luaur-common</code></td><td>Foundations: <code>SmallVector</code>, <code>DenseHashMap</code>, <code>Variant</code>, FastFlags</td></tr>
+              <tr><td><code>luaur-ast</code></td><td>Lexer, parser, AST</td></tr>
+              <tr><td><code>luaur-bytecode</code></td><td>Bytecode format + builder</td></tr>
+              <tr><td><code>luaur-compiler</code></td><td>Luau source → bytecode compiler</td></tr>
+              <tr><td><code>luaur-code-gen</code></td><td>Native code generation (A64 / X64)</td></tr>
+              <tr><td><code>luaur-vm</code></td><td>The register VM + standard library</td></tr>
+              <tr><td><code>luaur-analysis</code></td><td>Type checker / type inference</td></tr>
+              <tr><td><code>luaur-config</code></td><td><code>.luaurc</code> configuration</td></tr>
+              <tr><td><code>luaur-require</code></td><td>Require-by-string module resolution</td></tr>
+              <tr><td><code>luaur-web</code></td><td><code>wasm32</code> bindings — run / type-check Luau in the browser</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="crates-foot">
+          Plus the CLI tools: <code>luaur-repl-cli</code> (REPL), <code>luaur-analyze-cli</code>
+          (standalone type checker), and <code>luaur-ast-cli</code> /
+          <code>luaur-compile-cli</code> / <code>luaur-bytecode-cli</code> /
+          <code>luaur-reduce-cli</code>.
+        </p>
+      </div>
+    </section>
+
+    <!-- ───────────────────────── FAQ ───────────────────────── -->
+    <section id="faq" class="faq">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">The honest version</p>
+          <h2>FAQ</h2>
+          <p>
+            Why this exists, why it isn't a fork of the C++, and where to send a
+            contribution.
+          </p>
+        </div>
+
+        <div class="faq-list">
+          <details class="faq-item" open>
+            <summary>Why was luaur built?</summary>
+            <div class="faq-body">
+              <p>
+                Two honest reasons. First, the <strong>translation itself was the
+                interesting part</strong> — taking ~205k lines of production C++17 and
+                porting it, line for line, as a convergent system that the upstream test
+                suite actually validates is a hard, unsolved problem, and that process was
+                the point (see <a href="#how">How it was built</a>).
+              </p>
+              <p>
+                Second, a practical need: I wanted a Luau that runs cleanly on
+                <code>wasm32-unknown-unknown</code> — the target the Rust ecosystem reaches
+                for most often — without dragging in C, emscripten, or a separate toolchain.
+                A native-Rust port gets you that for free.
+              </p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Why not just contribute to the C++ version?</summary>
+            <div class="faq-body">
+              <p>
+                Because for <em>language</em> contributions you should. Upstream
+                <a href="https://github.com/luau-lang/luau" target="_blank" rel="noopener">Luau</a>
+                is the source of truth — it's where new features, fixes and the spec live.
+                luaur is a <strong>translation</strong> of it, not a competing
+                implementation: if luaur ever attracts real interest, it will most likely
+                track Luau upstream rather than diverge from it.
+              </p>
+              <p>
+                So the recommendation is genuinely: <strong>if you want to improve Luau,
+                contribute to the C++.</strong> Those improvements flow downstream here. luaur
+                is the place to care about the Rust/wasm packaging and the translation
+                machinery, not the place to land new language semantics.
+              </p>
+            </div>
+          </details>
+
+          <details class="faq-item" id="faq-size">
+            <summary>Why is the Rust ~2× the size of the C++? <span class="aster-tag">*</span></summary>
+            <div class="faq-body">
+              <p>
+                The headline <strong>1.96× body-to-body ratio</strong> compares like for
+                like — function bodies against function bodies, not counting blank lines or
+                comments — so it isn't a measurement artifact. The Rust really is about
+                twice the lines, and that's expected for a <em>faithful</em> port:
+              </p>
+              <ul>
+                <li>
+                  C++ leans on terse idioms (dense one-liners, macros, implicit conversions,
+                  pointer arithmetic) that expand into several explicit, safe-by-default Rust
+                  lines — pattern matches, explicit <code>match</code>/<code>Option</code>
+                  handling, bounds-checked accessors, packed-field accessors.
+                </li>
+                <li>
+                  Constructs the C++ packs into one statement (initializer lists, ternary
+                  chains, RAII tricks) often become a few readable lines in Rust rather than
+                  one clever one.
+                </li>
+                <li>
+                  Faithfulness was the goal, not golfing: the port mirrors the original's
+                  structure 1:1 so it can be validated against Luau's own tests — it was
+                  never optimized for line count.
+                </li>
+              </ul>
+              <p>
+                In other words, the extra lines buy memory safety and a structure that a test
+                oracle can hold honest. They are not bloat — they are the cost of the same
+                logic, written explicitly.
+              </p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Is it production-ready?</summary>
+            <div class="faq-body">
+              <p>
+                It passes Luau's own ported unit suite (5,347 tests), runs all 293
+                conformance scripts byte-identically, and matches the C++ VM on a byte-exact
+                bytecode differential. That's a strong correctness bar — but luaur is a
+                research-grade translation, best treated as such. For anything load-bearing,
+                pin a version and run your own tests, exactly as you would adopting any new
+                runtime.
+              </p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────────────────── FOOTER ───────────────────────── -->
+    <footer class="foot">
+      <div class="wrap">
+        <p>
+          MIT. luaur is a derivative translation of Luau (© Roblox Corporation), which
+          derives from Lua (© Lua.org, PUC-Rio); both upstream copyrights are preserved.
+        </p>
+        <p class="foot-base">
+          Translated against Luau commit <code>8f33df9</code>. The entire toolchain runs
+          on <code>wasm32-unknown-unknown</code> — this page included.
+        </p>
+        <p class="foot-base">
+          Source &amp; issues:
+          <a href="https://github.com/pjankiewicz/luaur" target="_blank" rel="noopener">github.com/pjankiewicz/luaur</a>
+        </p>
+      </div>
+    </footer>
+  </main>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
