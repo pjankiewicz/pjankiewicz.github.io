@@ -4,6 +4,76 @@ import * as import2 from "env"
 
 
 /**
+ * Structured result of a [`run`] call: the program's captured `print` output
+ * and, *separately*, any error text (an empty string when the run succeeded).
+ *
+ * Keeping the two apart — rather than concatenating them into one string the
+ * caller then has to guess apart — is what lets the playground classify a run
+ * correctly. With a single combined string the only signal available to
+ * JavaScript was a content heuristic, which both *false-positived* (legitimate
+ * output containing the word "error" — e.g. iterating `_G`, which has a global
+ * literally named `error` — was painted as a failure) and *false-negatived* (a
+ * compile error whose text lacked the magic words was reported as success).
+ * `error` non-empty ⇔ the run failed; no scanning of `output` required.
+ */
+export class RunResult {
+    static __wrap(ptr) {
+        const obj = Object.create(RunResult.prototype);
+        obj.__wbg_ptr = ptr;
+        RunResultFinalization.register(obj, obj.__wbg_ptr, obj);
+        return obj;
+    }
+    __destroy_into_raw() {
+        const ptr = this.__wbg_ptr;
+        this.__wbg_ptr = 0;
+        RunResultFinalization.unregister(this);
+        return ptr;
+    }
+    free() {
+        const ptr = this.__destroy_into_raw();
+        wasm.__wbg_runresult_free(ptr, 0);
+    }
+    /**
+     * Error text, or the empty string when the run succeeded. In the browser
+     * build this is a compile/load error message: a genuine *runtime* error
+     * traps the WebAssembly instance (`panic = "abort"` on
+     * `wasm32-unknown-unknown`) and is surfaced by the caller's trap handler,
+     * so it never reaches here.
+     * @returns {string}
+     */
+    get error() {
+        let deferred1_0;
+        let deferred1_1;
+        try {
+            const ret = wasm.runresult_error(this.__wbg_ptr);
+            deferred1_0 = ret[0];
+            deferred1_1 = ret[1];
+            return getStringFromWasm0(ret[0], ret[1]);
+        } finally {
+            wasm.__wbindgen_free(deferred1_0, deferred1_1, 1);
+        }
+    }
+    /**
+     * The script's captured `print` output (tab-separated arguments, one line
+     * per `print`, each terminated by a newline).
+     * @returns {string}
+     */
+    get output() {
+        let deferred1_0;
+        let deferred1_1;
+        try {
+            const ret = wasm.runresult_output(this.__wbg_ptr);
+            deferred1_0 = ret[0];
+            deferred1_1 = ret[1];
+            return getStringFromWasm0(ret[0], ret[1]);
+        } finally {
+            wasm.__wbindgen_free(deferred1_0, deferred1_1, 1);
+        }
+    }
+}
+if (Symbol.dispose) RunResult.prototype[Symbol.dispose] = RunResult.prototype.free;
+
+/**
  * Type-check `source` with the analyzer (old solver) and return the
  * newline-joined `line: message` diagnostics, or `"No errors."` when clean.
  *
@@ -29,33 +99,50 @@ export function check(source) {
 
 /**
  * Compile and execute `source` on a fresh sandboxed Luau VM, returning the
- * program's captured `print` output followed by any runtime error text.
+ * program's captured `print` output and any error text as separate fields of a
+ * [`RunResult`].
  *
  * This is the browser counterpart of the crate's `extern "C"` `execute_script`
- * — it shares `setup_state` and `run_code`, but installs a capturing `print`
- * and returns the captured output as an owned `String`.
+ * — it shares `setup_state` and `run_code`, but installs a capturing `print`.
  * @param {string} source
- * @returns {string}
+ * @returns {RunResult}
  */
 export function run(source) {
-    let deferred2_0;
-    let deferred2_1;
-    try {
-        const ptr0 = passStringToWasm0(source, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-        const len0 = WASM_VECTOR_LEN;
-        const ret = wasm.run(ptr0, len0);
-        deferred2_0 = ret[0];
-        deferred2_1 = ret[1];
-        return getStringFromWasm0(ret[0], ret[1]);
-    } finally {
-        wasm.__wbindgen_free(deferred2_0, deferred2_1, 1);
-    }
+    const ptr0 = passStringToWasm0(source, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len0 = WASM_VECTOR_LEN;
+    const ret = wasm.run(ptr0, len0);
+    return RunResult.__wrap(ret);
 }
 
 /**
- * Module start hook: route Rust panics to `console.error` with a readable
- * message + location instead of an opaque `unreachable` wasm trap. Runs once
- * when the module is instantiated.
+ * Module start hook. A Lua runtime error reaches this panic hook as a
+ * `lua_exception` payload (`luaD_throw` -> `panic_any`). We recover its message
+ * (`what()` reads the error object off the still-intact stack — `panic=abort`
+ * does not unwind) and hand it to JS *before* the abort traps the instance, so
+ * runtime errors surface with their text instead of an opaque `unreachable`
+ * trap. Any other panic keeps the `console.error` diagnostic.
+ *
+ * ## Hook ordering — why this is more than a single `set_hook`
+ *
+ * The VM installs its OWN process-wide hook ([`install_lua_exception_panic_hook`],
+ * fired lazily on the first `luaD_rawrunprotected` during state setup) that
+ * *silently swallows* every `lua_exception` payload: those panics are its
+ * `longjmp` emulation, not crashes, and the CLI must not print "thread panicked"
+ * for a normal `error()`. That same swallowing, however, also hides the error
+ * *message* — the VM hook `take_hook()`s whatever we install and then `return`s
+ * early for `lua_exception`, so a naive hook here would never be reached.
+ *
+ * So we deliberately build the chain with OUR hook outermost (it runs first):
+ *
+ * ```text
+ *   ours (lua_exception -> JS bridge)  ->  VM hook  ->  console_error_panic_hook
+ * ```
+ *
+ * Force `console_error_panic_hook` as the base, force the VM hook to install on
+ * top of it *now* (so its captured `previous` is the console hook, not ours),
+ * then wrap that with our hook. A `lua_exception` is intercepted here and its
+ * message forwarded to JS; any real Rust bug falls through to the VM hook, which
+ * delegates to `console_error_panic_hook` unchanged.
  */
 export function wasm_start() {
     wasm.wasm_start();
@@ -63,6 +150,12 @@ export function wasm_start() {
 function __wbg_get_imports() {
     const import0 = {
         __proto__: null,
+        __wbg___luaurOnRuntimeError_dad7c22bc9ef36ee: function(arg0, arg1) {
+            globalThis.__luaurOnRuntimeError(getStringFromWasm0(arg0, arg1));
+        },
+        __wbg___wbindgen_throw_1506f2235d1bdba0: function(arg0, arg1) {
+            throw new Error(getStringFromWasm0(arg0, arg1));
+        },
         __wbg_error_a6fa202b58aa1cd3: function(arg0, arg1) {
             let deferred0_0;
             let deferred0_1;
@@ -102,6 +195,10 @@ function __wbg_get_imports() {
         "env": import2,
     };
 }
+
+const RunResultFinalization = (typeof FinalizationRegistry === 'undefined')
+    ? { register: () => {}, unregister: () => {} }
+    : new FinalizationRegistry(ptr => wasm.__wbg_runresult_free(ptr, 1));
 
 let cachedDataViewMemory0 = null;
 function getDataViewMemory0() {
