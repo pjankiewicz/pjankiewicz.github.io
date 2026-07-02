@@ -150,7 +150,7 @@ export function wasm_start() {
 function __wbg_get_imports() {
     const import0 = {
         __proto__: null,
-        __wbg___luaurOnRuntimeError_dad7c22bc9ef36ee: function(arg0, arg1) {
+        __wbg___luaurOnRuntimeError_dbb1c9cdf8631b66: function(arg0, arg1) {
             globalThis.__luaurOnRuntimeError(getStringFromWasm0(arg0, arg1));
         },
         __wbg___wbindgen_throw_1506f2235d1bdba0: function(arg0, arg1) {

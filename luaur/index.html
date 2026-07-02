@@ -522,9 +522,12 @@ lua.globals().set(<span class="tok-str">"v"</span>, lua.create_userdata(Vec2 { x
             <summary>Is it production-ready?</summary>
             <div class="faq-body">
               <p>
-                It passes Luau's own ported unit suite (5,347 tests), runs all 293
+                It passes Luau's own ported unit suite (5,652 tests), runs all 293
                 conformance scripts byte-identically, and matches the C++ VM on a byte-exact
-                bytecode differential. That's a strong correctness bar — but luaur is a
+                bytecode differential. It's also continuously fuzzed (AFL, with differential
+                opt-level, metamorphic, determinism, span and round-trip oracles), which has
+                surfaced and fixed real bugs — a few of which exist in the reference C++
+                implementation too. That's a strong correctness bar — but luaur is a
                 research-grade translation, best treated as such. For anything load-bearing,
                 pin a version and run your own tests, exactly as you would adopting any new
                 runtime.
