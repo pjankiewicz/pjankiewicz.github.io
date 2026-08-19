@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>The Least-Tested State Is the Most Common One - Paweł Jankiewicz</title>
+  <meta name="description" content="A conversion widget shipped invisible because every test ran as a returning user. The fresh visitor — cookie banner up, nothing decided — is the state nobody tests and everybody lives in.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/blog/style.css">
+
+  <link rel="alternate" type="application/rss+xml" title="Paweł Jankiewicz" href="/blog/feed.xml">
+  <meta property="og:site_name" content="Paweł Jankiewicz">
+  <meta property="og:title" content="The Least-Tested State Is the Most Common One">
+  <meta property="og:description" content="A conversion widget shipped invisible because every test ran as a returning user. The fresh visitor — cookie banner up, nothing decided — is the state nobody tests and everybody lives in.">
+  <meta property="og:url" content="https://pjankiewicz.github.io/blog/posts/the-least-tested-state-is-the-most-common-one/">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The Least-Tested State Is the Most Common One">
+  <meta name="twitter:description" content="A conversion widget shipped invisible because every test ran as a returning user. The fresh visitor — cookie banner up, nothing decided — is the state nobody tests and everybody lives in.">
+  
+
+  <!-- Umami analytics -->
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="d583f5f2-b49f-48e6-af2a-44599356368e"></script>
+
+  <!-- Rybbit analytics -->
+  <script
+    src="https://app.rybbit.io/api/script.js"
+    data-site-id="a3ed84f02bf6"
+    defer
+  ></script>
+</head>
+<body>  <div class="site-wrapper">
+
+  <header class="site-header">
+    <h1><a href="/blog/">Paweł Jankiewicz</a></h1>
+    <p>Blog about programming, AI, Machine Learning</p>
+    <p class="site-social">
+      <a href="https://www.linkedin.com/in/pjankiewicz/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </p>
+  </header>
+  <main class="site-main">
+    
+<article class="post-content">
+  <h1>The Least-Tested State Is the Most Common One</h1>
+  <p class="post-meta">August 19, 2026</p>
+  <p>I shipped a conversion widget today that was invisible to every person it was built for. All tests green. Typecheck clean. 1,600+ unit tests passing, including nine written specifically for the new widget.</p>
+<p>The widget was a small proactive card in the bottom-right corner of a webapp — the kind that slides up and offers help after you interact with the page. Classic pattern. The unit tests covered the timing, the dismissal, the analytics events, the session budget. All of it worked.</p>
+<p>Then I opened a real browser, loaded the page like a first-time visitor, and clicked the card.</p>
+<p>Nothing. The click landed on the cookie consent banner instead.</p>
+<h2 id="two-toasts-one-corner">Two toasts, one corner</h2>
+<p>The consent banner lives in the bottom-right corner at <code>z-index: 1000</code>. My widget's container was at <code>z-index: 60</code>. Both are <code>position: fixed</code>. The banner sat on top, and because it's semi-transparent-adjacent in layout terms — a card floating over a card — the widget underneath was partially visible but completely unclickable. Close enough to looking correct that a screenshot in passing wouldn't flag it.</p>
+<p>Here's the part that hurt more. While fixing the stacking, I realized the collision wasn't new. The chat panel that the widget opens — a feature that had been in production for weeks — had the same z-index. On mobile, that panel goes fullscreen, and the consent banner floated <em>on top of its text input</em>. Any first-time visitor who opened the chat on a phone without first answering the cookie question got a chat they could read but not comfortably type into.</p>
+<p>Weeks. In production. On the single most important surface for converting new visitors.</p>
+<h2 id="why-no-test-caught-it">Why no test caught it</h2>
+<p>Unit tests run in jsdom. jsdom doesn't do layout. Two elements can occupy the same pixels at conflicting z-indexes and every assertion about them passes, because assertions ask about the DOM tree, not the picture. <code>getByRole</code> finds the button; it doesn't know the button is under another button.</p>
+<p>But the deeper failure isn't the tooling. It's the state I was testing in.</p>
+<p>Every manual check I'd ever done on that corner of the app ran in my own browser profile: cookies decided long ago, banner long gone, logged in half the time. The automated browser tests? They dismiss the consent banner in setup, first thing, precisely because it "gets in the way." Which is the bug, stated as a test convenience.</p>
+<p>Think about what that means for the population of states. A returning developer sees the banner for two seconds, once. A first-time visitor — the person every landing page, every signup flow, every conversion widget is aimed at — sees it on <em>every page</em> until they deal with it. The state I tested least was the state my target audience is in most.</p>
+<p>It's a sampling bias, the same one that ruins ML models. My test distribution was "me, yesterday, again." The production distribution was "stranger, first visit, banner up." The overlap was close to zero exactly where it mattered.</p>
+<h2 id="the-fix-and-the-rule">The fix, and the rule</h2>
+<p>The mechanical fix took ten minutes: raise the widget's layer above the banner, and while the teaser card is showing, measure the banner's height and stack the card above it with a small gap, settling back down when the visitor finally clicks accept or decline. One <code>data-</code> attribute on the banner as a measuring hook, one cheap re-measure loop.</p>
+<p>The rule I actually took away has nothing to do with z-index:</p>
+<p><strong>Walk through your feature in the state a stranger arrives in.</strong> Fresh profile, nothing in storage, nothing consented, not logged in. In practice that's one incognito window and thirty seconds. If your app has a consent banner, that banner is part of your first-visit UI whether you designed for it or not — it will sit in some corner, and sooner or later you will put something important in that corner too.</p>
+<p>And when two fixed-position elements want the same corner, don't resolve it by whoever happens to have the bigger z-index. That's not a policy, it's an accident with a winner. Decide the stacking on purpose, write the number down next to the other numbers, and make the elements aware of each other if they can be visible at the same time.</p>
+<p>A grep for <code>z-index</code> across the codebase took five seconds and showed me six layers nobody had ever reconciled. That grep is now part of how I review any floating UI. The picture your users see is a real output of your program — test at least one frame of it with their eyes, not yours.</p>
+</article>
+<!-- Copy-to-clipboard functionality for code blocks -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.codehilite').forEach(function(container) {
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.type = 'button';
+      btn.innerText = 'Copy';
+      container.appendChild(btn);
+      btn.addEventListener('click', function() {
+        var codeElem = container.querySelector('code') || container;
+        var text = codeElem.innerText;
+        navigator.clipboard.writeText(text).then(function() {
+          btn.innerText = 'Copied!';
+          btn.classList.add('copied');
+          setTimeout(function() {
+            btn.innerText = 'Copy';
+            btn.classList.remove('copied');
+          }, 2000);
+        }, function() {
+          btn.innerText = 'Error';
+        });
+      });
+    });
+  });
+</script>
+
+  </main>
+  <footer class="site-footer">
+    <p>&copy; 2026 Paweł Jankiewicz</p>
+  </footer>
+  </div>
+</body>
+</html>

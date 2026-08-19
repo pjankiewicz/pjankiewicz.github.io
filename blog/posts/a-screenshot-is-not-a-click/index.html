@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>A screenshot is not a click - Paweł Jankiewicz</title>
+  <meta name="description" content="Static screenshots of a web app will happily show you a beautiful, broken feature. Driving the app found a bug in ten minutes that a hundred passing tests missed — with a CDP driver in 100 lines and zero dependencies.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/blog/style.css">
+
+  <link rel="alternate" type="application/rss+xml" title="Paweł Jankiewicz" href="/blog/feed.xml">
+  <meta property="og:site_name" content="Paweł Jankiewicz">
+  <meta property="og:title" content="A screenshot is not a click">
+  <meta property="og:description" content="Static screenshots of a web app will happily show you a beautiful, broken feature. Driving the app found a bug in ten minutes that a hundred passing tests missed — with a CDP driver in 100 lines and zero dependencies.">
+  <meta property="og:url" content="https://pjankiewicz.github.io/blog/posts/a-screenshot-is-not-a-click/">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="A screenshot is not a click">
+  <meta name="twitter:description" content="Static screenshots of a web app will happily show you a beautiful, broken feature. Driving the app found a bug in ten minutes that a hundred passing tests missed — with a CDP driver in 100 lines and zero dependencies.">
+  
+
+  <!-- Umami analytics -->
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="d583f5f2-b49f-48e6-af2a-44599356368e"></script>
+
+  <!-- Rybbit analytics -->
+  <script
+    src="https://app.rybbit.io/api/script.js"
+    data-site-id="a3ed84f02bf6"
+    defer
+  ></script>
+</head>
+<body>  <div class="site-wrapper">
+
+  <header class="site-header">
+    <h1><a href="/blog/">Paweł Jankiewicz</a></h1>
+    <p>Blog about programming, AI, Machine Learning</p>
+    <p class="site-social">
+      <a href="https://www.linkedin.com/in/pjankiewicz/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </p>
+  </header>
+  <main class="site-main">
+    
+<article class="post-content">
+  <h1>A screenshot is not a click</h1>
+  <p class="post-meta">August 19, 2026</p>
+  <p>I was verifying a new feature in a web app the other day. No Playwright in the
+repo, no Cypress, nothing. So I did what everyone does: headless Chrome,
+<code>--screenshot</code>, look at the PNG. The page rendered beautifully. Every panel in
+place, every number right. Ship it?</p>
+<p>Then I actually drove it — opened a detail dialog, clicked through a few
+records. One panel claimed a record had no history. The data clearly said
+otherwise; the API returned a full chain. The unit tests for that exact
+function? All green. The test fixtures were built on an assumption about
+uniqueness that real data politely declined to satisfy. Two components each
+did the right thing; the seam between them was where the lie lived.</p>
+<p>A screenshot can never catch that. A screenshot shows you the happy path in
+its resting state. The bug was in what happens when you <em>interact</em> — and
+"interact" is exactly what a static capture doesn't do.</p>
+<p>Here's the part I want to sell you on: you don't need to install anything to
+drive a browser. Node 21+ ships a native WebSocket client. Chrome ships the
+DevTools protocol. That's the whole stack:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// 1. Launch: chrome --headless=new --remote-debugging-port=9222</span>
+<span class="c1">// 2. Open a tab, get its socket:</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">tab</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="nx">fetch</span><span class="p">(</span><span class="s1">&#39;http://127.0.0.1:9222/json/new?url=about:blank&#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nx">method</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;PUT&#39;</span><span class="w"> </span><span class="p">})).</span><span class="nx">json</span><span class="p">();</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">ws</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">WebSocket</span><span class="p">(</span><span class="nx">tab</span><span class="p">.</span><span class="nx">webSocketDebuggerUrl</span><span class="p">);</span>
+<span class="c1">// 3. Everything is { id, method, params }:</span>
+<span class="nx">send</span><span class="p">(</span><span class="s1">&#39;Page.navigate&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">url</span><span class="w"> </span><span class="p">});</span>
+<span class="nx">send</span><span class="p">(</span><span class="s1">&#39;Runtime.evaluate&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">expression</span><span class="p">,</span><span class="w"> </span><span class="nx">returnByValue</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">});</span>
+<span class="nx">send</span><span class="p">(</span><span class="s1">&#39;Input.dispatchKeyEvent&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;keyDown&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">key</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;ArrowDown&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">});</span>
+<span class="nx">send</span><span class="p">(</span><span class="s1">&#39;Page.captureScreenshot&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">format</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;png&#39;</span><span class="w"> </span><span class="p">});</span>
+</code></pre></div>
+
+<p>A promise map keyed by <code>id</code>, four helper functions, about a hundred lines.
+Real clicks via mouse events at an element's bounding box, real typing, real
+keyboard shortcuts — the kind that hit <code>window</code>-level handlers, which
+<code>element.click()</code> shims never exercise. Screenshot after every step so you
+have evidence instead of memory.</p>
+<p>Think of it like chess analysis. Staring at a position tells you it <em>looks</em>
+fine. You only find the refutation by playing the moves. The screenshot is
+the position; driving is the line.</p>
+<p>Three gotchas that each cost me a few minutes, so they cost you none:</p>
+<ul>
+<li>React <code>&lt;select&gt;</code> ignores <code>el.value = x</code>. You need the native prototype's
+  value setter, then <code>dispatchEvent(new Event('change', { bubbles: true }))</code>.</li>
+<li>CSS modules hash class names. Select on <code>[class*="stem"]</code>, roles, or text —
+  never the full class.</li>
+<li><code>input[type="text"]</code> doesn't match an <code>&lt;input&gt;</code> with no <code>type</code> attribute.
+  The DOM <em>property</em> defaults to <code>"text"</code>; the attribute selector wants the
+  attribute.</li>
+</ul>
+<p>And one workflow tip: recon before you drive. First script just dumps what's
+there — button texts, inputs, selects. Then write the interaction script
+against reality instead of guessing selectors and burning a round-trip per
+typo.</p>
+<p>The takeaway isn't "CDP is neat" (it is). It's that the bar for "I verified
+this" is behavior, not appearance — and the tooling excuse is gone. If the
+machine has Chrome and a recent Node, you are a hundred dependency-free lines
+away from clicking the buttons your users will click. The bugs that matter
+live behind those clicks.</p>
+</article>
+<!-- Copy-to-clipboard functionality for code blocks -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.codehilite').forEach(function(container) {
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.type = 'button';
+      btn.innerText = 'Copy';
+      container.appendChild(btn);
+      btn.addEventListener('click', function() {
+        var codeElem = container.querySelector('code') || container;
+        var text = codeElem.innerText;
+        navigator.clipboard.writeText(text).then(function() {
+          btn.innerText = 'Copied!';
+          btn.classList.add('copied');
+          setTimeout(function() {
+            btn.innerText = 'Copy';
+            btn.classList.remove('copied');
+          }, 2000);
+        }, function() {
+          btn.innerText = 'Error';
+        });
+      });
+    });
+  });
+</script>
+
+  </main>
+  <footer class="site-footer">
+    <p>&copy; 2026 Paweł Jankiewicz</p>
+  </footer>
+  </div>
+</body>
+</html>

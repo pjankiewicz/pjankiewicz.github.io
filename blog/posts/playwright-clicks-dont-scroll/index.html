@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>The click that never happened - Paweł Jankiewicz</title>
+  <meta name="description" content="I spent an hour debugging an app bug that didn't exist. The test harness was silently throwing my clicks into the void.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/blog/style.css">
+
+  <link rel="alternate" type="application/rss+xml" title="Paweł Jankiewicz" href="/blog/feed.xml">
+  <meta property="og:site_name" content="Paweł Jankiewicz">
+  <meta property="og:title" content="The click that never happened">
+  <meta property="og:description" content="I spent an hour debugging an app bug that didn't exist. The test harness was silently throwing my clicks into the void.">
+  <meta property="og:url" content="https://pjankiewicz.github.io/blog/posts/playwright-clicks-dont-scroll/">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The click that never happened">
+  <meta name="twitter:description" content="I spent an hour debugging an app bug that didn't exist. The test harness was silently throwing my clicks into the void.">
+  
+
+  <!-- Umami analytics -->
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="d583f5f2-b49f-48e6-af2a-44599356368e"></script>
+
+  <!-- Rybbit analytics -->
+  <script
+    src="https://app.rybbit.io/api/script.js"
+    data-site-id="a3ed84f02bf6"
+    defer
+  ></script>
+</head>
+<body>  <div class="site-wrapper">
+
+  <header class="site-header">
+    <h1><a href="/blog/">Paweł Jankiewicz</a></h1>
+    <p>Blog about programming, AI, Machine Learning</p>
+    <p class="site-social">
+      <a href="https://www.linkedin.com/in/pjankiewicz/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </p>
+  </header>
+  <main class="site-main">
+    
+<article class="post-content">
+  <h1>The click that never happened</h1>
+  <p class="post-meta">August 19, 2026</p>
+  <p>I was testing a canvas app with Playwright. Type into a field — works. Click a button to vote — nothing. No error, no console warning, no wrong state. Just nothing.</p>
+<p>So I did what you do. I read the event dispatch code. I checked whether an absolutely-positioned overlay was swallowing the click. I theorized that Playwright's instant click — mouse down and up within a millisecond — might fall between two frames of an app that samples mouse state at 60fps, and wrote a "slow click" helper that holds the button down for 90ms. Three theories, three careful experiments, three dead ends. The handler code was fine. The hit-testing was fine. The timing was fine.</p>
+<p>The actual bug: the canvas was partially below the fold. The page had a header, the viewport was 900px tall, and the canvas started at y≈770. My text field happened to sit at y≈897 — inside the viewport by three pixels, so that click landed. The vote button was at y≈975 — below the viewport edge, so that click went nowhere. Silently.</p>
+<p>Here's the part that makes it a trap and not just a mistake: <strong>Playwright's screenshot API auto-scrolls the element into view. Its mouse API doesn't.</strong> So my screenshots showed a perfectly rendered app — proof, I thought, that the harness was healthy — while my clicks were being delivered to coordinates outside the visible page. Two sibling APIs, same library, opposite behavior on the same edge case. The one that worked kept vouching for the one that didn't.</p>
+<p>The fix is one line: <code>scrollIntoViewIfNeeded()</code> before you read the bounding box and start clicking.</p>
+<p>But the lesson is bigger than the fix. When input "doesn't work," the handler is the last thing to debug, not the first. There's a chain: the click is emitted → it lands on the page → it hits the element → the handler fires → the state changes. I started debugging at the end of the chain, because that's where my code was, and my code is what I suspect by default. I should have started at the beginning: <em>prove the click arrives at all.</em> A single probe — does hovering this spot change the cursor? — would have collapsed the whole search in thirty seconds. It's like checking a chess line for a blunder on move six when the piece was never on that square to begin with.</p>
+<p>The general form: when a system is silent — no error, no effect — don't debug the logic. Verify the signal at each boundary until you find the boundary where it disappears. Silent failures live between components, not inside them.</p>
+<p>Practical takeaway: in any browser automation against canvas apps, scroll the element into view before computing click coordinates, and when an interaction mysteriously no-ops, test whether <em>any</em> input reaches the target before you read a single line of handler code.</p>
+</article>
+<!-- Copy-to-clipboard functionality for code blocks -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.codehilite').forEach(function(container) {
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.type = 'button';
+      btn.innerText = 'Copy';
+      container.appendChild(btn);
+      btn.addEventListener('click', function() {
+        var codeElem = container.querySelector('code') || container;
+        var text = codeElem.innerText;
+        navigator.clipboard.writeText(text).then(function() {
+          btn.innerText = 'Copied!';
+          btn.classList.add('copied');
+          setTimeout(function() {
+            btn.innerText = 'Copy';
+            btn.classList.remove('copied');
+          }, 2000);
+        }, function() {
+          btn.innerText = 'Error';
+        });
+      });
+    });
+  });
+</script>
+
+  </main>
+  <footer class="site-footer">
+    <p>&copy; 2026 Paweł Jankiewicz</p>
+  </footer>
+  </div>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>The Tree Was Correct and Still Wrong - Paweł Jankiewicz</title>
+  <meta name="description" content="A scene tree built faithfully from a data-flow graph confused everyone who looked at it. The data was right. The orientation was backwards.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/blog/style.css">
+
+  <link rel="alternate" type="application/rss+xml" title="Paweł Jankiewicz" href="/blog/feed.xml">
+  <meta property="og:site_name" content="Paweł Jankiewicz">
+  <meta property="og:title" content="The Tree Was Correct and Still Wrong">
+  <meta property="og:description" content="A scene tree built faithfully from a data-flow graph confused everyone who looked at it. The data was right. The orientation was backwards.">
+  <meta property="og:url" content="https://pjankiewicz.github.io/blog/posts/the-tree-was-correct-and-still-wrong/">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The Tree Was Correct and Still Wrong">
+  <meta name="twitter:description" content="A scene tree built faithfully from a data-flow graph confused everyone who looked at it. The data was right. The orientation was backwards.">
+  
+
+  <!-- Umami analytics -->
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="d583f5f2-b49f-48e6-af2a-44599356368e"></script>
+
+  <!-- Rybbit analytics -->
+  <script
+    src="https://app.rybbit.io/api/script.js"
+    data-site-id="a3ed84f02bf6"
+    defer
+  ></script>
+</head>
+<body>  <div class="site-wrapper">
+
+  <header class="site-header">
+    <h1><a href="/blog/">Paweł Jankiewicz</a></h1>
+    <p>Blog about programming, AI, Machine Learning</p>
+    <p class="site-social">
+      <a href="https://www.linkedin.com/in/pjankiewicz/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </p>
+  </header>
+  <main class="site-main">
+    
+<article class="post-content">
+  <h1>The Tree Was Correct and Still Wrong</h1>
+  <p class="post-meta">June 10, 2026</p>
+  <p>I built a scene tree for a node-based editor. The kind of left-panel outliner
+every design tool has: a list of objects, expandable, click to select.</p>
+<p>The tree was generated from the underlying graph. In a data-flow graph, edges
+run from sources to results: a shape node feeds a transform node feeds a
+material node feeds the output. So the natural way to build a tree is to start
+at the output and walk backwards. The root of each object becomes the <em>last</em>
+operation applied to it, and the shape the user actually created ends up as the
+deepest leaf.</p>
+<p>Every test passed. The tree was a faithful projection of the graph. And it was
+confusing as hell.</p>
+<p>Users saw this:</p>
+<div class="codehilite"><pre><span></span><code>Material
+└── Transform
+    └── Sphere
+</code></pre></div>
+
+<p>and read it as "a Material that contains a Transform that contains a Sphere."
+Which is technically what the evaluation order is. But nobody thinks that way.
+People think: <em>I made a sphere, then I moved it, then I painted it.</em> The thing
+you created is the identity. The operations are details that came after.</p>
+<p>The fix wasn't touching the data structure at all. The backward walk stayed,
+tests and all. I added a presentation transform that re-orients each chain:
+follow the primary input from the final operation down to the source, then flip
+it. The source shape becomes the title row. The operations list below it,
+top-down, in the order they were applied:</p>
+<div class="codehilite"><pre><span></span><code>Sphere
+    Transform
+    Material
+</code></pre></div>
+
+<p>This is what a modifier stack in any mature 3D tool looks like, and there's a
+reason every one of them converged on it. Operations that combine several
+inputs (a boolean, a blend) keep real tree structure — the second input nests
+under the operation as its own little stack. Linear chains flatten. Identity
+first, history below.</p>
+<p>Two things I want to keep from this.</p>
+<p><strong>Correct data can still be a wrong UI.</strong> The graph's direction is an
+implementation fact. The user's mental model has its own direction, and when
+the two disagree, the rendering layer has to do the flip. Don't restructure
+your data to match the UI and don't ship the UI in data order. Keep both, with
+a pure transform between them. Mine is one function with its own tests; the
+graph code never changed.</p>
+<p><strong>Screenshots make UI bugs debuggable.</strong> I iterated on this with a loop:
+screenshot the panel, send it to a vision model with a neutral prompt
+("describe how this hierarchy reads, list problems, rate clarity"), fix the top
+complaint, repeat. Neutral matters — ask "is the tree still confusing?" and a
+model will happily confirm whatever you implied. The model caught things I had
+stopped seeing: labels truncated by invisible-but-space-reserving buttons,
+three identical names that made rows impossible to map to the canvas, property
+rows visually indistinguishable from object rows. Each round was one cheap
+call. The score plateaued exactly where the remaining complaints stopped being
+bugs and started being design <em>decisions</em> — which is itself useful: that's the
+line where you stop fixing and start choosing.</p>
+<p>The takeaway: when a hierarchy view feels wrong but the data checks out, check
+the orientation before anything else. Trees are read top-down, thing-first.
+If your renderer walks the data the other way, flip it at the view layer and
+leave the data alone.</p>
+</article>
+<!-- Copy-to-clipboard functionality for code blocks -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.codehilite').forEach(function(container) {
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.type = 'button';
+      btn.innerText = 'Copy';
+      container.appendChild(btn);
+      btn.addEventListener('click', function() {
+        var codeElem = container.querySelector('code') || container;
+        var text = codeElem.innerText;
+        navigator.clipboard.writeText(text).then(function() {
+          btn.innerText = 'Copied!';
+          btn.classList.add('copied');
+          setTimeout(function() {
+            btn.innerText = 'Copy';
+            btn.classList.remove('copied');
+          }, 2000);
+        }, function() {
+          btn.innerText = 'Error';
+        });
+      });
+    });
+  });
+</script>
+
+  </main>
+  <footer class="site-footer">
+    <p>&copy; 2026 Paweł Jankiewicz</p>
+  </footer>
+  </div>
+</body>
+</html>

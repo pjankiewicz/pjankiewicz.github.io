@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Backtracker Counted the Same Answer 5,040 Times - Paweł Jankiewicz</title>
+  <meta name="description" content="A backtracking search kept reporting 'ambiguous' on inputs with exactly one solution. The search was correct — it was just enumerating every solution in every possible order, and tripping its own safety cap.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/blog/style.css">
+
+  <link rel="alternate" type="application/rss+xml" title="Paweł Jankiewicz" href="/blog/feed.xml">
+  <meta property="og:site_name" content="Paweł Jankiewicz">
+  <meta property="og:title" content="My Backtracker Counted the Same Answer 5,040 Times">
+  <meta property="og:description" content="A backtracking search kept reporting 'ambiguous' on inputs with exactly one solution. The search was correct — it was just enumerating every solution in every possible order, and tripping its own safety cap.">
+  <meta property="og:url" content="https://pjankiewicz.github.io/blog/posts/backtracker-counting-the-same-answer-5040-times/">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="My Backtracker Counted the Same Answer 5,040 Times">
+  <meta name="twitter:description" content="A backtracking search kept reporting 'ambiguous' on inputs with exactly one solution. The search was correct — it was just enumerating every solution in every possible order, and tripping its own safety cap.">
+  
+
+  <!-- Umami analytics -->
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="d583f5f2-b49f-48e6-af2a-44599356368e"></script>
+
+  <!-- Rybbit analytics -->
+  <script
+    src="https://app.rybbit.io/api/script.js"
+    data-site-id="a3ed84f02bf6"
+    defer
+  ></script>
+</head>
+<body>  <div class="site-wrapper">
+
+  <header class="site-header">
+    <h1><a href="/blog/">Paweł Jankiewicz</a></h1>
+    <p>Blog about programming, AI, Machine Learning</p>
+    <p class="site-social">
+      <a href="https://www.linkedin.com/in/pjankiewicz/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </p>
+  </header>
+  <main class="site-main">
+    
+<article class="post-content">
+  <h1>My Backtracker Counted the Same Answer 5,040 Times</h1>
+  <p class="post-meta">August 19, 2026</p>
+  <p>I have a small library that applies AI-generated patches to files. The hard part isn't parsing — it's placement: a patch hunk says "delete this line, here's some context around it," and the matcher has to find where in the file that hunk belongs. When several hunks could land in several places, it runs a backtracking search over the assignments. If exactly one final file can result, apply it. If two different files can result, refuse — report the patch as ambiguous and make the model add more context. That refusal is a feature. Silently picking one interpretation of an ambiguous patch is how you corrupt files with confidence.</p>
+<p>Backtracking can blow up exponentially, so the search had a safety cap: visit more than 100k nodes and give up, reporting "ambiguous." Conservative default, seemed harmless.</p>
+<p>Then a perfectly unambiguous patch — seven identical one-line deletions, seven places they could go, every assignment producing the <em>same</em> resulting file — came back as ambiguous. There was provably exactly one answer. The search insisted there were two.</p>
+<p>The bug wasn't in the matching, the dedup, or the cap. It was in what the search was counting.</p>
+<p>At every node, the search branched on <em>every</em> remaining hunk: "try hunk A next at each of its positions, then try hunk B next at each of its positions..." That feels natural — it's how you'd write the recursion without thinking. But a finished solution is just an assignment of hunks to positions. It does not care what order you assigned them in. Placing A then B reaches exactly the same final mapping as placing B then A. The search was enumerating each mapping once per ordering — that's a factor of k! for k hunks — and the node count exploded as the square of the naive estimate: seven interchangeable hunks meant tens of millions of nodes for what was, underneath, 5,040 distinct assignments and <em>one</em> distinct answer. The cap tripped at 100k, and the cap's failure mode was "report ambiguous." So a correctness guard plus a performance guard combined into a wrong answer.</p>
+<p>In chess terms: it's move-order blindness, the thing transposition tables exist for. 1. e4 e5 2. Nf3 and 1. Nf3 e5 2. e4 are different move sequences arriving at the same position, and an engine that analyzes the position fresh each time it arrives by a new order is wasting almost all of its effort. My search had no notion of transposition at all. Every ordering of the same assignment looked like new work.</p>
+<p>The fix is embarrassingly small. At each node, don't branch on every remaining hunk — designate <em>one</em> (the first eligible) and branch only on its positions. Since every complete solution must place every hunk eventually, and since feasibility doesn't depend on order (two hunks overlap or they don't, regardless of which was placed first), fixing the assignment order loses nothing. Each final mapping now gets enumerated exactly once. You even get a stronger prune for free: if the designated hunk has no feasible position right now, it never will on this path — the constraints only tighten — so the whole branch is dead immediately.</p>
+<p>One more layer fell out of benchmarking the fix. Even enumerating each mapping once, interchangeable hunks still produce many mappings with identical <em>results</em> — swap two identical deletions and you get a different mapping but the same file. The old dedup materialized the full output file at every completed path just to compare it against the first one. For a 2,000-line file that's thousands of full-file builds whose only purpose is to conclude "yes, same as before." But two mappings that assign the same <em>content</em> to the same <em>positions</em> cannot produce different files — so you can compare a sorted list of (position, content-class) pairs, a few dozen integers, and only build the actual file when the cheap key says the mappings genuinely differ. The pathological case went from a false "ambiguous" after 1.4 seconds of churn to a correct answer in 7 milliseconds.</p>
+<p>What I'm keeping from this:</p>
+<ul>
+<li><strong>Know what your search enumerates: sequences or outcomes.</strong> If the answer is a set (an assignment, a subset, a partition) and your recursion branches on "which element next," you're enumerating orderings of outcomes and paying a factorial tax for it. Either fix the order (canonical element next) or detect transpositions. This is the same bug whether it's a patch matcher, a scheduling solver, or a chess engine without a transposition table.</li>
+<li><strong>A safety cap converts slowness into whatever your fallback answer is.</strong> Mine converted it into "ambiguous," which callers treat as a definitive verdict about the input. It wasn't — it was a verdict about my node budget. If a cap can fire, ask what the caller will believe when it does, and whether that belief is ever a lie about the input rather than a confession about the algorithm.</li>
+<li><strong>Benchmark after correctness fixes, not just performance ones.</strong> The factorial blow-up was invisible in unit tests with two or three hunks. It only surfaced because I benchmarked a slightly bigger case and the "obviously fine" search took ages before failing. The gap between n=5 working and n=7 misreporting was one innocent-looking loop.</li>
+</ul>
+</article>
+<!-- Copy-to-clipboard functionality for code blocks -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.codehilite').forEach(function(container) {
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.type = 'button';
+      btn.innerText = 'Copy';
+      container.appendChild(btn);
+      btn.addEventListener('click', function() {
+        var codeElem = container.querySelector('code') || container;
+        var text = codeElem.innerText;
+        navigator.clipboard.writeText(text).then(function() {
+          btn.innerText = 'Copied!';
+          btn.classList.add('copied');
+          setTimeout(function() {
+            btn.innerText = 'Copy';
+            btn.classList.remove('copied');
+          }, 2000);
+        }, function() {
+          btn.innerText = 'Error';
+        });
+      });
+    });
+  });
+</script>
+
+  </main>
+  <footer class="site-footer">
+    <p>&copy; 2026 Paweł Jankiewicz</p>
+  </footer>
+  </div>
+</body>
+</html>

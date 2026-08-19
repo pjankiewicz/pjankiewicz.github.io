@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Your release build has never run - Paweł Jankiewicz</title>
+  <meta name="description" content="Debug builds run a thousand times before shipping. The release build often runs zero times. That asymmetry is where launch bugs hide.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/blog/style.css">
+
+  <link rel="alternate" type="application/rss+xml" title="Paweł Jankiewicz" href="/blog/feed.xml">
+  <meta property="og:site_name" content="Paweł Jankiewicz">
+  <meta property="og:title" content="Your release build has never run">
+  <meta property="og:description" content="Debug builds run a thousand times before shipping. The release build often runs zero times. That asymmetry is where launch bugs hide.">
+  <meta property="og:url" content="https://pjankiewicz.github.io/blog/posts/your-release-build-has-never-run/">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Your release build has never run">
+  <meta name="twitter:description" content="Debug builds run a thousand times before shipping. The release build often runs zero times. That asymmetry is where launch bugs hide.">
+  
+
+  <!-- Umami analytics -->
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="d583f5f2-b49f-48e6-af2a-44599356368e"></script>
+
+  <!-- Rybbit analytics -->
+  <script
+    src="https://app.rybbit.io/api/script.js"
+    data-site-id="a3ed84f02bf6"
+    defer
+  ></script>
+</head>
+<body>  <div class="site-wrapper">
+
+  <header class="site-header">
+    <h1><a href="/blog/">Paweł Jankiewicz</a></h1>
+    <p>Blog about programming, AI, Machine Learning</p>
+    <p class="site-social">
+      <a href="https://www.linkedin.com/in/pjankiewicz/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </p>
+  </header>
+  <main class="site-main">
+    
+<article class="post-content">
+  <h1>Your release build has never run</h1>
+  <p class="post-meta">August 19, 2026</p>
+  <p>Today I watched a store submission almost go out with a login flow that had never once executed on a device.</p>
+<p>The app in question had months of development behind it. Thousands of debug-build launches on emulators. A green unit-test suite. CI passing. And a release build that, as far as I can tell, nobody had ever installed anywhere.</p>
+<p>When we finally ran it — on an emulator, against the production backend, an hour before pushing the release button — three things fell out.</p>
+<p><strong>First: the release config pointed at a development URL.</strong> The API base URL was set once, in the shared build config, to the emulator's loopback address. Debug builds worked perfectly, because that's the address debug builds are supposed to use. The release build inherited it silently. Every store install would have shipped pointing at a backend that only exists on a developer's laptop. No test catches this, because every test runs in an environment where that address is correct.</p>
+<p><strong>Second: the auth flow had drifted from the backend contract.</strong> The app opened an OAuth route that didn't exist on the server, passed a parameter the server ignored, and waited for a redirect the server would never send. Four separate mismatches. Unit tests were green the whole time — they tested that the app built the URL it intended to build, not that the server agreed with the intention. Contract drift is invisible to any test that only runs on one side of the contract.</p>
+<p><strong>Third, and my favorite: a false alarm that taught a real lesson.</strong> The first screenshot of the "release build" showed a developer login panel — bright orange, labeled DEBUG, sitting in the middle of the store build's login screen. Genuine heart-stop moment. The actual cause: <code>adb install -r</code> over an existing debug install fails on signature mismatch, and the launch command then happily starts the <em>old debug app</em>. The install error scrolled past unnoticed because it was piped through <code>tail</code>. Uninstall first, reinstall, check <code>versionName</code> and <code>pkgFlags</code> in dumpsys before believing any screenshot.</p>
+<p>That last one generalizes further than Android. Twice in the same day, a pipeline like <code>important-command | tail -5</code> reported success because the <em>pipe's</em> exit code is the last command's — <code>tail</code> always succeeds. A deploy wrapper, a test runner, a store upload: all of them can fail invisibly if the thing that reads their exit code is a text filter. If you pipe, check the output for the failure, not the exit code for success.</p>
+<p>None of these three bugs was hard to find. Each took about ten minutes of running the actual artifact in an environment that resembled production. What they had in common was that nothing in the normal development loop would ever produce that combination: release configuration, real backend, clean device.</p>
+<p>The math here is lopsided. A debug build gets launched hundreds or thousands of times before a release. The release build — different config, different signing, different code paths through minification — often gets launched exactly zero times before users get it. Whatever your equivalent of "install the release artifact on a clean machine and log in against production" is, it costs minutes. Store review round-trips cost days each, and a launch-day login failure costs users you never see again.</p>
+<p>Run the thing you're shipping, not the thing you've been developing. They are not the same program.</p>
+</article>
+<!-- Copy-to-clipboard functionality for code blocks -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.codehilite').forEach(function(container) {
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.type = 'button';
+      btn.innerText = 'Copy';
+      container.appendChild(btn);
+      btn.addEventListener('click', function() {
+        var codeElem = container.querySelector('code') || container;
+        var text = codeElem.innerText;
+        navigator.clipboard.writeText(text).then(function() {
+          btn.innerText = 'Copied!';
+          btn.classList.add('copied');
+          setTimeout(function() {
+            btn.innerText = 'Copy';
+            btn.classList.remove('copied');
+          }, 2000);
+        }, function() {
+          btn.innerText = 'Error';
+        });
+      });
+    });
+  });
+</script>
+
+  </main>
+  <footer class="site-footer">
+    <p>&copy; 2026 Paweł Jankiewicz</p>
+  </footer>
+  </div>
+</body>
+</html>

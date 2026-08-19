@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Your oracle has bugs too - Paweł Jankiewicz</title>
+  <meta name="description" content="Differential testing against a reference implementation works great — until the reference is wrong. What a red CI on exactly one OS taught me about oracle tests.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/blog/style.css">
+
+  <link rel="alternate" type="application/rss+xml" title="Paweł Jankiewicz" href="/blog/feed.xml">
+  <meta property="og:site_name" content="Paweł Jankiewicz">
+  <meta property="og:title" content="Your oracle has bugs too">
+  <meta property="og:description" content="Differential testing against a reference implementation works great — until the reference is wrong. What a red CI on exactly one OS taught me about oracle tests.">
+  <meta property="og:url" content="https://pjankiewicz.github.io/blog/posts/your-oracle-has-bugs-too/">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Your oracle has bugs too">
+  <meta name="twitter:description" content="Differential testing against a reference implementation works great — until the reference is wrong. What a red CI on exactly one OS taught me about oracle tests.">
+  
+
+  <!-- Umami analytics -->
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="d583f5f2-b49f-48e6-af2a-44599356368e"></script>
+
+  <!-- Rybbit analytics -->
+  <script
+    src="https://app.rybbit.io/api/script.js"
+    data-site-id="a3ed84f02bf6"
+    defer
+  ></script>
+</head>
+<body>  <div class="site-wrapper">
+
+  <header class="site-header">
+    <h1><a href="/blog/">Paweł Jankiewicz</a></h1>
+    <p>Blog about programming, AI, Machine Learning</p>
+    <p class="site-social">
+      <a href="https://www.linkedin.com/in/pjankiewicz/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </p>
+  </header>
+  <main class="site-main">
+    
+<article class="post-content">
+  <h1>Your oracle has bugs too</h1>
+  <p class="post-meta">July 03, 2026</p>
+  <p>CI went red on Linux and stayed green on macOS and Windows. Same commit, same test, same inputs. That's usually the start of a bad afternoon. This time it was the most informative failure I'd seen all month.</p>
+<p>The test was an oracle test. I had a pure-Rust reimplementation of C's <code>printf</code>-style formatting, and the test hammered it against the platform's actual libc <code>snprintf</code> across tens of thousands of flag/width/precision/value combinations, asserting byte equality. Classic differential testing: don't write expected values by hand, ask the reference implementation.</p>
+<p>The failing case was <code>%#g</code> of <code>999999.5</code>. My code said <code>1.00000e+06</code>. glibc said <code>1.e+06</code>.</p>
+<p>Here's the thing: the C standard is unambiguous about this. The <code>#</code> flag for <code>%g</code> means trailing zeros are <em>not</em> removed. But when rounding pushes the value across a decade boundary — 999999.5 rounds up to 1e+06 — glibc strips them anyway. BSD libc keeps them. My implementation followed the standard, and the standard-following output is what failed the test.</p>
+<p>So the test was asserting "matches whatever this machine's libc does", and one machine's libc was wrong. The oracle had a bug.</p>
+<p>It happened again the same day, in the other direction. The same reimplementation covered <code>strftime</code>-style date formatting, and <code>%z</code> (the UTC offset) came out as <code>+0100</code> on macOS for a time that was explicitly UTC. Not my code — raw libc. I wrote a five-line C program to check: fill a <code>struct tm</code> with <code>gmtime_r</code> (which sets the offset field to zero), format it with <code>%z</code>, and macOS prints the <em>local</em> timezone offset anyway. It ignores the field entirely and recomputes from process-global state. glibc reads the field, like you'd expect.</p>
+<p>Two references, two disagreements, both in corners where the implementations quietly diverge from each other and sometimes from the spec.</p>
+<p>The fix is not to make your code bug-compatible with one platform. Chase glibc's quirk and the macOS oracle fails; chase macOS and Linux fails. You cannot win that game, because the referees disagree with each other.</p>
+<p>What works is splitting the test in two:</p>
+<ol>
+<li>
+<p><strong>Pin the behavior you chose in deterministic unit tests.</strong> Hand-written expected strings, no libc involved. <code>%#g</code> of 999999.5 is <code>1.00000e+06</code>, on every platform, forever. This is where you encode the decision and the reasoning — a comment saying "glibc strips these zeros, C99 says keep them, we follow C99" is worth more than a thousand green oracle runs.</p>
+</li>
+<li>
+<p><strong>Run the oracle only where the implementations agree.</strong> Exclude the known quirk zones from the differential sweep — skip the <code>#</code> flag for <code>%g</code>, oracle-check <code>%z</code> only on the platform whose semantics you adopted. The oracle still buys you enormous coverage over the boring 99% where every libc agrees, which is exactly where your own bugs live.</p>
+</li>
+</ol>
+<p>The mistake to avoid is the silent version of this: loosening the assertion, fuzzy-matching, or deleting the failing case with no comment. Six months later nobody knows there was a decision here. The skip needs a paragraph explaining what the platforms disagree about and which side you picked, or you've just buried a landmine for the next person who "fixes" the exclusion.</p>
+<p>There's a more general point underneath. Differential testing quietly assumes the reference is correct, but the reference is just another program. Mature, battle-tested, and still carrying decades-old quirks that survive precisely because everyone tests <em>against</em> them instead of <em>checking</em> them. When your implementation and the oracle disagree, you haven't found a bug yet — you've found a disagreement. Sometimes it's yours. Sometimes it's theirs. The C standard, a second reference implementation, or a five-line reproducer against raw libc settles it.</p>
+<p>And that per-OS CI matrix everyone maintains but rarely thinks about? A failure on exactly one OS with the same code and inputs is not noise to retry away. It's the build system handing you a cross-platform behavioral difference, localized to a single test case, for free. Read it before you rerun it.</p>
+<p>The takeaway: an oracle test is a comparison, not a verdict. When it fails, ask which side is wrong before you "fix" your code — and when the answer is "the oracle", write down the disagreement, pin your choice deterministically, and shrink the oracle's jurisdiction to where the references actually agree.</p>
+</article>
+<!-- Copy-to-clipboard functionality for code blocks -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.codehilite').forEach(function(container) {
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.type = 'button';
+      btn.innerText = 'Copy';
+      container.appendChild(btn);
+      btn.addEventListener('click', function() {
+        var codeElem = container.querySelector('code') || container;
+        var text = codeElem.innerText;
+        navigator.clipboard.writeText(text).then(function() {
+          btn.innerText = 'Copied!';
+          btn.classList.add('copied');
+          setTimeout(function() {
+            btn.innerText = 'Copy';
+            btn.classList.remove('copied');
+          }, 2000);
+        }, function() {
+          btn.innerText = 'Error';
+        });
+      });
+    });
+  });
+</script>
+
+  </main>
+  <footer class="site-footer">
+    <p>&copy; 2026 Paweł Jankiewicz</p>
+  </footer>
+  </div>
+</body>
+</html>

@@ -7,11 +7,56 @@
   <atom:link href="/blog/feed.xml" rel="self" type="application/rss+xml" /> 
   
   <item>
+    <title>Your release build has never run</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/your-release-build-has-never-run/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/your-release-build-has-never-run/</guid>
+    <pubDate>Wed, 19 Aug 2026 22:49:34 +0000</pubDate>
+    <description>Debug builds run a thousand times before shipping. The release build often runs zero times. That asymmetry is where launch bugs hide.</description>
+  </item>
+  
+  <item>
+    <title>Your guardrails will lose arguments to a smarter model</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/your-guardrails-will-lose-arguments-to-a-smarter-model/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/your-guardrails-will-lose-arguments-to-a-smarter-model/</guid>
+    <pubDate>Wed, 19 Aug 2026 22:49:34 +0000</pubDate>
+    <description>I upgraded an AI product to a stronger model and my hallucination guard started losing debates to it — in front of users. What &#34;smarter&#34; breaks, and how to fix the referee instead of the player.</description>
+  </item>
+  
+  <item>
+    <title>Your agent isn't dumb, your simulator is rigged</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/your-agent-isnt-dumb-your-simulator-is-rigged/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/your-agent-isnt-dumb-your-simulator-is-rigged/</guid>
+    <pubDate>Wed, 19 Aug 2026 22:49:34 +0000</pubDate>
+    <description>I spent hours tuning a game bot that kept dying at level one. The bot was fine. The world it lived in was broken in ways that looked exactly like bad play.</description>
+  </item>
+  
+  <item>
+    <title>The judge must see everything the model saw</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/the-judge-must-see-what-the-model-saw/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/the-judge-must-see-what-the-model-saw/</guid>
+    <pubDate>Wed, 19 Aug 2026 22:49:34 +0000</pubDate>
+    <description>My eval pipeline filed four hallucination defects in three days. All four were false accusations — the judge was blind to one input stream.</description>
+  </item>
+  
+  <item>
+    <title>The stall wasn't in my code — the GPU process was collecting my garbage</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/the-gpu-process-is-collecting-your-garbage/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/the-gpu-process-is-collecting-your-garbage/</guid>
+    <pubDate>Wed, 19 Aug 2026 22:49:34 +0000</pubDate>
+    <description>A WebGPU animation froze for half a second every few seconds. The profiler said my code was innocent. The real culprit was 4.5 GB/s of texture allocations nobody could see.</description>
+  </item>
+  
+  <item>
     <title>The bug was in the path nobody ran</title>
     
     <link>https://pjankiewicz.github.io/blog/posts/the-bug-was-in-the-path-nobody-ran/</link>
     <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/the-bug-was-in-the-path-nobody-ran/</guid>
-    <pubDate>Fri, 05 Jun 2026 08:54:57 +0000</pubDate>
+    <pubDate>Wed, 19 Aug 2026 22:49:34 +0000</pubDate>
     <description>A feature can pass every test and still be broken — if your tests take a different road through it than production does.</description>
   </item>
   
@@ -20,8 +65,17 @@
     
     <link>https://pjankiewicz.github.io/blog/posts/structural-capabilities-beat-policy-flags/</link>
     <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/structural-capabilities-beat-policy-flags/</guid>
-    <pubDate>Fri, 05 Jun 2026 08:54:57 +0000</pubDate>
+    <pubDate>Wed, 19 Aug 2026 22:49:34 +0000</pubDate>
     <description>Sandboxing user scripts? Don&#39;t gate the dangerous functions with flags. Build a second environment where they don&#39;t exist.</description>
+  </item>
+  
+  <item>
+    <title>Silence is not a green light</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/silence-is-not-a-green-light/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/silence-is-not-a-green-light/</guid>
+    <pubDate>Wed, 19 Aug 2026 22:49:34 +0000</pubDate>
+    <description>My build gate reported a perfect batch — 195 files, zero failures. 190 of them had never been compiled at all. The lesson: never let a pipeline count the absence of errors as success.</description>
   </item>
   
   <item>
@@ -29,8 +83,80 @@
     
     <link>https://pjankiewicz.github.io/blog/posts/real-codebases-as-test-oracles/</link>
     <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/real-codebases-as-test-oracles/</guid>
-    <pubDate>Fri, 05 Jun 2026 08:54:57 +0000</pubDate>
+    <pubDate>Wed, 19 Aug 2026 22:49:34 +0000</pubDate>
     <description>When you build a tool that rewrites source code, the strongest test isn&#39;t your fixtures — it&#39;s running it on real third-party projects and checking they still compile and pass their own tests.</description>
+  </item>
+  
+  <item>
+    <title>The click that never happened</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/playwright-clicks-dont-scroll/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/playwright-clicks-dont-scroll/</guid>
+    <pubDate>Wed, 19 Aug 2026 22:49:34 +0000</pubDate>
+    <description>I spent an hour debugging an app bug that didn&#39;t exist. The test harness was silently throwing my clicks into the void.</description>
+  </item>
+  
+  <item>
+    <title>Every URL returned 200</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/every-url-returned-200/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/every-url-returned-200/</guid>
+    <pubDate>Wed, 19 Aug 2026 22:49:34 +0000</pubDate>
+    <description>A server that answers OK to a page that does not exist, and four other bugs that were invisible because success and silence look identical.</description>
+  </item>
+  
+  <item>
+    <title>Code Behind a Feature Flag Has Never Been Compiled</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/code-behind-a-feature-flag-has-never-been-compiled/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/code-behind-a-feature-flag-has-never-been-compiled/</guid>
+    <pubDate>Wed, 19 Aug 2026 22:49:34 +0000</pubDate>
+    <description>A screenshot function sat in a vendored framework looking finished. The first time any build actually enabled its feature, it failed twice — once at compile time, once at runtime. Dead code at least type-checks. Feature-gated code doesn&#39;t even do that.</description>
+  </item>
+  
+  <item>
+    <title>My Backtracker Counted the Same Answer 5,040 Times</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/backtracker-counting-the-same-answer-5040-times/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/backtracker-counting-the-same-answer-5040-times/</guid>
+    <pubDate>Wed, 19 Aug 2026 22:49:34 +0000</pubDate>
+    <description>A backtracking search kept reporting &#39;ambiguous&#39; on inputs with exactly one solution. The search was correct — it was just enumerating every solution in every possible order, and tripping its own safety cap.</description>
+  </item>
+  
+  <item>
+    <title>A screenshot is not a click</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/a-screenshot-is-not-a-click/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/a-screenshot-is-not-a-click/</guid>
+    <pubDate>Wed, 19 Aug 2026 22:49:34 +0000</pubDate>
+    <description>Static screenshots of a web app will happily show you a beautiful, broken feature. Driving the app found a bug in ten minutes that a hundred passing tests missed — with a CDP driver in 100 lines and zero dependencies.</description>
+  </item>
+  
+  <item>
+    <title>The Least-Tested State Is the Most Common One</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/the-least-tested-state-is-the-most-common-one/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/the-least-tested-state-is-the-most-common-one/</guid>
+    <pubDate>Wed, 19 Aug 2026 00:00:00 +0000</pubDate>
+    <description>A conversion widget shipped invisible because every test ran as a returning user. The fresh visitor — cookie banner up, nothing decided — is the state nobody tests and everybody lives in.</description>
+  </item>
+  
+  <item>
+    <title>Your oracle has bugs too</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/your-oracle-has-bugs-too/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/your-oracle-has-bugs-too/</guid>
+    <pubDate>Fri, 03 Jul 2026 00:00:00 +0000</pubDate>
+    <description>Differential testing against a reference implementation works great — until the reference is wrong. What a red CI on exactly one OS taught me about oracle tests.</description>
+  </item>
+  
+  <item>
+    <title>The Tree Was Correct and Still Wrong</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/the-tree-was-correct-and-still-wrong/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/the-tree-was-correct-and-still-wrong/</guid>
+    <pubDate>Wed, 10 Jun 2026 00:00:00 +0000</pubDate>
+    <description>A scene tree built faithfully from a data-flow graph confused everyone who looked at it. The data was right. The orientation was backwards.</description>
   </item>
   
   <item>

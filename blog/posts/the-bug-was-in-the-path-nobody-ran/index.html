@@ -23,6 +23,7 @@
 
   <!-- Umami analytics -->
   <script defer src="https://cloud.umami.is/script.js" data-website-id="d583f5f2-b49f-48e6-af2a-44599356368e"></script>
+
   <!-- Rybbit analytics -->
   <script
     src="https://app.rybbit.io/api/script.js"
@@ -43,7 +44,7 @@
     
 <article class="post-content">
   <h1>The bug was in the path nobody ran</h1>
-  <p class="post-meta">June 05, 2026</p>
+  <p class="post-meta">August 19, 2026</p>
   <p>I shipped a feature a while back, wrote tests for it, watched them go green, demoed it. Some time later someone pointed it at a real database and it crashed on the very first try. Not a flaky crash. It had never worked. Not once. And the tests had been green the entire time.</p>
 <p>Here's how that happens, because it's more common than the green dashboard makes it look.</p>
 <p>The feature applied a batch of schema changes at the moment you cut a release. It was written to support a couple of different storage backends. The thing I built it against — the thing the tests ran against, the thing in the demo — used the simplest backend: an in-memory key-value store. Real users pointed it at a real SQL database.</p>

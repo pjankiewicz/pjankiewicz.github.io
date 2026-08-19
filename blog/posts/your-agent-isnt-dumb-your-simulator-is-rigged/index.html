@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Your agent isn't dumb, your simulator is rigged - Paweł Jankiewicz</title>
+  <meta name="description" content="I spent hours tuning a game bot that kept dying at level one. The bot was fine. The world it lived in was broken in ways that looked exactly like bad play.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/blog/style.css">
+
+  <link rel="alternate" type="application/rss+xml" title="Paweł Jankiewicz" href="/blog/feed.xml">
+  <meta property="og:site_name" content="Paweł Jankiewicz">
+  <meta property="og:title" content="Your agent isn't dumb, your simulator is rigged">
+  <meta property="og:description" content="I spent hours tuning a game bot that kept dying at level one. The bot was fine. The world it lived in was broken in ways that looked exactly like bad play.">
+  <meta property="og:url" content="https://pjankiewicz.github.io/blog/posts/your-agent-isnt-dumb-your-simulator-is-rigged/">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Your agent isn't dumb, your simulator is rigged">
+  <meta name="twitter:description" content="I spent hours tuning a game bot that kept dying at level one. The bot was fine. The world it lived in was broken in ways that looked exactly like bad play.">
+  
+
+  <!-- Umami analytics -->
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="d583f5f2-b49f-48e6-af2a-44599356368e"></script>
+
+  <!-- Rybbit analytics -->
+  <script
+    src="https://app.rybbit.io/api/script.js"
+    data-site-id="a3ed84f02bf6"
+    defer
+  ></script>
+</head>
+<body>  <div class="site-wrapper">
+
+  <header class="site-header">
+    <h1><a href="/blog/">Paweł Jankiewicz</a></h1>
+    <p>Blog about programming, AI, Machine Learning</p>
+    <p class="site-social">
+      <a href="https://www.linkedin.com/in/pjankiewicz/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </p>
+  </header>
+  <main class="site-main">
+    
+<article class="post-content">
+  <h1>Your agent isn't dumb, your simulator is rigged</h1>
+  <p class="post-meta">August 19, 2026</p>
+  <p>I've been building a bot for a poker-style roguelite. Simulator in Rust, search on top, the usual setup. The bot was terrible. It died on the first level in most runs, and every instinct said: the strategy is weak, tune the strategy.</p>
+<p>I almost started there. Instead I traced one single game, action by action, and found something embarrassing: the simulator had a bug where an endgame boss — one that's supposed to be impossible before the midgame — spawned on level one. Every run. The default value of an uninitialized field happened to be the hardest boss in the game.</p>
+<p>The bot wasn't weak. It was playing a rigged game.</p>
+<p>That was the first of many. Over the next few hours I audited the simulator against the original game's source and found a whole family of bugs, and here's the thing — every single one of them looked exactly like "the bot plays badly":</p>
+<ul>
+<li>A missing income rule (the real game pays you for unused resources every round). The bot's economy was chronically starved. Looks like: "the bot manages money badly."</li>
+<li>Items that could be bought but whose effects were never implemented. The bot bought them, they did nothing. Looks like: "the bot wastes money on junk."</li>
+<li>A difficulty table with two levels 20-40% harder than the real game, exactly where the bot kept dying. Looks like: "the bot can't handle the midgame."</li>
+<li>A shop that offered three times more of a rare resource than the real game. This one inflated the bot's results — a bug in its favor is still a bug, because you end up tuning against a world that doesn't exist.</li>
+</ul>
+<p>The pattern generalizes way beyond games. Any time you evaluate an agent — an RL policy, a trading strategy on a backtester, an LLM agent in a mocked environment — the environment is part of the system under test, and it's usually the part nobody tests. Backtest engines with look-ahead leaks. Mock APIs that accept requests the real API rejects. Reward functions that pay out for the wrong thing. The agent gets blamed, retrained, retuned — against a counterfeit world.</p>
+<p>What actually worked for me, in order:</p>
+<ol>
+<li><strong>Trace one full episode by hand before any tuning.</strong> Not aggregate stats — one game, every action, every state transition. The level-one boss bug was visible in the first thirty lines of a trace. Aggregate win rates hid it completely; they just said "bad."</li>
+<li><strong>Audit against ground truth, mechanically.</strong> I had the original game's source. I diffed rule by rule: income, prices, probabilities, timings. Where you don't have source, you have documentation, or the real API, or recorded episodes. Every rule you can't verify is a place your agent can be silently wrong.</li>
+<li><strong>Fix the world before the brain.</strong> Tuning a policy against a broken environment doesn't just waste time — it actively bakes the environment's bugs into the policy. My bot had learned (via my hand-tuning) to hoard resources, which was only correct in the world where income didn't exist.</li>
+</ol>
+<p>The chess way to say it: before you conclude your engine misevaluates positions, make sure the board isn't missing a piece.</p>
+<p>One number to close with. Fixing the simulator bugs — no strategy changes at all — moved the bot from "dies on level one" to clearing the midgame. The single biggest strategy improvement of the whole project was not a strategy improvement.</p>
+<p>Next time your agent looks dumb, trace one episode. The bug you find probably won't be in the agent.</p>
+</article>
+<!-- Copy-to-clipboard functionality for code blocks -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.codehilite').forEach(function(container) {
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.type = 'button';
+      btn.innerText = 'Copy';
+      container.appendChild(btn);
+      btn.addEventListener('click', function() {
+        var codeElem = container.querySelector('code') || container;
+        var text = codeElem.innerText;
+        navigator.clipboard.writeText(text).then(function() {
+          btn.innerText = 'Copied!';
+          btn.classList.add('copied');
+          setTimeout(function() {
+            btn.innerText = 'Copy';
+            btn.classList.remove('copied');
+          }, 2000);
+        }, function() {
+          btn.innerText = 'Error';
+        });
+      });
+    });
+  });
+</script>
+
+  </main>
+  <footer class="site-footer">
+    <p>&copy; 2026 Paweł Jankiewicz</p>
+  </footer>
+  </div>
+</body>
+</html>

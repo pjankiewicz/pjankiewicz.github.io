@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Code Behind a Feature Flag Has Never Been Compiled - Paweł Jankiewicz</title>
+  <meta name="description" content="A screenshot function sat in a vendored framework looking finished. The first time any build actually enabled its feature, it failed twice — once at compile time, once at runtime. Dead code at least type-checks. Feature-gated code doesn't even do that.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/blog/style.css">
+
+  <link rel="alternate" type="application/rss+xml" title="Paweł Jankiewicz" href="/blog/feed.xml">
+  <meta property="og:site_name" content="Paweł Jankiewicz">
+  <meta property="og:title" content="Code Behind a Feature Flag Has Never Been Compiled">
+  <meta property="og:description" content="A screenshot function sat in a vendored framework looking finished. The first time any build actually enabled its feature, it failed twice — once at compile time, once at runtime. Dead code at least type-checks. Feature-gated code doesn't even do that.">
+  <meta property="og:url" content="https://pjankiewicz.github.io/blog/posts/code-behind-a-feature-flag-has-never-been-compiled/">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Code Behind a Feature Flag Has Never Been Compiled">
+  <meta name="twitter:description" content="A screenshot function sat in a vendored framework looking finished. The first time any build actually enabled its feature, it failed twice — once at compile time, once at runtime. Dead code at least type-checks. Feature-gated code doesn't even do that.">
+  
+
+  <!-- Umami analytics -->
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="d583f5f2-b49f-48e6-af2a-44599356368e"></script>
+
+  <!-- Rybbit analytics -->
+  <script
+    src="https://app.rybbit.io/api/script.js"
+    data-site-id="a3ed84f02bf6"
+    defer
+  ></script>
+</head>
+<body>  <div class="site-wrapper">
+
+  <header class="site-header">
+    <h1><a href="/blog/">Paweł Jankiewicz</a></h1>
+    <p>Blog about programming, AI, Machine Learning</p>
+    <p class="site-social">
+      <a href="https://www.linkedin.com/in/pjankiewicz/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </p>
+  </header>
+  <main class="site-main">
+    
+<article class="post-content">
+  <h1>Code Behind a Feature Flag Has Never Been Compiled</h1>
+  <p class="post-meta">August 19, 2026</p>
+  <p>I was wiring a screenshot capability into a desktop app. The function already existed in a vendored UI framework — a proper implementation, reading back the GPU framebuffer, returning an image. It sat behind a cargo feature. The code looked done because someone had written it carefully, with comments, following the file's conventions. It compiled, in the sense that the crate compiled.</p>
+<p>The first build that actually enabled the feature failed with a type error. The function's signature used <code>Result&lt;T&gt;</code> — one generic argument — in a file whose ambient <code>Result</code> was the two-argument kind. A one-token bug, the kind the compiler catches instantly. It had survived in the tree because the compiler had never once seen that function. <code>cfg</code> doesn't compile your code and throw the result away. It deletes the code before the type checker wakes up.</p>
+<p>That was failure one. Failure two was quieter. The feature was declared in the top-level crate and forwarded down to the platform crate that held the real implementation — except the forward went through a dev-dependency. Dev-dependency features don't propagate to downstream consumers. So enabling the feature compiled the public API surface and silently skipped the platform implementation behind it. Everything built. At runtime, the call hit the trait's default method: "not implemented for this platform."</p>
+<p>Two bugs, zero compiler warnings, in code that any reviewer would have approved. Both were invisible for one reason: no build configuration anywhere — not the app, not CI, not the framework's own tests — ever turned that feature on.</p>
+<p>There's a hierarchy of how dead code can lie to you. Unused code with no gate still gets parsed, type-checked, borrow-checked; the compiler at least confirms it's coherent, and warns you it's unused. Feature-gated code that nothing enables gets none of that. It's not dead code. It's unwritten code wearing dead code's clothes. Schrödinger would recognize the situation: the function is simultaneously correct and broken until some build finally opens the box.</p>
+<p>The failure compounds with distance. This code was in a vendored dependency — written in one repo, gated for a consumer that lived in another, tested by neither. The author gated it correctly by their local conventions. The consumer that would have exercised it didn't exist yet. Between those two moments, refactors moved types and renamed imports around the frozen, unchecked function, and nothing ever complained.</p>
+<p>What I actually do about it now:</p>
+<ul>
+<li><strong>Treat first activation as a test.</strong> The first build with a new feature combination is not a formality — expect it to fail, budget for it, and do it as close to writing the code as possible. If you add a gated capability, add one build (a CI job, a Makefile line, anything) that compiles with it on, even if nothing ships it yet.</li>
+<li><strong>Audit for orphan features.</strong> Grep your feature declarations, then grep for who enables them. A feature no manifest, CI matrix, or downstream crate ever activates is a pile of unchecked syntax. Either wire up a build or delete it.</li>
+<li><strong>Be suspicious of feature forwards.</strong> A feature that only re-exports another crate's feature is one line — and one line is exactly the size of a bug. Check what kind of dependency edge the forward crosses. A forward through a dev-dependency is a no-op for everyone downstream, and cargo won't say a word.</li>
+</ul>
+<p>The general law is older than cargo: a code path's reliability is proportional to how recently something actually executed — or at least compiled — it. Feature flags move code from "checked on every build" to "checked when someone remembers." Someone has to remember. Make it a machine.</p>
+</article>
+<!-- Copy-to-clipboard functionality for code blocks -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.codehilite').forEach(function(container) {
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.type = 'button';
+      btn.innerText = 'Copy';
+      container.appendChild(btn);
+      btn.addEventListener('click', function() {
+        var codeElem = container.querySelector('code') || container;
+        var text = codeElem.innerText;
+        navigator.clipboard.writeText(text).then(function() {
+          btn.innerText = 'Copied!';
+          btn.classList.add('copied');
+          setTimeout(function() {
+            btn.innerText = 'Copy';
+            btn.classList.remove('copied');
+          }, 2000);
+        }, function() {
+          btn.innerText = 'Error';
+        });
+      });
+    });
+  });
+</script>
+
+  </main>
+  <footer class="site-footer">
+    <p>&copy; 2026 Paweł Jankiewicz</p>
+  </footer>
+  </div>
+</body>
+</html>

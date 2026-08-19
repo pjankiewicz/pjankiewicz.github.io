@@ -23,6 +23,7 @@
 
   <!-- Umami analytics -->
   <script defer src="https://cloud.umami.is/script.js" data-website-id="d583f5f2-b49f-48e6-af2a-44599356368e"></script>
+
   <!-- Rybbit analytics -->
   <script
     src="https://app.rybbit.io/api/script.js"
@@ -43,7 +44,7 @@
     
 <article class="post-content">
   <h1>Capabilities you can't call beat capabilities you're told not to use</h1>
-  <p class="post-meta">June 05, 2026</p>
+  <p class="post-meta">August 19, 2026</p>
   <p>I was adding user-authored widgets to a webapp this week. Little sandboxed scripts with an Elm-ish shape: <code>update</code> changes state, <code>view</code> renders it. The rule was simple: <code>update</code> may call external APIs, <code>view</code> must not — because <code>view</code> re-runs every time someone reopens a page, and you really don't want a render to fire off CRM calls or LLM requests as a side effect of scrolling back through history.</p>
 <p>My first instinct was the classic one: one sandbox, one flag. Register all the API bindings, set <code>phase = "render"</code> before calling <code>view</code>, and have every binding check the flag and throw.</p>
 <p>I've written that code before. It always rots the same way. Someone adds a new binding and forgets the check. Someone adds a second entry point that doesn't set the flag. The flag becomes load-bearing in fourteen places, and the only thing standing between "render" and "send an email" is a boolean that everyone has to remember exists.</p>

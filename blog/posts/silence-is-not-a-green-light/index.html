@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Silence is not a green light - Paweł Jankiewicz</title>
+  <meta name="description" content="My build gate reported a perfect batch — 195 files, zero failures. 190 of them had never been compiled at all. The lesson: never let a pipeline count the absence of errors as success.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/blog/style.css">
+
+  <link rel="alternate" type="application/rss+xml" title="Paweł Jankiewicz" href="/blog/feed.xml">
+  <meta property="og:site_name" content="Paweł Jankiewicz">
+  <meta property="og:title" content="Silence is not a green light">
+  <meta property="og:description" content="My build gate reported a perfect batch — 195 files, zero failures. 190 of them had never been compiled at all. The lesson: never let a pipeline count the absence of errors as success.">
+  <meta property="og:url" content="https://pjankiewicz.github.io/blog/posts/silence-is-not-a-green-light/">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Silence is not a green light">
+  <meta name="twitter:description" content="My build gate reported a perfect batch — 195 files, zero failures. 190 of them had never been compiled at all. The lesson: never let a pipeline count the absence of errors as success.">
+  
+
+  <!-- Umami analytics -->
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="d583f5f2-b49f-48e6-af2a-44599356368e"></script>
+
+  <!-- Rybbit analytics -->
+  <script
+    src="https://app.rybbit.io/api/script.js"
+    data-site-id="a3ed84f02bf6"
+    defer
+  ></script>
+</head>
+<body>  <div class="site-wrapper">
+
+  <header class="site-header">
+    <h1><a href="/blog/">Paweł Jankiewicz</a></h1>
+    <p>Blog about programming, AI, Machine Learning</p>
+    <p class="site-social">
+      <a href="https://www.linkedin.com/in/pjankiewicz/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </p>
+  </header>
+  <main class="site-main">
+    
+<article class="post-content">
+  <h1>Silence is not a green light</h1>
+  <p class="post-meta">August 19, 2026</p>
+  <p>Last night an automated pipeline of mine reported its best run ever: 195 generated files, 100% passing the compile gate, zero reverts. A perfect batch.</p>
+<p>This morning 190 of those files were broken.</p>
+<p>The gate wasn't lying, exactly. It ran the compiler, collected every error, and attributed each one to a file. The batch's files had no errors against them. By the gate's definition of success — "no errors attributed to you" — everyone passed.</p>
+<p>Here's what actually happened. The build covered a workspace of about twenty packages with a dependency chain between them. One file in a <em>low-level</em> package was broken. The compiler did what compilers do: it failed that package and <strong>skipped everything downstream</strong>. The packages where my 190 fresh files lived were never compiled at all. Zero diagnostics. Not because the code was good — because nobody looked at it.</p>
+<p>And to my gate, zero diagnostics meant zero problems. It counted files it never verified as verified.</p>
+<p>This is a general trap, and once you see it you find it everywhere:</p>
+<ul>
+<li>A test runner that reports green when a config error made it collect zero tests.</li>
+<li>A linter wired to the wrong directory, "passing" forever.</li>
+<li>A migration script that "processed" a table its filter quietly excluded.</li>
+<li>A monitoring alert that never fires because the metric stopped being emitted.</li>
+</ul>
+<p>The shape is always the same: somewhere in the chain, a <em>failure to observe</em> gets translated into an <em>observation of no failures</em>. Silence and success have the same exit code.</p>
+<p>In chess there's a difference between "I don't see a threat" and "I checked and there is no threat." Beginners conflate them; that's how you lose a queen to a move you never considered. My gate was a beginner. It didn't see any threats in those 190 files because it never looked at the board.</p>
+<p>The fix was not more error handling. It was demanding <strong>positive evidence</strong>. The build tool I use emits an artifact message for every unit it successfully compiles. So now the gate's rule is: a file counts as verified only if its package produced an artifact <em>and</em> produced no errors. Files in packages that never built go into a third bucket — not passed, not failed: <strong>unverified</strong> — and unverified work is rolled back and re-queued, never landed.</p>
+<p>Three buckets, not two. That's the whole fix. Pass, fail, and <em>don't know</em> — and "don't know" must never be allowed to masquerade as "pass."</p>
+<p>The practical takeaway: find every gate in your pipeline that infers success from the absence of bad news, and ask what it would report if the thing it checks silently didn't run. If the answer is "success," you don't have a gate. You have a green light wired to nothing, and the day it matters most — the day something upstream breaks — is exactly the day it will wave everything through.</p>
+</article>
+<!-- Copy-to-clipboard functionality for code blocks -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.codehilite').forEach(function(container) {
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.type = 'button';
+      btn.innerText = 'Copy';
+      container.appendChild(btn);
+      btn.addEventListener('click', function() {
+        var codeElem = container.querySelector('code') || container;
+        var text = codeElem.innerText;
+        navigator.clipboard.writeText(text).then(function() {
+          btn.innerText = 'Copied!';
+          btn.classList.add('copied');
+          setTimeout(function() {
+            btn.innerText = 'Copy';
+            btn.classList.remove('copied');
+          }, 2000);
+        }, function() {
+          btn.innerText = 'Error';
+        });
+      });
+    });
+  });
+</script>
+
+  </main>
+  <footer class="site-footer">
+    <p>&copy; 2026 Paweł Jankiewicz</p>
+  </footer>
+  </div>
+</body>
+</html>

@@ -23,6 +23,7 @@
 
   <!-- Umami analytics -->
   <script defer src="https://cloud.umami.is/script.js" data-website-id="d583f5f2-b49f-48e6-af2a-44599356368e"></script>
+
   <!-- Rybbit analytics -->
   <script
     src="https://app.rybbit.io/api/script.js"
@@ -45,23 +46,121 @@
   
   <article>
     
+    <h2><a href="/blog/posts/your-release-build-has-never-run/">Your release build has never run</a></h2>
+    <p class="post-meta">August 19, 2026</p>
+    <p>Debug builds run a thousand times before shipping. The release build often runs zero times. That asymmetry is where launch bugs hide.</p>
+  </article>
+  
+  <article>
+    
+    <h2><a href="/blog/posts/your-guardrails-will-lose-arguments-to-a-smarter-model/">Your guardrails will lose arguments to a smarter model</a></h2>
+    <p class="post-meta">August 19, 2026</p>
+    <p>I upgraded an AI product to a stronger model and my hallucination guard started losing debates to it — in front of users. What "smarter" breaks, and how to fix the referee instead of the player.</p>
+  </article>
+  
+  <article>
+    
+    <h2><a href="/blog/posts/your-agent-isnt-dumb-your-simulator-is-rigged/">Your agent isn't dumb, your simulator is rigged</a></h2>
+    <p class="post-meta">August 19, 2026</p>
+    <p>I spent hours tuning a game bot that kept dying at level one. The bot was fine. The world it lived in was broken in ways that looked exactly like bad play.</p>
+  </article>
+  
+  <article>
+    
+    <h2><a href="/blog/posts/the-judge-must-see-what-the-model-saw/">The judge must see everything the model saw</a></h2>
+    <p class="post-meta">August 19, 2026</p>
+    <p>My eval pipeline filed four hallucination defects in three days. All four were false accusations — the judge was blind to one input stream.</p>
+  </article>
+  
+  <article>
+    
+    <h2><a href="/blog/posts/the-gpu-process-is-collecting-your-garbage/">The stall wasn't in my code — the GPU process was collecting my garbage</a></h2>
+    <p class="post-meta">August 19, 2026</p>
+    <p>A WebGPU animation froze for half a second every few seconds. The profiler said my code was innocent. The real culprit was 4.5 GB/s of texture allocations nobody could see.</p>
+  </article>
+  
+  <article>
+    
     <h2><a href="/blog/posts/the-bug-was-in-the-path-nobody-ran/">The bug was in the path nobody ran</a></h2>
-    <p class="post-meta">June 05, 2026</p>
+    <p class="post-meta">August 19, 2026</p>
     <p>A feature can pass every test and still be broken — if your tests take a different road through it than production does.</p>
   </article>
   
   <article>
     
     <h2><a href="/blog/posts/structural-capabilities-beat-policy-flags/">Capabilities you can't call beat capabilities you're told not to use</a></h2>
-    <p class="post-meta">June 05, 2026</p>
+    <p class="post-meta">August 19, 2026</p>
     <p>Sandboxing user scripts? Don't gate the dangerous functions with flags. Build a second environment where they don't exist.</p>
   </article>
   
   <article>
     
+    <h2><a href="/blog/posts/silence-is-not-a-green-light/">Silence is not a green light</a></h2>
+    <p class="post-meta">August 19, 2026</p>
+    <p>My build gate reported a perfect batch — 195 files, zero failures. 190 of them had never been compiled at all. The lesson: never let a pipeline count the absence of errors as success.</p>
+  </article>
+  
+  <article>
+    
     <h2><a href="/blog/posts/real-codebases-as-test-oracles/">Other People's Codebases Are the Best Test Suite You Never Wrote</a></h2>
-    <p class="post-meta">June 05, 2026</p>
+    <p class="post-meta">August 19, 2026</p>
     <p>When you build a tool that rewrites source code, the strongest test isn't your fixtures — it's running it on real third-party projects and checking they still compile and pass their own tests.</p>
+  </article>
+  
+  <article>
+    
+    <h2><a href="/blog/posts/playwright-clicks-dont-scroll/">The click that never happened</a></h2>
+    <p class="post-meta">August 19, 2026</p>
+    <p>I spent an hour debugging an app bug that didn't exist. The test harness was silently throwing my clicks into the void.</p>
+  </article>
+  
+  <article>
+    
+    <h2><a href="/blog/posts/every-url-returned-200/">Every URL returned 200</a></h2>
+    <p class="post-meta">August 19, 2026</p>
+    <p>A server that answers OK to a page that does not exist, and four other bugs that were invisible because success and silence look identical.</p>
+  </article>
+  
+  <article>
+    
+    <h2><a href="/blog/posts/code-behind-a-feature-flag-has-never-been-compiled/">Code Behind a Feature Flag Has Never Been Compiled</a></h2>
+    <p class="post-meta">August 19, 2026</p>
+    <p>A screenshot function sat in a vendored framework looking finished. The first time any build actually enabled its feature, it failed twice — once at compile time, once at runtime. Dead code at least type-checks. Feature-gated code doesn't even do that.</p>
+  </article>
+  
+  <article>
+    
+    <h2><a href="/blog/posts/backtracker-counting-the-same-answer-5040-times/">My Backtracker Counted the Same Answer 5,040 Times</a></h2>
+    <p class="post-meta">August 19, 2026</p>
+    <p>A backtracking search kept reporting 'ambiguous' on inputs with exactly one solution. The search was correct — it was just enumerating every solution in every possible order, and tripping its own safety cap.</p>
+  </article>
+  
+  <article>
+    
+    <h2><a href="/blog/posts/a-screenshot-is-not-a-click/">A screenshot is not a click</a></h2>
+    <p class="post-meta">August 19, 2026</p>
+    <p>Static screenshots of a web app will happily show you a beautiful, broken feature. Driving the app found a bug in ten minutes that a hundred passing tests missed — with a CDP driver in 100 lines and zero dependencies.</p>
+  </article>
+  
+  <article>
+    
+    <h2><a href="/blog/posts/the-least-tested-state-is-the-most-common-one/">The Least-Tested State Is the Most Common One</a></h2>
+    <p class="post-meta">August 19, 2026</p>
+    <p>A conversion widget shipped invisible because every test ran as a returning user. The fresh visitor — cookie banner up, nothing decided — is the state nobody tests and everybody lives in.</p>
+  </article>
+  
+  <article>
+    
+    <h2><a href="/blog/posts/your-oracle-has-bugs-too/">Your oracle has bugs too</a></h2>
+    <p class="post-meta">July 03, 2026</p>
+    <p>Differential testing against a reference implementation works great — until the reference is wrong. What a red CI on exactly one OS taught me about oracle tests.</p>
+  </article>
+  
+  <article>
+    
+    <h2><a href="/blog/posts/the-tree-was-correct-and-still-wrong/">The Tree Was Correct and Still Wrong</a></h2>
+    <p class="post-meta">June 10, 2026</p>
+    <p>A scene tree built faithfully from a data-flow graph confused everyone who looked at it. The data was right. The orientation was backwards.</p>
   </article>
   
   <article>
