@@ -7,11 +7,20 @@
   <atom:link href="/blog/feed.xml" rel="self" type="application/rss+xml" /> 
   
   <item>
+    <title>Your timeout is killing your best responses</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/your-timeout-is-killing-your-best-responses/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/your-timeout-is-killing-your-best-responses/</guid>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
+    <description>A production error that looked like provider flakiness was a timeout doing exactly what we told it to do. The tell: every failure landed at exactly the same interval.</description>
+  </item>
+  
+  <item>
     <title>Your release build has never run</title>
     
     <link>https://pjankiewicz.github.io/blog/posts/your-release-build-has-never-run/</link>
     <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/your-release-build-has-never-run/</guid>
-    <pubDate>Wed, 19 Aug 2026 22:49:34 +0000</pubDate>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
     <description>Debug builds run a thousand times before shipping. The release build often runs zero times. That asymmetry is where launch bugs hide.</description>
   </item>
   
@@ -20,7 +29,7 @@
     
     <link>https://pjankiewicz.github.io/blog/posts/your-guardrails-will-lose-arguments-to-a-smarter-model/</link>
     <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/your-guardrails-will-lose-arguments-to-a-smarter-model/</guid>
-    <pubDate>Wed, 19 Aug 2026 22:49:34 +0000</pubDate>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
     <description>I upgraded an AI product to a stronger model and my hallucination guard started losing debates to it — in front of users. What &#34;smarter&#34; breaks, and how to fix the referee instead of the player.</description>
   </item>
   
@@ -29,8 +38,62 @@
     
     <link>https://pjankiewicz.github.io/blog/posts/your-agent-isnt-dumb-your-simulator-is-rigged/</link>
     <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/your-agent-isnt-dumb-your-simulator-is-rigged/</guid>
-    <pubDate>Wed, 19 Aug 2026 22:49:34 +0000</pubDate>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
     <description>I spent hours tuning a game bot that kept dying at level one. The bot was fine. The world it lived in was broken in ways that looked exactly like bad play.</description>
+  </item>
+  
+  <item>
+    <title>Who Else Registered That Handler?</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/who-else-registered-that-handler/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/who-else-registered-that-handler/</guid>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
+    <description>My error handler was correct, the error definitely fired, and the handler never ran. The bug wasn&#39;t in my code — it was in the assumption that I was the only one writing to a shared global slot.</description>
+  </item>
+  
+  <item>
+    <title>Use the original as your oracle</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/use-the-original-as-your-oracle/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/use-the-original-as-your-oracle/</guid>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
+    <description>If you&#39;re reimplementing something, the original implementation is the best test suite you will ever get — wire it up as a live oracle and fuzz against it.</description>
+  </item>
+  
+  <item>
+    <title>The type check that checked nothing</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/the-type-check-that-checked-nothing/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/the-type-check-that-checked-nothing/</guid>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
+    <description>I ran tsc --noEmit a dozen times in one day and trusted every green exit. It was checking zero files. How solution-style tsconfigs turn your type check into theater.</description>
+  </item>
+  
+  <item>
+    <title>The stalemate that looked like a pressure bug</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/the-stalemate-that-looked-like-a-pressure-bug/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/the-stalemate-that-looked-like-a-pressure-bug/</guid>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
+    <description>A plug of water sat on top of a 213 kPa gas pocket and refused to move. The pressure was right. The bookkeeping was wrong.</description>
+  </item>
+  
+  <item>
+    <title>The pump that ran as a motor</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/the-pump-that-ran-as-a-motor/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/the-pump-that-ran-as-a-motor/</guid>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
+    <description>My physics prototype drained the mine beautifully for an hour. The crank torque had the wrong sign. Only a test about the design, not the numbers, caught it.</description>
+  </item>
+  
+  <item>
+    <title>The original is your oracle</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/the-original-is-your-oracle/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/the-original-is-your-oracle/</guid>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
+    <description>When you port code from a reference implementation you can still run, don&#39;t grade your work by eye — compile the original into a ground-truth oracle and diff outputs byte for byte.</description>
   </item>
   
   <item>
@@ -38,7 +101,7 @@
     
     <link>https://pjankiewicz.github.io/blog/posts/the-judge-must-see-what-the-model-saw/</link>
     <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/the-judge-must-see-what-the-model-saw/</guid>
-    <pubDate>Wed, 19 Aug 2026 22:49:34 +0000</pubDate>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
     <description>My eval pipeline filed four hallucination defects in three days. All four were false accusations — the judge was blind to one input stream.</description>
   </item>
   
@@ -47,8 +110,71 @@
     
     <link>https://pjankiewicz.github.io/blog/posts/the-gpu-process-is-collecting-your-garbage/</link>
     <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/the-gpu-process-is-collecting-your-garbage/</guid>
-    <pubDate>Wed, 19 Aug 2026 22:49:34 +0000</pubDate>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
     <description>A WebGPU animation froze for half a second every few seconds. The profiler said my code was innocent. The real culprit was 4.5 GB/s of texture allocations nobody could see.</description>
+  </item>
+  
+  <item>
+    <title>The fuzzer that never visited</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/the-fuzzer-that-never-visited/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/the-fuzzer-that-never-visited/</guid>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
+    <description>A fuzzer ran for days and reported a whole subsystem clean. It wasn&#39;t clean. The fuzzer had simply never been able to reach it.</description>
+  </item>
+  
+  <item>
+    <title>The fast pass was the broken one</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/the-fast-pass-was-the-broken-one/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/the-fast-pass-was-the-broken-one/</guid>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
+    <description>Two GPU passes ran the same kernel. One finished in seconds, the other hung for 22 minutes. I spent the whole investigation on the slow one — the bug was in the fast one.</description>
+  </item>
+  
+  <item>
+    <title>The copy found bugs in the original</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/the-copy-found-bugs-in-the-original/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/the-copy-found-bugs-in-the-original/</guid>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
+    <description>We ported a C++ language runtime to Rust and fuzzed the port. The crashes we triaged expecting translation bugs kept pointing back at undefined behavior in the original.</description>
+  </item>
+  
+  <item>
+    <title>An 87-Year-Old Conjecture Fell, and 20 Lines of sympy Let Me Check It Myself</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/the-conjecture-fell-and-sympy-let-me-watch/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/the-conjecture-fell-and-sympy-let-me-watch/</guid>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
+    <description>A tweet claimed to kill the Jacobian conjecture. Instead of waiting for the experts, I verified both certificates with exact symbolic computation before lunch. That option is always on the table, and people forget it.</description>
+  </item>
+  
+  <item>
+    <title>The comment was the source file</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/the-comment-was-the-source-file/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/the-comment-was-the-source-file/</guid>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
+    <description>A lookup table&#39;s doc comment got the arithmetic wrong. The code under it was right. Forty-five translations copied the comment.</description>
+  </item>
+  
+  <item>
+    <title>The Cache Answered, but the Cursor Stayed Behind</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/the-cache-answered-but-the-cursor-stayed-behind/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/the-cache-answered-but-the-cursor-stayed-behind/</guid>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
+    <description>A video player froze for seconds after clicking the timeline while the audio played on. The seek was served from a frame cache that returned the right picture and skipped the part where the underlying stream actually moves. A cached read that stands in for a state transition leaves a debt, and the debt comes due at the worst possible moment.</description>
+  </item>
+  
+  <item>
+    <title>The bug your test fixture cannot see</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/the-bug-your-test-fixture-cannot-see/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/the-bug-your-test-fixture-cannot-see/</guid>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
+    <description>A missing-thumbnail bug that only existed for files bigger than 2 kilobytes — and why the minimal reproduction passed every time.</description>
   </item>
   
   <item>
@@ -56,8 +182,26 @@
     
     <link>https://pjankiewicz.github.io/blog/posts/the-bug-was-in-the-path-nobody-ran/</link>
     <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/the-bug-was-in-the-path-nobody-ran/</guid>
-    <pubDate>Wed, 19 Aug 2026 22:49:34 +0000</pubDate>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
     <description>A feature can pass every test and still be broken — if your tests take a different road through it than production does.</description>
+  </item>
+  
+  <item>
+    <title>The bang that was always true</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/the-bang-that-was-always-true/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/the-bang-that-was-always-true/</guid>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
+    <description>Porting C to Rust, one character changed meaning and a boolean became a constant. It compiled, type-checked, and segfaulted only when I ran a real program.</description>
+  </item>
+  
+  <item>
+    <title>The 400 that only the visitor saw</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/the-400-that-only-the-visitor-saw/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/the-400-that-only-the-visitor-saw/</guid>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
+    <description>Seven people clicked &#34;sign in&#34;, one account appeared, and the analytics could not say what happened to the other six. The missing pages were the ones that never loaded the tracker.</description>
   </item>
   
   <item>
@@ -65,8 +209,26 @@
     
     <link>https://pjankiewicz.github.io/blog/posts/structural-capabilities-beat-policy-flags/</link>
     <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/structural-capabilities-beat-policy-flags/</guid>
-    <pubDate>Wed, 19 Aug 2026 22:49:34 +0000</pubDate>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
     <description>Sandboxing user scripts? Don&#39;t gate the dangerous functions with flags. Build a second environment where they don&#39;t exist.</description>
+  </item>
+  
+  <item>
+    <title>Single-request probes lie</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/single-request-probes-lie/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/single-request-probes-lie/</guid>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
+    <description>An LLM provider that answers a test request in 0.7 seconds can still hang your whole agent fleet. Test at production concurrency or you&#39;re testing nothing.</description>
+  </item>
+  
+  <item>
+    <title>The app wasn't buggy. It was dead.</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/silent-wasm-panic-broken-features/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/silent-wasm-panic-broken-features/</guid>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
+    <description>A silent wasm panic makes every feature look broken at once. The tell is a frozen FPS counter.</description>
   </item>
   
   <item>
@@ -74,7 +236,7 @@
     
     <link>https://pjankiewicz.github.io/blog/posts/silence-is-not-a-green-light/</link>
     <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/silence-is-not-a-green-light/</guid>
-    <pubDate>Wed, 19 Aug 2026 22:49:34 +0000</pubDate>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
     <description>My build gate reported a perfect batch — 195 files, zero failures. 190 of them had never been compiled at all. The lesson: never let a pipeline count the absence of errors as success.</description>
   </item>
   
@@ -83,7 +245,7 @@
     
     <link>https://pjankiewicz.github.io/blog/posts/real-codebases-as-test-oracles/</link>
     <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/real-codebases-as-test-oracles/</guid>
-    <pubDate>Wed, 19 Aug 2026 22:49:34 +0000</pubDate>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
     <description>When you build a tool that rewrites source code, the strongest test isn&#39;t your fixtures — it&#39;s running it on real third-party projects and checking they still compile and pass their own tests.</description>
   </item>
   
@@ -92,8 +254,26 @@
     
     <link>https://pjankiewicz.github.io/blog/posts/playwright-clicks-dont-scroll/</link>
     <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/playwright-clicks-dont-scroll/</guid>
-    <pubDate>Wed, 19 Aug 2026 22:49:34 +0000</pubDate>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
     <description>I spent an hour debugging an app bug that didn&#39;t exist. The test harness was silently throwing my clicks into the void.</description>
+  </item>
+  
+  <item>
+    <title>One threshold, two rulers</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/one-threshold-two-rulers/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/one-threshold-two-rulers/</guid>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
+    <description>How an AI assistant ended up summarizing its own conversation history on every single message — and why aggregate metrics never showed it.</description>
+  </item>
+  
+  <item>
+    <title>I Kept Proving the Bug Couldn't Exist</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/i-kept-proving-the-bug-couldnt-exist/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/i-kept-proving-the-bug-couldnt-exist/</guid>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
+    <description>Clicks in a 3D editor landed off-target. I proved the projection math was identical — and stayed wrong for hours. The bug was in an input I never thought to check.</description>
   </item>
   
   <item>
@@ -101,8 +281,26 @@
     
     <link>https://pjankiewicz.github.io/blog/posts/every-url-returned-200/</link>
     <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/every-url-returned-200/</guid>
-    <pubDate>Wed, 19 Aug 2026 22:49:34 +0000</pubDate>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
     <description>A server that answers OK to a page that does not exist, and four other bugs that were invisible because success and silence look identical.</description>
+  </item>
+  
+  <item>
+    <title>Errors Should Teach the Next Attempt</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/errors-should-teach-the-next-attempt/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/errors-should-teach-the-next-attempt/</guid>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
+    <description>When the thing reading your error message is an AI agent, &#39;invalid input&#39; isn&#39;t an error — it&#39;s a dead end. Make the error carry the fix.</description>
+  </item>
+  
+  <item>
+    <title>Data structures are 5% of the code and 80% of the failure mass</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/data-structures-are-the-contract/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/data-structures-are-the-contract/</guid>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
+    <description>A large automated refactoring effort gave me hard numbers for an old belief: get the structs wrong and everything downstream fails in ways that point everywhere except at the cause.</description>
   </item>
   
   <item>
@@ -110,8 +308,26 @@
     
     <link>https://pjankiewicz.github.io/blog/posts/code-behind-a-feature-flag-has-never-been-compiled/</link>
     <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/code-behind-a-feature-flag-has-never-been-compiled/</guid>
-    <pubDate>Wed, 19 Aug 2026 22:49:34 +0000</pubDate>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
     <description>A screenshot function sat in a vendored framework looking finished. The first time any build actually enabled its feature, it failed twice — once at compile time, once at runtime. Dead code at least type-checks. Feature-gated code doesn&#39;t even do that.</description>
+  </item>
+  
+  <item>
+    <title>Checkpoint committed state, not in-flight work</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/checkpoint-committed-state-not-in-flight-work/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/checkpoint-committed-state-not-in-flight-work/</guid>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
+    <description>Two resume bugs in one day, same root cause — a checkpoint that remembered things the world had already forgotten.</description>
+  </item>
+  
+  <item>
+    <title>Cargo Wrote Down Your Build Script's First Answer</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/cargo-wrote-down-your-build-scripts-first-answer/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/cargo-wrote-down-your-build-scripts-first-answer/</guid>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
+    <description>A linker error survived the fix that should have killed it. The env var was set, the symbols were in the archive, and the real bug was a build script decision cached months ago that nothing was ever going to invalidate.</description>
   </item>
   
   <item>
@@ -119,8 +335,26 @@
     
     <link>https://pjankiewicz.github.io/blog/posts/backtracker-counting-the-same-answer-5040-times/</link>
     <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/backtracker-counting-the-same-answer-5040-times/</guid>
-    <pubDate>Wed, 19 Aug 2026 22:49:34 +0000</pubDate>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
     <description>A backtracking search kept reporting &#39;ambiguous&#39; on inputs with exactly one solution. The search was correct — it was just enumerating every solution in every possible order, and tripping its own safety cap.</description>
+  </item>
+  
+  <item>
+    <title>AI made building cheap. It didn't make knowing cheap.</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/ai-made-building-cheap-not-knowing/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/ai-made-building-cheap-not-knowing/</guid>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
+    <description>I re-ranked a list of product ideas assuming AI speed changes everything. The ranking flattened instead — because the bottleneck moved to the one place AI can&#39;t reach.</description>
+  </item>
+  
+  <item>
+    <title>A thousand signups and zero users</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/a-thousand-signups-and-zero-users/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/a-thousand-signups-and-zero-users/</guid>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
+    <description>The users table said a side project had found an audience. The analytics said nobody had visited. Both were right, and the signup form was the weapon.</description>
   </item>
   
   <item>
@@ -128,8 +362,17 @@
     
     <link>https://pjankiewicz.github.io/blog/posts/a-screenshot-is-not-a-click/</link>
     <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/a-screenshot-is-not-a-click/</guid>
-    <pubDate>Wed, 19 Aug 2026 22:49:34 +0000</pubDate>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
     <description>Static screenshots of a web app will happily show you a beautiful, broken feature. Driving the app found a bug in ten minutes that a hundred passing tests missed — with a CDP driver in 100 lines and zero dependencies.</description>
+  </item>
+  
+  <item>
+    <title>A Playable Counterexample to the Jacobian Conjecture</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/a-playable-counterexample-to-the-jacobian-conjecture/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/a-playable-counterexample-to-the-jacobian-conjecture/</guid>
+    <pubDate>Thu, 03 Sep 2026 19:07:52 +0000</pubDate>
+    <description>The Jacobian conjecture stood for 87 years and died in a tweet. Here is the map, both certificates, and three interactive figures — including one where you drag a slider and watch two preimages escape to infinity.</description>
   </item>
   
   <item>
@@ -139,6 +382,51 @@
     <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/the-least-tested-state-is-the-most-common-one/</guid>
     <pubDate>Wed, 19 Aug 2026 00:00:00 +0000</pubDate>
     <description>A conversion widget shipped invisible because every test ran as a returning user. The fresh visitor — cookie banner up, nothing decided — is the state nobody tests and everybody lives in.</description>
+  </item>
+  
+  <item>
+    <title>Your Benchmark Is Measuring the Weather</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/your-benchmark-is-measuring-the-weather/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/your-benchmark-is-measuring-the-weather/</guid>
+    <pubDate>Wed, 08 Jul 2026 00:00:00 +0000</pubDate>
+    <description>Sequential before/after benchmarking on a laptop lies. Interleave your runs and prove behavior didn&#39;t change.</description>
+  </item>
+  
+  <item>
+    <title>Parked is not stuck</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/parked-is-not-stuck/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/parked-is-not-stuck/</guid>
+    <pubDate>Tue, 07 Jul 2026 00:00:00 +0000</pubDate>
+    <description>If your system can legitimately wait — for a human, for a slow job — every deadlock you ship will hide behind that state. Unless waiting has to prove itself.</description>
+  </item>
+  
+  <item>
+    <title>The cache that forgot the answers you gave it</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/the-cache-that-forgot-the-answers/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/the-cache-that-forgot-the-answers/</guid>
+    <pubDate>Tue, 07 Jul 2026 00:00:00 +0000</pubDate>
+    <description>A cache populated only on the compute path silently breaks any &#39;never do this twice&#39; guarantee — because sometimes the result arrives without computing anything.</description>
+  </item>
+  
+  <item>
+    <title>You can't validate a schema with a schema</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/you-cant-validate-a-schema-with-a-schema/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/you-cant-validate-a-schema-with-a-schema/</guid>
+    <pubDate>Tue, 07 Jul 2026 00:00:00 +0000</pubDate>
+    <description>A config field that holds a type looks innocent until you try to validate it. The fix isn&#39;t a bigger validator — it&#39;s to stop putting types in config at all.</description>
+  </item>
+  
+  <item>
+    <title>Resume is an equation</title>
+    
+    <link>https://pjankiewicz.github.io/blog/posts/resume-is-an-equation/</link>
+    <guid isPermaLink="true">https://pjankiewicz.github.io/blog/posts/resume-is-an-equation/</guid>
+    <pubDate>Mon, 06 Jul 2026 00:00:00 +0000</pubDate>
+    <description>If your system can pause and resume, there is a one-line property test that will find bugs you didn&#39;t know you had. Mine found three before the first coffee refill.</description>
   </item>
   
   <item>

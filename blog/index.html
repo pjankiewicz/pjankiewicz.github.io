@@ -46,100 +46,289 @@
   
   <article>
     
+    <h2><a href="/blog/posts/your-timeout-is-killing-your-best-responses/">Your timeout is killing your best responses</a></h2>
+    <p class="post-meta">September 03, 2026</p>
+    <p>A production error that looked like provider flakiness was a timeout doing exactly what we told it to do. The tell: every failure landed at exactly the same interval.</p>
+  </article>
+  
+  <article>
+    
     <h2><a href="/blog/posts/your-release-build-has-never-run/">Your release build has never run</a></h2>
-    <p class="post-meta">August 19, 2026</p>
+    <p class="post-meta">September 03, 2026</p>
     <p>Debug builds run a thousand times before shipping. The release build often runs zero times. That asymmetry is where launch bugs hide.</p>
   </article>
   
   <article>
     
     <h2><a href="/blog/posts/your-guardrails-will-lose-arguments-to-a-smarter-model/">Your guardrails will lose arguments to a smarter model</a></h2>
-    <p class="post-meta">August 19, 2026</p>
+    <p class="post-meta">September 03, 2026</p>
     <p>I upgraded an AI product to a stronger model and my hallucination guard started losing debates to it — in front of users. What "smarter" breaks, and how to fix the referee instead of the player.</p>
   </article>
   
   <article>
     
     <h2><a href="/blog/posts/your-agent-isnt-dumb-your-simulator-is-rigged/">Your agent isn't dumb, your simulator is rigged</a></h2>
-    <p class="post-meta">August 19, 2026</p>
+    <p class="post-meta">September 03, 2026</p>
     <p>I spent hours tuning a game bot that kept dying at level one. The bot was fine. The world it lived in was broken in ways that looked exactly like bad play.</p>
   </article>
   
   <article>
     
+    <h2><a href="/blog/posts/who-else-registered-that-handler/">Who Else Registered That Handler?</a></h2>
+    <p class="post-meta">September 03, 2026</p>
+    <p>My error handler was correct, the error definitely fired, and the handler never ran. The bug wasn't in my code — it was in the assumption that I was the only one writing to a shared global slot.</p>
+  </article>
+  
+  <article>
+    
+    <h2><a href="/blog/posts/use-the-original-as-your-oracle/">Use the original as your oracle</a></h2>
+    <p class="post-meta">September 03, 2026</p>
+    <p>If you're reimplementing something, the original implementation is the best test suite you will ever get — wire it up as a live oracle and fuzz against it.</p>
+  </article>
+  
+  <article>
+    
+    <h2><a href="/blog/posts/the-type-check-that-checked-nothing/">The type check that checked nothing</a></h2>
+    <p class="post-meta">September 03, 2026</p>
+    <p>I ran tsc --noEmit a dozen times in one day and trusted every green exit. It was checking zero files. How solution-style tsconfigs turn your type check into theater.</p>
+  </article>
+  
+  <article>
+    
+    <h2><a href="/blog/posts/the-stalemate-that-looked-like-a-pressure-bug/">The stalemate that looked like a pressure bug</a></h2>
+    <p class="post-meta">September 03, 2026</p>
+    <p>A plug of water sat on top of a 213 kPa gas pocket and refused to move. The pressure was right. The bookkeeping was wrong.</p>
+  </article>
+  
+  <article>
+    
+    <h2><a href="/blog/posts/the-pump-that-ran-as-a-motor/">The pump that ran as a motor</a></h2>
+    <p class="post-meta">September 03, 2026</p>
+    <p>My physics prototype drained the mine beautifully for an hour. The crank torque had the wrong sign. Only a test about the design, not the numbers, caught it.</p>
+  </article>
+  
+  <article>
+    
+    <h2><a href="/blog/posts/the-original-is-your-oracle/">The original is your oracle</a></h2>
+    <p class="post-meta">September 03, 2026</p>
+    <p>When you port code from a reference implementation you can still run, don't grade your work by eye — compile the original into a ground-truth oracle and diff outputs byte for byte.</p>
+  </article>
+  
+  <article>
+    
     <h2><a href="/blog/posts/the-judge-must-see-what-the-model-saw/">The judge must see everything the model saw</a></h2>
-    <p class="post-meta">August 19, 2026</p>
+    <p class="post-meta">September 03, 2026</p>
     <p>My eval pipeline filed four hallucination defects in three days. All four were false accusations — the judge was blind to one input stream.</p>
   </article>
   
   <article>
     
     <h2><a href="/blog/posts/the-gpu-process-is-collecting-your-garbage/">The stall wasn't in my code — the GPU process was collecting my garbage</a></h2>
-    <p class="post-meta">August 19, 2026</p>
+    <p class="post-meta">September 03, 2026</p>
     <p>A WebGPU animation froze for half a second every few seconds. The profiler said my code was innocent. The real culprit was 4.5 GB/s of texture allocations nobody could see.</p>
   </article>
   
   <article>
     
+    <h2><a href="/blog/posts/the-fuzzer-that-never-visited/">The fuzzer that never visited</a></h2>
+    <p class="post-meta">September 03, 2026</p>
+    <p>A fuzzer ran for days and reported a whole subsystem clean. It wasn't clean. The fuzzer had simply never been able to reach it.</p>
+  </article>
+  
+  <article>
+    
+    <h2><a href="/blog/posts/the-fast-pass-was-the-broken-one/">The fast pass was the broken one</a></h2>
+    <p class="post-meta">September 03, 2026</p>
+    <p>Two GPU passes ran the same kernel. One finished in seconds, the other hung for 22 minutes. I spent the whole investigation on the slow one — the bug was in the fast one.</p>
+  </article>
+  
+  <article>
+    
+    <h2><a href="/blog/posts/the-copy-found-bugs-in-the-original/">The copy found bugs in the original</a></h2>
+    <p class="post-meta">September 03, 2026</p>
+    <p>We ported a C++ language runtime to Rust and fuzzed the port. The crashes we triaged expecting translation bugs kept pointing back at undefined behavior in the original.</p>
+  </article>
+  
+  <article>
+    
+    <h2><a href="/blog/posts/the-conjecture-fell-and-sympy-let-me-watch/">An 87-Year-Old Conjecture Fell, and 20 Lines of sympy Let Me Check It Myself</a></h2>
+    <p class="post-meta">September 03, 2026</p>
+    <p>A tweet claimed to kill the Jacobian conjecture. Instead of waiting for the experts, I verified both certificates with exact symbolic computation before lunch. That option is always on the table, and people forget it.</p>
+  </article>
+  
+  <article>
+    
+    <h2><a href="/blog/posts/the-comment-was-the-source-file/">The comment was the source file</a></h2>
+    <p class="post-meta">September 03, 2026</p>
+    <p>A lookup table's doc comment got the arithmetic wrong. The code under it was right. Forty-five translations copied the comment.</p>
+  </article>
+  
+  <article>
+    
+    <h2><a href="/blog/posts/the-cache-answered-but-the-cursor-stayed-behind/">The Cache Answered, but the Cursor Stayed Behind</a></h2>
+    <p class="post-meta">September 03, 2026</p>
+    <p>A video player froze for seconds after clicking the timeline while the audio played on. The seek was served from a frame cache that returned the right picture and skipped the part where the underlying stream actually moves. A cached read that stands in for a state transition leaves a debt, and the debt comes due at the worst possible moment.</p>
+  </article>
+  
+  <article>
+    
+    <h2><a href="/blog/posts/the-bug-your-test-fixture-cannot-see/">The bug your test fixture cannot see</a></h2>
+    <p class="post-meta">September 03, 2026</p>
+    <p>A missing-thumbnail bug that only existed for files bigger than 2 kilobytes — and why the minimal reproduction passed every time.</p>
+  </article>
+  
+  <article>
+    
     <h2><a href="/blog/posts/the-bug-was-in-the-path-nobody-ran/">The bug was in the path nobody ran</a></h2>
-    <p class="post-meta">August 19, 2026</p>
+    <p class="post-meta">September 03, 2026</p>
     <p>A feature can pass every test and still be broken — if your tests take a different road through it than production does.</p>
   </article>
   
   <article>
     
+    <h2><a href="/blog/posts/the-bang-that-was-always-true/">The bang that was always true</a></h2>
+    <p class="post-meta">September 03, 2026</p>
+    <p>Porting C to Rust, one character changed meaning and a boolean became a constant. It compiled, type-checked, and segfaulted only when I ran a real program.</p>
+  </article>
+  
+  <article>
+    
+    <h2><a href="/blog/posts/the-400-that-only-the-visitor-saw/">The 400 that only the visitor saw</a></h2>
+    <p class="post-meta">September 03, 2026</p>
+    <p>Seven people clicked "sign in", one account appeared, and the analytics could not say what happened to the other six. The missing pages were the ones that never loaded the tracker.</p>
+  </article>
+  
+  <article>
+    
     <h2><a href="/blog/posts/structural-capabilities-beat-policy-flags/">Capabilities you can't call beat capabilities you're told not to use</a></h2>
-    <p class="post-meta">August 19, 2026</p>
+    <p class="post-meta">September 03, 2026</p>
     <p>Sandboxing user scripts? Don't gate the dangerous functions with flags. Build a second environment where they don't exist.</p>
   </article>
   
   <article>
     
+    <h2><a href="/blog/posts/single-request-probes-lie/">Single-request probes lie</a></h2>
+    <p class="post-meta">September 03, 2026</p>
+    <p>An LLM provider that answers a test request in 0.7 seconds can still hang your whole agent fleet. Test at production concurrency or you're testing nothing.</p>
+  </article>
+  
+  <article>
+    
+    <h2><a href="/blog/posts/silent-wasm-panic-broken-features/">The app wasn't buggy. It was dead.</a></h2>
+    <p class="post-meta">September 03, 2026</p>
+    <p>A silent wasm panic makes every feature look broken at once. The tell is a frozen FPS counter.</p>
+  </article>
+  
+  <article>
+    
     <h2><a href="/blog/posts/silence-is-not-a-green-light/">Silence is not a green light</a></h2>
-    <p class="post-meta">August 19, 2026</p>
+    <p class="post-meta">September 03, 2026</p>
     <p>My build gate reported a perfect batch — 195 files, zero failures. 190 of them had never been compiled at all. The lesson: never let a pipeline count the absence of errors as success.</p>
   </article>
   
   <article>
     
     <h2><a href="/blog/posts/real-codebases-as-test-oracles/">Other People's Codebases Are the Best Test Suite You Never Wrote</a></h2>
-    <p class="post-meta">August 19, 2026</p>
+    <p class="post-meta">September 03, 2026</p>
     <p>When you build a tool that rewrites source code, the strongest test isn't your fixtures — it's running it on real third-party projects and checking they still compile and pass their own tests.</p>
   </article>
   
   <article>
     
     <h2><a href="/blog/posts/playwright-clicks-dont-scroll/">The click that never happened</a></h2>
-    <p class="post-meta">August 19, 2026</p>
+    <p class="post-meta">September 03, 2026</p>
     <p>I spent an hour debugging an app bug that didn't exist. The test harness was silently throwing my clicks into the void.</p>
   </article>
   
   <article>
     
+    <h2><a href="/blog/posts/one-threshold-two-rulers/">One threshold, two rulers</a></h2>
+    <p class="post-meta">September 03, 2026</p>
+    <p>How an AI assistant ended up summarizing its own conversation history on every single message — and why aggregate metrics never showed it.</p>
+  </article>
+  
+  <article>
+    
+    <h2><a href="/blog/posts/i-kept-proving-the-bug-couldnt-exist/">I Kept Proving the Bug Couldn't Exist</a></h2>
+    <p class="post-meta">September 03, 2026</p>
+    <p>Clicks in a 3D editor landed off-target. I proved the projection math was identical — and stayed wrong for hours. The bug was in an input I never thought to check.</p>
+  </article>
+  
+  <article>
+    
     <h2><a href="/blog/posts/every-url-returned-200/">Every URL returned 200</a></h2>
-    <p class="post-meta">August 19, 2026</p>
+    <p class="post-meta">September 03, 2026</p>
     <p>A server that answers OK to a page that does not exist, and four other bugs that were invisible because success and silence look identical.</p>
   </article>
   
   <article>
     
+    <h2><a href="/blog/posts/errors-should-teach-the-next-attempt/">Errors Should Teach the Next Attempt</a></h2>
+    <p class="post-meta">September 03, 2026</p>
+    <p>When the thing reading your error message is an AI agent, 'invalid input' isn't an error — it's a dead end. Make the error carry the fix.</p>
+  </article>
+  
+  <article>
+    
+    <h2><a href="/blog/posts/data-structures-are-the-contract/">Data structures are 5% of the code and 80% of the failure mass</a></h2>
+    <p class="post-meta">September 03, 2026</p>
+    <p>A large automated refactoring effort gave me hard numbers for an old belief: get the structs wrong and everything downstream fails in ways that point everywhere except at the cause.</p>
+  </article>
+  
+  <article>
+    
     <h2><a href="/blog/posts/code-behind-a-feature-flag-has-never-been-compiled/">Code Behind a Feature Flag Has Never Been Compiled</a></h2>
-    <p class="post-meta">August 19, 2026</p>
+    <p class="post-meta">September 03, 2026</p>
     <p>A screenshot function sat in a vendored framework looking finished. The first time any build actually enabled its feature, it failed twice — once at compile time, once at runtime. Dead code at least type-checks. Feature-gated code doesn't even do that.</p>
   </article>
   
   <article>
     
+    <h2><a href="/blog/posts/checkpoint-committed-state-not-in-flight-work/">Checkpoint committed state, not in-flight work</a></h2>
+    <p class="post-meta">September 03, 2026</p>
+    <p>Two resume bugs in one day, same root cause — a checkpoint that remembered things the world had already forgotten.</p>
+  </article>
+  
+  <article>
+    
+    <h2><a href="/blog/posts/cargo-wrote-down-your-build-scripts-first-answer/">Cargo Wrote Down Your Build Script's First Answer</a></h2>
+    <p class="post-meta">September 03, 2026</p>
+    <p>A linker error survived the fix that should have killed it. The env var was set, the symbols were in the archive, and the real bug was a build script decision cached months ago that nothing was ever going to invalidate.</p>
+  </article>
+  
+  <article>
+    
     <h2><a href="/blog/posts/backtracker-counting-the-same-answer-5040-times/">My Backtracker Counted the Same Answer 5,040 Times</a></h2>
-    <p class="post-meta">August 19, 2026</p>
+    <p class="post-meta">September 03, 2026</p>
     <p>A backtracking search kept reporting 'ambiguous' on inputs with exactly one solution. The search was correct — it was just enumerating every solution in every possible order, and tripping its own safety cap.</p>
   </article>
   
   <article>
     
+    <h2><a href="/blog/posts/ai-made-building-cheap-not-knowing/">AI made building cheap. It didn't make knowing cheap.</a></h2>
+    <p class="post-meta">September 03, 2026</p>
+    <p>I re-ranked a list of product ideas assuming AI speed changes everything. The ranking flattened instead — because the bottleneck moved to the one place AI can't reach.</p>
+  </article>
+  
+  <article>
+    
+    <h2><a href="/blog/posts/a-thousand-signups-and-zero-users/">A thousand signups and zero users</a></h2>
+    <p class="post-meta">September 03, 2026</p>
+    <p>The users table said a side project had found an audience. The analytics said nobody had visited. Both were right, and the signup form was the weapon.</p>
+  </article>
+  
+  <article>
+    
     <h2><a href="/blog/posts/a-screenshot-is-not-a-click/">A screenshot is not a click</a></h2>
-    <p class="post-meta">August 19, 2026</p>
+    <p class="post-meta">September 03, 2026</p>
     <p>Static screenshots of a web app will happily show you a beautiful, broken feature. Driving the app found a bug in ten minutes that a hundred passing tests missed — with a CDP driver in 100 lines and zero dependencies.</p>
+  </article>
+  
+  <article>
+    
+    <h2><a href="/blog/posts/a-playable-counterexample-to-the-jacobian-conjecture/">A Playable Counterexample to the Jacobian Conjecture</a></h2>
+    <p class="post-meta">September 03, 2026</p>
+    <p>The Jacobian conjecture stood for 87 years and died in a tweet. Here is the map, both certificates, and three interactive figures — including one where you drag a slider and watch two preimages escape to infinity.</p>
   </article>
   
   <article>
@@ -147,6 +336,41 @@
     <h2><a href="/blog/posts/the-least-tested-state-is-the-most-common-one/">The Least-Tested State Is the Most Common One</a></h2>
     <p class="post-meta">August 19, 2026</p>
     <p>A conversion widget shipped invisible because every test ran as a returning user. The fresh visitor — cookie banner up, nothing decided — is the state nobody tests and everybody lives in.</p>
+  </article>
+  
+  <article>
+    
+    <h2><a href="/blog/posts/your-benchmark-is-measuring-the-weather/">Your Benchmark Is Measuring the Weather</a></h2>
+    <p class="post-meta">July 08, 2026</p>
+    <p>Sequential before/after benchmarking on a laptop lies. Interleave your runs and prove behavior didn't change.</p>
+  </article>
+  
+  <article>
+    
+    <h2><a href="/blog/posts/parked-is-not-stuck/">Parked is not stuck</a></h2>
+    <p class="post-meta">July 07, 2026</p>
+    <p>If your system can legitimately wait — for a human, for a slow job — every deadlock you ship will hide behind that state. Unless waiting has to prove itself.</p>
+  </article>
+  
+  <article>
+    
+    <h2><a href="/blog/posts/the-cache-that-forgot-the-answers/">The cache that forgot the answers you gave it</a></h2>
+    <p class="post-meta">July 07, 2026</p>
+    <p>A cache populated only on the compute path silently breaks any 'never do this twice' guarantee — because sometimes the result arrives without computing anything.</p>
+  </article>
+  
+  <article>
+    
+    <h2><a href="/blog/posts/you-cant-validate-a-schema-with-a-schema/">You can't validate a schema with a schema</a></h2>
+    <p class="post-meta">July 07, 2026</p>
+    <p>A config field that holds a type looks innocent until you try to validate it. The fix isn't a bigger validator — it's to stop putting types in config at all.</p>
+  </article>
+  
+  <article>
+    
+    <h2><a href="/blog/posts/resume-is-an-equation/">Resume is an equation</a></h2>
+    <p class="post-meta">July 06, 2026</p>
+    <p>If your system can pause and resume, there is a one-line property test that will find bugs you didn't know you had. Mine found three before the first coffee refill.</p>
   </article>
   
   <article>
